@@ -12,8 +12,7 @@ import {
   SlidersHorizontal,
   GraduationCap,
   Sun,
-  Moon,
-  Zap
+  Moon
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
 
@@ -126,13 +125,12 @@ export default function ConfiguracionInicial() {
   const navigate = useNavigate();
   const { tema, alternarTema } = useTema();
   
-  // Paso 1: Cursos Obligatorios | Paso 2: Cursos Electivos
-  const [paso, setPaso] = useState(1);
   const [aprobados, setAprobados] = useState([]);
   const [cicloActivo, setCicloActivo] = useState("I");
   const [filtroElectivosCiclo, setFiltroElectivosCiclo] = useState("todos");
 
-  const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+  // Lista de 11 Pestañas: Ciclo I al X + Pestaña Especial "ELECTIVOS"
+  const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "ELECTIVOS"];
 
   const toggleCurso = (id) => {
     setAprobados((prev) =>
@@ -146,7 +144,9 @@ export default function ConfiguracionInicial() {
     navigate("/estudiante/inicio");
   };
 
-  // Cursos obligatorios del ciclo activo (Paso 1)
+  const esModoElectivos = cicloActivo === "ELECTIVOS";
+
+  // Cursos obligatorios del ciclo activo (FILTRADO STRICTO: Ningún electivo aparece en los ciclos I al X)
   const cursosObligatoriosDelCiclo = cursosReales.filter(
     (c) => c.ciclo === cicloActivo && !ELECTIVOS_SET.has(c.id)
   );
@@ -167,14 +167,14 @@ export default function ConfiguracionInicial() {
     }
   };
 
-  // Cursos electivos filtrados (Paso 2)
+  // Cursos electivos para la pestaña dedicada "ELECTIVOS"
   const todosLosElectivos = cursosReales.filter((c) => ELECTIVOS_SET.has(c.id));
   const electivosFiltrados = todosLosElectivos.filter((c) => {
     if (filtroElectivosCiclo === "todos") return true;
     return c.ciclo === filtroElectivosCiclo;
   });
 
-  // Métricas
+  // Métricas de progreso
   const creditosAprobados = cursosReales
     .filter((c) => aprobados.includes(c.id))
     .reduce((acc, c) => acc + c.creditos, 0);
@@ -188,6 +188,20 @@ export default function ConfiguracionInicial() {
   const porcentajeObligatorios = Math.round((obligatoriosAprobados / 69) * 100);
   const porcentajeElectivos = Math.min(100, Math.round((creditosElectivosAprobados / 15) * 100));
   const porcentajeAvance = Math.min(100, Math.round((creditosAprobados / 274) * 100));
+
+  const irSiguientePestana = () => {
+    const idx = ciclos.indexOf(cicloActivo);
+    if (idx < ciclos.length - 1) {
+      setCicloActivo(ciclos[idx + 1]);
+    }
+  };
+
+  const irAnteriorPestana = () => {
+    const idx = ciclos.indexOf(cicloActivo);
+    if (idx > 0) {
+      setCicloActivo(ciclos[idx - 1]);
+    }
+  };
 
   return (
     <div className={`min-h-screen ${
@@ -206,29 +220,29 @@ export default function ConfiguracionInicial() {
         <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-4 gap-3`}>
           <div className="flex items-center space-x-3">
             <div className={`w-10 h-10 rounded-2xl ${
-              paso === 1
-                ? 'bg-blue-600/20 text-blue-500 border-blue-500/40'
-                : 'bg-purple-600/20 text-purple-400 border-purple-500/40'
+              esModoElectivos
+                ? 'bg-purple-600/20 text-purple-400 border-purple-500/40'
+                : 'bg-blue-600/20 text-blue-500 border-blue-500/40'
             } border flex items-center justify-center font-black text-xs shadow-md shrink-0`}>
-              0{paso}
+              {esModoElectivos ? "⚡" : `01`}
             </div>
             <div>
               <div className="flex items-center space-x-2">
                 <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
-                  {paso === 1 ? "Paso 1 de 2: Asignaturas Obligatorias" : "Paso 2 de 2: Cursos Electivos Aprobados"}
+                  {esModoElectivos ? "Sección Especial: Cursos Electivos" : `Calibración Malla: Ciclo ${cicloActivo} (Cursos Obligatorios)`}
                 </span>
                 <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border ${
-                  paso === 1
-                    ? 'bg-blue-500/10 text-blue-500 border-blue-500/30'
-                    : 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+                  esModoElectivos
+                    ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+                    : 'bg-blue-500/10 text-blue-500 border-blue-500/30'
                 }`}>
-                  {paso === 1 ? "Obligatorios" : "Electivos"}
+                  {esModoElectivos ? "Electivos UNP" : "Solo Obligatorios"}
                 </span>
               </div>
               <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} block font-medium mt-0.5`}>
-                {paso === 1
-                  ? "Selecciona únicamente tus cursos obligatorios superados del Ciclo I al X."
-                  : "Indica las asignaturas electivas especializadas que has culminado."}
+                {esModoElectivos
+                  ? "Selecciona individualmente solo los electivos que cursaste y aprobaste (15 CR requeridos)."
+                  : "Los electivos han sido removidos de los ciclos normales y se ubican al final."}
               </span>
             </div>
           </div>
@@ -266,12 +280,12 @@ export default function ConfiguracionInicial() {
           </div>
 
           <h1 className={`text-xl sm:text-2xl md:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
-            {paso === 1 ? "1. Marca tus Cursos Obligatorios Aprobados" : "2. Selecciona tus Asignaturas Electivas Aprobadas"}
+            {esModoElectivos ? "Selección de Asignaturas Electivas Aprobadas" : "Indica tus Asignaturas Aprobadas"}
           </h1>
           <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-1.5 max-w-xl mx-auto leading-relaxed`}>
-            {paso === 1
-              ? "Revisa los ciclos académicos I al X. Marca únicamente las asignaturas obligatorias que hayas completado."
-              : "Ahora selecciona las asignaturas electivas especializadas que has cursado (Requerido: 15 créditos electivos)."}
+            {esModoElectivos
+              ? "Selecciona únicamente los cursos electivos que hayas cursado y aprobado (Requerido: 15 créditos electivos acumulados)."
+              : "Marca los cursos obligatorios que ya has superado del Ciclo I al X. Los electivos se gestionan al final en su propia pestaña."}
           </p>
         </div>
 
@@ -280,7 +294,7 @@ export default function ConfiguracionInicial() {
           
           {/* Cursos Obligatorios */}
           <div className={`${
-            paso === 1 ? 'ring-2 ring-blue-500/50' : ''
+            !esModoElectivos ? 'ring-2 ring-blue-500/50' : ''
           } ${tema === 'dark' ? 'bg-slate-950/80 border-slate-800/90' : 'bg-blue-50/60 border-blue-200'} rounded-2xl p-4 border flex items-center space-x-3.5 shadow-lg transition-all`}>
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
               <BookOpen className="w-5 h-5" />
@@ -296,7 +310,7 @@ export default function ConfiguracionInicial() {
 
           {/* Cursos Electivos */}
           <div className={`${
-            paso === 2 ? 'ring-2 ring-purple-500/50' : ''
+            esModoElectivos ? 'ring-2 ring-purple-500/50' : ''
           } ${tema === 'dark' ? 'bg-purple-950/20 border-purple-500/30' : 'bg-purple-50/60 border-purple-200'} rounded-2xl p-4 border flex items-center space-x-3.5 shadow-lg transition-all`}>
             <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-400 dark:text-purple-300 flex items-center justify-center shrink-0 shadow-sm">
               <Sparkles className="w-5 h-5" />
@@ -339,47 +353,72 @@ export default function ConfiguracionInicial() {
 
         </div>
 
-        {/* ── PASO 1: VISTA DE CURSOS OBLIGATORIOS ── */}
-        {paso === 1 && (
+        {/* ── BARRA DE 11 PESTAÑAS (Ciclo I al X + Pestaña Especial "⚡ Cursos Electivos") ── */}
+        <div className={`flex space-x-1.5 mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
+          {ciclos.map((ciclo) => {
+            const esElectivoTab = ciclo === "ELECTIVOS";
+            const estaActivo = cicloActivo === ciclo;
+
+            if (esElectivoTab) {
+              return (
+                <button
+                  key="ELECTIVOS"
+                  type="button"
+                  onClick={() => setCicloActivo("ELECTIVOS")}
+                  className={`px-4 py-3 text-xs font-black rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer flex items-center space-x-1.5 ${
+                    estaActivo
+                      ? "text-purple-400 border-purple-500 bg-purple-500/20 shadow-inner"
+                      : "text-purple-400/80 border-transparent hover:text-purple-300 hover:bg-purple-950/30"
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                  <span>⚡ Cursos Electivos</span>
+                  {electivosAprobados > 0 && (
+                    <span className="ml-1 text-[9px] bg-purple-500/30 text-purple-300 border border-purple-500/40 px-1.5 py-0.5 rounded-full font-black">
+                      {electivosAprobados}
+                    </span>
+                  )}
+                </button>
+              );
+            }
+
+            const aprobadosEnCiclo = cursosReales.filter(
+              (c) => c.ciclo === ciclo && !ELECTIVOS_SET.has(c.id) && aprobados.includes(c.id)
+            ).length;
+            const totalEnCiclo = cursosReales.filter((c) => c.ciclo === ciclo && !ELECTIVOS_SET.has(c.id)).length;
+
+            return (
+              <button
+                key={ciclo}
+                type="button"
+                onClick={() => setCicloActivo(ciclo)}
+                className={`px-4 py-3 text-xs font-extrabold rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer ${
+                  estaActivo
+                    ? "text-blue-500 dark:text-blue-400 border-blue-500 bg-blue-500/10 shadow-inner"
+                    : tema === 'dark'
+                    ? "text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/40"
+                    : "text-slate-500 border-transparent hover:text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                Ciclo {ciclo}
+                {aprobadosEnCiclo > 0 && (
+                  <span className="ml-2 text-[9px] bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded-full font-black">
+                    {aprobadosEnCiclo}/{totalEnCiclo}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ── CONTENIDO VISTA DE CICLO NORMAL (CICLOS I AL X - SOLO OBLIGATORIOS) ── */}
+        {!esModoElectivos && (
           <div className="space-y-6 animate-fadeIn">
-            {/* Pestañas de ciclo para Obligatorios */}
-            <div className={`flex space-x-1.5 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
-              {ciclos.map((ciclo) => {
-                const aprobadosEnCiclo = cursosReales.filter(
-                  (c) => c.ciclo === ciclo && !ELECTIVOS_SET.has(c.id) && aprobados.includes(c.id)
-                ).length;
-                const totalEnCiclo = cursosReales.filter((c) => c.ciclo === ciclo && !ELECTIVOS_SET.has(c.id)).length;
-                const estaActivo = cicloActivo === ciclo;
-
-                return (
-                  <button
-                    key={ciclo}
-                    type="button"
-                    onClick={() => setCicloActivo(ciclo)}
-                    className={`px-4 py-3 text-xs font-extrabold rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer ${
-                      estaActivo
-                        ? "text-blue-500 dark:text-blue-400 border-blue-500 bg-blue-500/10 shadow-inner"
-                        : tema === 'dark'
-                        ? "text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/40"
-                        : "text-slate-500 border-transparent hover:text-slate-900 hover:bg-slate-100"
-                    }`}
-                  >
-                    Ciclo {ciclo}
-                    {aprobadosEnCiclo > 0 && (
-                      <span className="ml-2 text-[9px] bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded-full font-black">
-                        {aprobadosEnCiclo}/{totalEnCiclo}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
             {/* Acciones del ciclo actual */}
             <div className="flex justify-between items-center px-1">
               <span className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider flex items-center space-x-2`}>
                 <SlidersHorizontal className="w-3.5 h-3.5 text-blue-500" />
-                <span>Obligatorios del Ciclo {cicloActivo} ({cursosObligatoriosDelCiclo.length} cursos)</span>
+                <span>Asignaturas Obligatorias del Ciclo {cicloActivo} ({cursosObligatoriosDelCiclo.length} cursos)</span>
               </span>
 
               <button
@@ -443,9 +482,22 @@ export default function ConfiguracionInicial() {
           </div>
         )}
 
-        {/* ── PASO 2: VISTA DE CURSOS ELECTIVOS ── */}
-        {paso === 2 && (
+        {/* ── CONTENIDO PESTAÑA DEDICADA: "⚡ CURSOS ELECTIVOS" (UBICADA DESPUÉS DEL CICLO X) ── */}
+        {esModoElectivos && (
           <div className="space-y-6 animate-fadeIn">
+            {/* Banner de Indicación sobre Electivos UNP */}
+            <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center space-x-2 text-purple-300">
+                <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                <span className="leading-relaxed">
+                  <strong>Regla de Electivos UNP:</strong> Los estudiantes llevan únicamente de 1 a 2 asignaturas electivas según su especialización (hasta sumar 15 CR electivos). Selecciona solo los que cursaste.
+                </span>
+              </div>
+              <div className="px-3.5 py-1.5 rounded-xl bg-purple-950/90 border border-purple-500/40 text-purple-300 font-black shrink-0 text-xs shadow-sm">
+                ⚡ {electivosAprobados} electivo(s) ({creditosElectivosAprobados} / 15 CR)
+              </div>
+            </div>
+
             {/* Pestañas de filtro por ciclo para Electivos */}
             <div className={`flex space-x-1.5 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
               {[
@@ -462,12 +514,12 @@ export default function ConfiguracionInicial() {
                     key={f.id}
                     type="button"
                     onClick={() => setFiltroElectivosCiclo(f.id)}
-                    className={`px-4 py-3 text-xs font-extrabold rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer ${
+                    className={`px-4 py-2.5 text-xs font-extrabold rounded-t-xl shrink-0 transition-all border-b-2 cursor-pointer ${
                       estaActivo
-                        ? "text-purple-400 border-purple-500 bg-purple-500/10 shadow-inner"
+                        ? "text-purple-400 border-purple-500 bg-purple-500/10"
                         : tema === 'dark'
-                        ? "text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/40"
-                        : "text-slate-500 border-transparent hover:text-slate-900 hover:bg-slate-100"
+                        ? "text-slate-400 border-transparent hover:text-slate-200"
+                        : "text-slate-500 border-transparent hover:text-slate-900"
                     }`}
                   >
                     {f.etiqueta}
@@ -476,20 +528,7 @@ export default function ConfiguracionInicial() {
               })}
             </div>
 
-            {/* Acciones e Info para Electivos */}
-            <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center space-x-2 text-purple-300">
-                <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
-                <span className="leading-relaxed">
-                  <strong>Indicación de Electivos UNP:</strong> Selecciona individualmente solo los electivos que hayas cursado y aprobado (Requerido: 15 créditos electivos acumulados).
-                </span>
-              </div>
-              <div className="px-3 py-1.5 rounded-xl bg-purple-950/80 border border-purple-500/40 text-purple-300 font-extrabold shrink-0 text-[11px]">
-                ⚡ {electivosAprobados} electivo(s) marcados ({creditosElectivosAprobados} / 15 CR)
-              </div>
-            </div>
-
-            {/* Listado de cursos electivos */}
+            {/* Listado de los 17 Cursos Electivos */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-80 overflow-y-auto pr-1">
               {electivosFiltrados.map((curso) => {
                 const estaSeleccionado = aprobados.includes(curso.id);
@@ -539,32 +578,32 @@ export default function ConfiguracionInicial() {
           </div>
         )}
 
-        {/* Footer Navegación entre Pasos */}
+        {/* Footer Navegación entre Pestañas */}
         <div className={`flex flex-col sm:flex-row items-center justify-between border-t ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pt-6 gap-4 mt-6`}>
           <div className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} text-center sm:text-left font-medium`}>
-            <span className={`${tema === 'dark' ? 'text-white' : 'text-slate-900'} font-black`}>{aprobados.length}</span> asignaturas marcadas total (
+            <span className={`${tema === 'dark' ? 'text-white' : 'text-slate-900'} font-black`}>{aprobados.length}</span> asignaturas marcadas (
             <span className="text-emerald-500 dark:text-emerald-400 font-bold">{obligatoriosAprobados} obligatorios</span> · <span className="text-purple-400 font-bold">{creditosElectivosAprobados} CR electivos</span>)
           </div>
 
           <div className="flex items-center space-x-3 w-full sm:w-auto">
-            {paso === 2 && (
+            {cicloActivo !== "I" && (
               <button
                 type="button"
-                onClick={() => setPaso(1)}
+                onClick={irAnteriorPestana}
                 className="w-full sm:w-auto px-5 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold rounded-2xl text-xs border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Volver a Obligatorios</span>
+                <span>Anterior</span>
               </button>
             )}
 
-            {paso === 1 ? (
+            {!esModoElectivos ? (
               <button
                 type="button"
-                onClick={() => setPaso(2)}
+                onClick={irSiguientePestana}
                 className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.98] text-white font-black rounded-2xl text-sm transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center space-x-2 cursor-pointer"
               >
-                <span>Siguiente: Seleccionar Electivos</span>
+                <span>{cicloActivo === "X" ? "Ir a Cursos Electivos ⚡" : `Siguiente: Ciclo ${ciclos[ciclos.indexOf(cicloActivo) + 1]}`}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
@@ -584,4 +623,3 @@ export default function ConfiguracionInicial() {
     </div>
   );
 }
-
