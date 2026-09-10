@@ -174,22 +174,6 @@ export default function ConfiguracionInicial() {
     return c.ciclo === filtroElectivosCiclo;
   });
 
-  const todosElectivosEnFiltroAprobados =
-    electivosFiltrados.length > 0 &&
-    electivosFiltrados.every((c) => aprobados.includes(c.id));
-
-  const toggleTodosLosElectivos = () => {
-    const idsElectivos = electivosFiltrados.map((c) => c.id);
-    if (todosElectivosEnFiltroAprobados) {
-      setAprobados((prev) => prev.filter((id) => !idsElectivos.includes(id)));
-    } else {
-      setAprobados((prev) => {
-        const filtrados = prev.filter((id) => !idsElectivos.includes(id));
-        return [...filtrados, ...idsElectivos];
-      });
-    }
-  };
-
   // Métricas
   const creditosAprobados = cursosReales
     .filter((c) => aprobados.includes(c.id))
@@ -492,21 +476,17 @@ export default function ConfiguracionInicial() {
               })}
             </div>
 
-            {/* Acciones para Electivos */}
-            <div className="flex justify-between items-center px-1">
-              <span className={`text-xs font-bold ${tema === 'dark' ? 'text-purple-300' : 'text-purple-700'} uppercase tracking-wider flex items-center space-x-2`}>
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                <span>Asignaturas Electivas ({electivosFiltrados.length} disponibles)</span>
-              </span>
-
-              <button
-                type="button"
-                onClick={toggleTodosLosElectivos}
-                className="text-xs font-extrabold text-purple-400 hover:opacity-80 transition-all flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 cursor-pointer shadow-sm"
-              >
-                {todosElectivosEnFiltroAprobados ? <CheckSquare className="w-4 h-4 text-purple-400" /> : <Square className="w-4 h-4 text-purple-400" />}
-                <span>{todosElectivosEnFiltroAprobados ? "Desmarcar estos electivos" : "Marcar todos estos electivos"}</span>
-              </button>
+            {/* Acciones e Info para Electivos */}
+            <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center space-x-2 text-purple-300">
+                <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                <span className="leading-relaxed">
+                  <strong>Indicación de Electivos UNP:</strong> Selecciona individualmente solo los electivos que hayas cursado y aprobado (Requerido: 15 créditos electivos acumulados).
+                </span>
+              </div>
+              <div className="px-3 py-1.5 rounded-xl bg-purple-950/80 border border-purple-500/40 text-purple-300 font-extrabold shrink-0 text-[11px]">
+                ⚡ {electivosAprobados} electivo(s) marcados ({creditosElectivosAprobados} / 15 CR)
+              </div>
             </div>
 
             {/* Listado de cursos electivos */}
