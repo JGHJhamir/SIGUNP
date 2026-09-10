@@ -504,19 +504,19 @@ export default function InicioEstudiante() {
               </Link>
 
               <Link
-                to="/estudiante/apuntes"
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-sky-500/50 light:hover:border-sky-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
+                to="/estudiante/matricula"
+                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-amber-500/50 light:hover:border-amber-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
               >
                 <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 light:text-sky-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                    <FileText className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 light:text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
+                    <BookOpen className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Apuntes Notion</div>
-                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Cuadernos por curso</div>
+                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Pre-Matrícula</div>
+                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Inscripción y horarios</div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
               </Link>
             </div>
 

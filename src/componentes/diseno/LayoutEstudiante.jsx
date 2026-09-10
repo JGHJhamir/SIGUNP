@@ -53,12 +53,6 @@ export default function LayoutEstudiante() {
       icono: <Sliders className="w-4 h-4" />
     },
     {
-      ruta: "/estudiante/apuntes",
-      etiqueta: "Apuntes Notion",
-      descripcion: "Cuaderno por asignaturas",
-      icono: <BookOpen className="w-4 h-4" />
-    },
-    {
       ruta: "/estudiante/matricula",
       etiqueta: "Matrícula",
       descripcion: "Inscripción de grupos",

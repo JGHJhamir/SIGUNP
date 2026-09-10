@@ -8,7 +8,6 @@ import LayoutEstudiante from "../componentes/diseno/LayoutEstudiante";
 import InicioEstudiante from "../paginas/Estudiante/InicioEstudiante";
 import HorarioMatricula from "../paginas/Estudiante/HorarioMatricula";
 import MallaCurricular from "../paginas/Estudiante/MallaCurricular";
-import ApuntesNotion from "../paginas/Estudiante/ApuntesNotion";
 import SimuladorSemestres from "../paginas/Estudiante/SimuladorSemestres";
 import Matricula from "../paginas/Estudiante/Matricula";
 import PerfilEstudiante from "../paginas/Estudiante/PerfilEstudiante";
@@ -121,7 +120,6 @@ export default function EnrutadorApp() {
           <Route path="inicio" element={<InicioEstudiante />} />
           <Route path="horario" element={<HorarioMatricula />} />
           <Route path="malla" element={<MallaCurricular />} />
-          <Route path="apuntes" element={<ApuntesNotion />} />
           <Route path="simulador" element={<SimuladorSemestres />} />
           <Route path="matricula" element={<Matricula />} />
           <Route path="perfil" element={<PerfilEstudiante />} />
