@@ -255,11 +255,11 @@ export default function IniciarSesion() {
       } [background-size:32px_32px] pointer-events-none`}></div>
 
       {/* Top right theme toggle */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <button
           type="button"
           onClick={alternarTema}
-          className={`px-4 py-2 rounded-2xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-lg ${
+          className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-lg ${
             tema === 'dark'
               ? "bg-slate-900/80 border-slate-700 text-amber-300 hover:bg-slate-800"
               : "bg-white/90 border-slate-200 text-amber-600 hover:bg-slate-100"
@@ -268,12 +268,12 @@ export default function IniciarSesion() {
           {tema === 'dark' ? (
             <>
               <Sun className="w-4 h-4 text-amber-400" />
-              <span>Modo Claro</span>
+              <span className="hidden sm:inline">Modo Claro</span>
             </>
           ) : (
             <>
               <Moon className="w-4 h-4 text-indigo-600" />
-              <span>Modo Oscuro</span>
+              <span className="hidden sm:inline">Modo Oscuro</span>
             </>
           )}
         </button>
@@ -281,21 +281,21 @@ export default function IniciarSesion() {
 
       <div className={`w-full max-w-2xl ${
         tema === 'dark' ? 'bg-slate-900/85 border-slate-800/90' : 'bg-white/90 border-slate-200/90 shadow-2xl'
-      } backdrop-blur-2xl border rounded-3xl p-6 md:p-12 relative overflow-hidden z-10 transition-all duration-300`}>
+      } backdrop-blur-2xl border rounded-3xl p-4 sm:p-6 md:p-12 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
         
         {/* Top accent bar */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500"></div>
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="relative group inline-flex items-center justify-center mb-6">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="relative group inline-flex items-center justify-center mb-4 sm:mb-6 mt-4 sm:mt-0">
             {/* Ambient Backlight Glows */}
             <div className={`absolute -inset-3 ${
               tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
             } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
             
             {/* Logo Ring Container with perfect circular clipping */}
-            <div className={`relative w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 rounded-full p-1.5 ${
+            <div className={`relative w-28 h-28 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full p-1.5 ${
               tema === 'dark'
                 ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35),0_0_25px_rgba(245,158,11,0.25)]'
                 : 'bg-white border-sky-300 shadow-2xl shadow-sky-600/15'

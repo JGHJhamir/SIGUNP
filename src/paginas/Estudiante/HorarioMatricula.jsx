@@ -566,7 +566,7 @@ export default function HorarioMatricula() {
             )}
 
             {/* Selector de Semestres */}
-            <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800">
+            <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800 overflow-x-auto no-scrollbar max-w-full">
               {semestresDisponibles.map((sem) => {
                 const tieneMatriculaGuardada = matriculasPorSemestre[sem]?.cursos?.length > 0;
                 return (

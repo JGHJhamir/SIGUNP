@@ -302,7 +302,7 @@ export default function LayoutEstudiante() {
           </div>
         </header>
 
-        <div className="p-4 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn">
+        <div className="p-3 sm:p-4 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn overflow-x-hidden">
           <Outlet />
         </div>
       </main>
@@ -310,14 +310,14 @@ export default function LayoutEstudiante() {
       {/* Bottom Bar Móvil */}
       <nav className={`md:hidden fixed bottom-0 left-0 right-0 ${
         tema === 'dark' ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200'
-      } backdrop-blur-2xl border-t flex items-center justify-around py-2.5 z-50 px-2 shadow-2xl transition-colors duration-300`}>
+      } backdrop-blur-2xl border-t flex items-center justify-between py-2 z-50 px-1 shadow-2xl transition-colors duration-300 overflow-x-auto no-scrollbar`}>
         {menuItems.map((item) => {
           const estaActivo = localizacion.pathname === item.ruta;
           return (
             <Link
               key={item.ruta}
               to={item.ruta}
-              className={`flex flex-col items-center justify-center px-2.5 py-1 rounded-xl transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center px-1 sm:px-2.5 py-1 rounded-xl transition-all duration-200 shrink-0 min-w-0 flex-1 ${
                 estaActivo
                   ? "text-blue-500 dark:text-blue-400 scale-105 font-bold"
                   : tema === 'dark'
@@ -326,7 +326,7 @@ export default function LayoutEstudiante() {
               }`}
             >
               <div className={`shrink-0 ${estaActivo ? "text-blue-500 dark:text-blue-400" : ""}`}>{item.icono}</div>
-              <span className="text-[9px] font-semibold mt-1 tracking-tight truncate max-w-[64px]">
+              <span className="text-[8px] sm:text-[9px] font-bold mt-0.5 tracking-tight truncate max-w-[48px] sm:max-w-[64px] text-center">
                 {item.etiqueta}
               </span>
             </Link>

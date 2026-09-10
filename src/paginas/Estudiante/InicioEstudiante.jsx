@@ -204,29 +204,29 @@ export default function InicioEstudiante() {
     <div className="space-y-6">
 
       {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-slate-800/90 p-6 md:p-8 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-slate-800/90 p-4 sm:p-6 md:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/15 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="flex items-center space-x-5">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6">
+          <div className="flex items-center space-x-3 sm:space-x-5">
             <div className="relative shrink-0 hidden sm:flex items-center justify-center">
               <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl pointer-events-none"></div>
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
                 <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold shadow-sm">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] sm:text-xs font-bold shadow-sm">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>PANEL ACADÉMICO PRINCIPAL</span>
                 </div>
-                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold shadow-sm">
-                  <Info className="w-3.5 h-3.5 text-amber-400" />
+                <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] sm:text-[11px] font-bold shadow-sm">
+                  <Info className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>Proyecto Independiente por JIAR (No Oficial UNP)</span>
                 </div>
               </div>
-              <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl md:text-4xl font-black text-white tracking-tight">
                 ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}! 👋
               </h1>
               <p className="text-xs md:text-sm text-slate-400 max-w-lg leading-relaxed">
@@ -235,7 +235,7 @@ export default function InicioEstudiante() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 bg-slate-950/80 border border-slate-800 px-4 py-3 rounded-2xl backdrop-blur-md shadow-xl shrink-0">
+          <div className="flex items-center space-x-3 bg-slate-950/80 border border-slate-800 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-md shadow-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start">
             <Calendar className="w-5 h-5 text-blue-400" />
             <div>
               <div className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400">Semestre Vigente</div>

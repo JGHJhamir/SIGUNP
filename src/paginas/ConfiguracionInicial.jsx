@@ -182,12 +182,12 @@ export default function ConfiguracionInicial() {
 
       <div className={`w-full max-w-5xl ${
         tema === 'dark' ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white/90 border-slate-200 shadow-2xl'
-      } backdrop-blur-2xl rounded-3xl border p-6 md:p-10 relative overflow-hidden z-10 animate-fadeIn transition-colors duration-300`}>
+      } backdrop-blur-2xl rounded-3xl border p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 animate-fadeIn transition-colors duration-300 max-w-full`}>
         
         {/* Step Indicator Pill */}
         <div className={`flex justify-between items-center mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-4`}>
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-500 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center font-black text-xs shadow-md">
+            <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-500 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center font-black text-xs shadow-md shrink-0">
               01
             </div>
             <div>
@@ -207,7 +207,7 @@ export default function ConfiguracionInicial() {
               }`}
             >
               {tema === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-600" />}
-              <span>{tema === 'dark' ? "Claro" : "Oscuro"}</span>
+              <span className="hidden sm:inline">{tema === 'dark' ? "Claro" : "Oscuro"}</span>
             </button>
 
             <div className={`hidden sm:flex items-center space-x-2 text-xs ${
@@ -220,10 +220,10 @@ export default function ConfiguracionInicial() {
         </div>
 
         {/* Encabezado */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="relative group inline-flex items-center justify-center mb-4">
             <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl pointer-events-none"></div>
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
               <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
             </div>
           </div>
@@ -235,7 +235,7 @@ export default function ConfiguracionInicial() {
             </div>
           </div>
 
-          <h1 className={`text-2xl md:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+          <h1 className={`text-xl sm:text-2xl md:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
             Indica tus Asignaturas Aprobadas
           </h1>
           <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-2 max-w-lg mx-auto leading-relaxed`}>
@@ -244,7 +244,7 @@ export default function ConfiguracionInicial() {
         </div>
 
         {/* Dynamic Progress Metric Bar Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           
           {/* Cursos Obligatorios */}
           <div className={`${tema === 'dark' ? 'bg-slate-950/80 border-slate-800/90' : 'bg-blue-50/60 border-blue-200'} rounded-2xl p-4 border flex items-center space-x-3.5 shadow-lg`}>
@@ -304,7 +304,7 @@ export default function ConfiguracionInicial() {
         </div>
 
         {/* Pestañas de ciclo */}
-        <div className={`flex space-x-1.5 mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto`}>
+        <div className={`flex space-x-1.5 mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
           {ciclos.map((ciclo) => {
             const aprobadosEnCiclo = cursosReales.filter(
               (c) => c.ciclo === ciclo && aprobados.includes(c.id)

@@ -134,7 +134,7 @@ export default function ApuntesNotion() {
             />
           </div>
 
-          <div className="bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 p-3 rounded-3xl shadow-sm dark:shadow-xl flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible backdrop-blur-2xl transition-colors">
+          <div className="bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 p-3 rounded-3xl shadow-sm dark:shadow-xl flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible no-scrollbar backdrop-blur-2xl transition-colors">
             {cursosFiltrados.map((curso) => {
               const esActivo = curso.id === cursoActivo;
               return (
@@ -160,7 +160,7 @@ export default function ApuntesNotion() {
         </div>
 
         {/* Columna Derecha: Editor Notion */}
-        <div className="lg:col-span-3 flex flex-col space-y-3.5 h-[580px]">
+        <div className="lg:col-span-3 flex flex-col space-y-3.5 min-h-[460px] lg:h-[580px]">
 
           <div className="flex-1 bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 rounded-3xl shadow-sm dark:shadow-xl overflow-hidden flex flex-col backdrop-blur-2xl transition-colors">
 

@@ -275,7 +275,7 @@ export default function Matricula() {
         {/* Selector de Semestre */}
         <div className="pt-2">
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-2">Selecciona Semestre Académico</span>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex overflow-x-auto no-scrollbar gap-2 max-w-full pb-1">
             {semestresDisponibles.map((sem) => {
               const guardado = !!matriculasPorSemestre[sem];
               const esActivo = semestreSeleccionado === sem;
