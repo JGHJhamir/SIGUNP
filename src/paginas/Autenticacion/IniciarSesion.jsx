@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   Sun,
   Moon,
   Mail,
@@ -62,29 +63,38 @@ export default function IniciarSesion() {
   const navegar = useNavigate();
   const { tema, alternarTema } = useTema();
 
-  // Modo: 'login' o 'registro'
-  const [pestanaActiva, setPestanaActiva] = useState("login");
+  // Vista activa: 'bienvenida' | 'login' | 'registro_paso1' | 'registro_paso2' | 'registro_paso3'
+  const [vista, setVista] = useState("bienvenida");
+
+  // ── ESTADO DE ACEPTACIÓN DE TÉRMINOS ──
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
 
   // ── ESTADOS DE INICIO DE SESIÓN ──
   const [identificadorLogin, setIdentificadorLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
   const [mostrarPasswordLogin, setMostrarPasswordLogin] = useState(false);
 
-  // ── ESTADOS DE REGISTRO ──
+  // ── ESTADOS DE REGISTRO PASO A PASO ──
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
+  
+  // Selección del método de identificación para el registro: 'dni', 'codigo', 'email'
+  const [metodoRegistroPref, setMetodoRegistroPref] = useState("dni");
   const [dni, setDni] = useState("");
   const [codigoUni, setCodigoUni] = useState("");
   const [email, setEmail] = useState("");
+
+  // Contraseñas
   const [passwordRegistro, setPasswordRegistro] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mostrarPasswordRegistro, setMostrarPasswordRegistro] = useState(false);
   const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
-  const [facultad, setFacultad] = useState("");
-  // ── ESTADO DE ACEPTACIÓN DE TÉRMINOS ──
-  const [aceptaTerminos, setAceptaTerminos] = useState(false);
 
-  // ── ESTADO DEL MODAL DE CONFIRMACIÓN ──
+  // Datos Académicos
+  const [facultad, setFacultad] = useState("");
+  const [escuela, setEscuela] = useState("");
+
+  // ── MODAL DE CONFIRMACIÓN ──
   const [mostrarModalConfirmacion, setMostrarModalConfirmacion] = useState(false);
 
   // Superusuario y Carga
@@ -92,10 +102,10 @@ export default function IniciarSesion() {
   const [modoIngreso, setModoIngreso] = useState("Estudiante");
   const [cargando, setCargando] = useState(false);
 
-  // Estado de Mensajes de Feedback
+  // Mensaje Feedback
   const [mensaje, setMensaje] = useState(null);
 
-  // Escuchar nombres y apellidos para el modo superusuario
+  // Escuchar nombres y apellidos para superusuario
   useEffect(() => {
     const esCoincidencia =
       nombres.trim().toLowerCase() === "jhamir walverdir" &&
@@ -111,55 +121,38 @@ export default function IniciarSesion() {
   };
 
   const autocompletarDemo = (tipo) => {
-    if (tipo === "estudiante") {
-      setIdentificadorLogin("0512021015");
-      setPasswordLogin("123456");
-      setNombres("Jhamir Walverdir");
-      setApellidos("Garcia Herrera");
-      setDni("72839401");
-      setCodigoUni("0512021015");
-      setEmail("jhamir.garcia@unp.edu.pe");
-      setPasswordRegistro("123456");
-      setConfirmPassword("123456");
-      setFacultad("Facultad de Ingeniería Industrial");
-      setEscuela("Ingeniería Informática");
-      setModoIngreso("Estudiante");
-    } else {
-      setIdentificadorLogin("0512021015");
-      setPasswordLogin("123456");
-      setNombres("Jhamir Walverdir");
-      setApellidos("Garcia Herrera");
-      setDni("72839401");
-      setCodigoUni("0512021015");
-      setEmail("jhamir.garcia@unp.edu.pe");
-      setPasswordRegistro("123456");
-      setConfirmPassword("123456");
-      setFacultad("Facultad de Ingeniería Industrial");
-      setEscuela("Ingeniería Informática");
-      setModoIngreso("Administrador");
-    }
-    setMensaje({
-      tipo: "success",
-      texto: "Credenciales demo autocompletadas."
-    });
+    setIdentificadorLogin("0512021015");
+    setPasswordLogin("123456");
+    setNombres("Jhamir Walverdir");
+    setApellidos("Garcia Herrera");
+    setDni("72839401");
+    setCodigoUni("0512021015");
+    setEmail("jhamir.garcia@unp.edu.pe");
+    setPasswordRegistro("123456");
+    setConfirmPassword("123456");
+    setFacultad("Facultad de Ingeniería Industrial");
+    setEscuela("Ingeniería Informática");
+    setAceptaTerminos(true);
+    setModoIngreso(tipo === "estudiante" ? "Estudiante" : "Administrador");
+    setMensaje({ tipo: "success", texto: "Credenciales demo autocompletadas." });
   };
 
-  // ── MANEJO DEL LOGIN ──
+  // ── EJECUTAR INICIO DE SESIÓN ──
   const ejecutarLogin = async (e) => {
     e.preventDefault();
     setMensaje(null);
+
+    if (!aceptaTerminos) {
+      setMensaje({
+        tipo: "error",
+        texto: "Debes marcar la casilla para aceptar los Términos de Uso y el aviso de proyecto independiente."
+      });
+      return;
+    }
+
     setCargando(true);
 
     try {
-      if (!aceptaTerminos) {
-        setMensaje({
-          tipo: "error",
-          texto: "Debes marcar la casilla para aceptar los Términos de Uso y el aviso de proyecto independiente."
-        });
-        setCargando(false);
-        return;
-      }
-
       const idLimpio = identificadorLogin.trim();
       if (!idLimpio || !passwordLogin) {
         setMensaje({ tipo: "error", texto: "Por favor, ingresa tu identificador y contraseña." });
@@ -167,7 +160,7 @@ export default function IniciarSesion() {
         return;
       }
 
-      // Consulta en Supabase buscando por DNI, Código o Email
+      // Consulta a Supabase
       const { data: usuarioBD, error } = await supabase
         .from("estudiantes")
         .select("*")
@@ -178,7 +171,6 @@ export default function IniciarSesion() {
         console.warn("Consulta Supabase:", error.message);
       }
 
-      // Si no existe en Supabase pero es la cuenta demo local
       let usuario = usuarioBD;
       if (!usuario && (idLimpio === "0512021015" || idLimpio === "72839401" || idLimpio === "jhamir.garcia@unp.edu.pe")) {
         usuario = {
@@ -195,13 +187,12 @@ export default function IniciarSesion() {
       if (!usuario) {
         setMensaje({
           tipo: "error",
-          texto: "Usuario no encontrado. Verifica tu DNI, Código o Correo, o regístrate si eres nuevo."
+          texto: "Usuario no encontrado. Verifica tu DNI, Código o Correo, o crea tu cuenta si eres nuevo."
         });
         setCargando(false);
         return;
       }
 
-      // Validar longitud mínima de contraseña
       if (passwordLogin.length < 6) {
         setMensaje({ tipo: "error", texto: "La contraseña debe tener al menos 6 caracteres." });
         setCargando(false);
@@ -210,7 +201,6 @@ export default function IniciarSesion() {
 
       const rolFinal = esSuperusuario ? modoIngreso : (usuario.rol || "Estudiante");
 
-      // Cargar cursos aprobados si existen
       if (usuario.codigo_universitario) {
         const { data: aprobadosBD } = await supabase
           .from("estudiante_cursos_aprobados")
@@ -223,7 +213,6 @@ export default function IniciarSesion() {
         }
       }
 
-      // Guardar Estado de Sesión Local
       localStorage.setItem("userRole", rolFinal);
       localStorage.setItem("codigoUniversitario", usuario.codigo_universitario || idLimpio);
       localStorage.setItem("nombreEstudiante", `${usuario.nombres} ${usuario.apellidos}`);
@@ -246,46 +235,42 @@ export default function IniciarSesion() {
           navegar("/configuracion-inicial");
         }
       }, 600);
+
     } catch (err) {
-      console.error("Error al iniciar sesión:", err);
-      setMensaje({ tipo: "error", texto: "Error al iniciar sesión. Inténtelo de nuevo." });
+      console.error("Error en login:", err);
+      setMensaje({ tipo: "error", texto: "Ocurrió un error al iniciar sesión." });
     } finally {
       setCargando(false);
     }
   };
 
-  // ── PREPARAR Y REVISAR REGISTRO ──
-  const revisarRegistro = (e) => {
+  // ── PASO 1 A PASO 2 ──
+  const irPaso2 = (e) => {
+    e.preventDefault();
+    setMensaje(null);
+    if (!nombres.trim() || !apellidos.trim()) {
+      setMensaje({ tipo: "error", texto: "Ingresa tus nombres y apellidos para continuar." });
+      return;
+    }
+    setVista("registro_paso2");
+  };
+
+  // ── PASO 2 A PASO 3 ──
+  const irPaso3 = (e) => {
     e.preventDefault();
     setMensaje(null);
 
-    if (!aceptaTerminos) {
-      setMensaje({
-        tipo: "error",
-        texto: "Debes marcar la casilla para aceptar los Términos de Uso y el aviso de proyecto independiente."
-      });
+    if (metodoRegistroPref === "dni" && (!dni.trim() || dni.trim().length !== 8)) {
+      setMensaje({ tipo: "error", texto: "Ingresa un número de DNI válido de 8 dígitos." });
       return;
     }
 
-    if (!nombres.trim() || !apellidos.trim()) {
-      setMensaje({ tipo: "error", texto: "Por favor, ingresa tus nombres y apellidos." });
+    if (metodoRegistroPref === "codigo" && (!codigoUni.trim() || codigoUni.trim().length < 6)) {
+      setMensaje({ tipo: "error", texto: "Ingresa un Código Universitario válido." });
       return;
     }
 
-    if (!dni.trim() && !codigoUni.trim()) {
-      setMensaje({
-        tipo: "error",
-        texto: "Debes ingresar al menos tu DNI (8 dígitos) o tu Código Universitario."
-      });
-      return;
-    }
-
-    if (dni.trim() && dni.trim().length !== 8) {
-      setMensaje({ tipo: "error", texto: "El número de DNI debe contener exactamente 8 dígitos." });
-      return;
-    }
-
-    if (!email.trim() || !email.includes("@")) {
+    if (metodoRegistroPref === "email" && (!email.trim() || !email.includes("@"))) {
       setMensaje({ tipo: "error", texto: "Ingresa un correo electrónico válido." });
       return;
     }
@@ -300,16 +285,23 @@ export default function IniciarSesion() {
       return;
     }
 
+    setVista("registro_paso3");
+  };
+
+  // ── PASO 3 A MODAL DE CONFIRMACIÓN ──
+  const revisarRegistroPaso3 = (e) => {
+    e.preventDefault();
+    setMensaje(null);
+
     if (!facultad || !escuela) {
-      setMensaje({ tipo: "error", texto: "Por favor, selecciona tu Facultad y Escuela Profesional." });
+      setMensaje({ tipo: "error", texto: "Selecciona tu Facultad y Escuela Profesional." });
       return;
     }
 
-    // Abrir modal de confirmación
     setMostrarModalConfirmacion(true);
   };
 
-  // ── CONFIRMAR E INSERTAR REGISTRO EN SUPABASE ──
+  // ── FINALIZAR REGISTRO ──
   const confirmarYRegistrar = async () => {
     setCargando(true);
     setMostrarModalConfirmacion(false);
@@ -317,6 +309,7 @@ export default function IniciarSesion() {
     try {
       const dniLimpio = dni.trim() || null;
       const codigoLimpio = codigoUni.trim() || null;
+      const emailLimpio = email.trim() ? email.trim().toLowerCase() : `${dniLimpio || codigoLimpio}@estudiante.unp.edu.pe`;
       const rolFinal = esSuperusuario ? modoIngreso : "Estudiante";
 
       const payload = {
@@ -324,7 +317,7 @@ export default function IniciarSesion() {
         apellidos: apellidos.trim(),
         dni: dniLimpio,
         codigo_universitario: codigoLimpio,
-        email: email.trim().toLowerCase(),
+        email: emailLimpio,
         password_hash: passwordRegistro,
         facultad,
         escuela,
@@ -332,14 +325,13 @@ export default function IniciarSesion() {
       };
 
       const { error } = await supabase.from("estudiantes").upsert(payload, {
-        onConflict: email ? "email" : "codigo_universitario"
+        onConflict: emailLimpio ? "email" : "codigo_universitario"
       });
 
       if (error) {
         console.warn("Sincronización Supabase:", error.message);
       }
 
-      // Guardar Estado Local
       localStorage.setItem("userRole", rolFinal);
       localStorage.setItem("codigoUniversitario", codigoLimpio || dniLimpio || "0500000000");
       localStorage.setItem("nombreEstudiante", `${nombres.trim()} ${apellidos.trim()}`);
@@ -359,9 +351,10 @@ export default function IniciarSesion() {
           navegar("/configuracion-inicial");
         }
       }, 700);
+
     } catch (err) {
       console.error("Error al registrar:", err);
-      setMensaje({ tipo: "error", texto: "Error al procesar el registro. Intente nuevamente." });
+      setMensaje({ tipo: "error", texto: "Error al procesar el registro." });
     } finally {
       setCargando(false);
     }
@@ -374,11 +367,11 @@ export default function IniciarSesion() {
         : 'bg-gradient-to-br from-slate-100 via-sky-50/60 to-amber-50/30 text-slate-900'
     } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-300`}>
       
-      {/* Glows de fondo */}
+      {/* Background Lights */}
       <div className={`absolute -top-40 -left-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-blue-600/15' : 'bg-sky-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
       <div className={`absolute -bottom-40 -right-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-purple-600/15' : 'bg-amber-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
 
-      {/* Botón superior de Tema */}
+      {/* Botón Tema */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <button
           type="button"
@@ -405,115 +398,161 @@ export default function IniciarSesion() {
 
       <div className={`w-full max-w-2xl ${
         tema === 'dark' ? 'bg-slate-900/85 border-slate-800/90' : 'bg-white/90 border-slate-200/90 shadow-2xl'
-      } backdrop-blur-2xl border rounded-3xl p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
+      } backdrop-blur-2xl border rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
         
-        {/* Barra superior de acento */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500"></div>
+        {/* Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-purple-600"></div>
 
-        {/* Encabezado Principal y Logo */}
-        <div className="text-center mb-6">
-          <div className="relative group inline-flex items-center justify-center mb-3 mt-2 sm:mt-0">
-            <div className={`absolute -inset-3 ${
-              tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
-            } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
-            
-            <div className={`relative w-24 h-24 sm:w-36 sm:h-36 rounded-full p-1.5 ${
-              tema === 'dark'
-                ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_50px_rgba(59,130,246,0.3)]'
-                : 'bg-white border-sky-300 shadow-xl'
-            } border-2 ring-4 ${tema === 'dark' ? 'ring-amber-400/30' : 'ring-amber-400/40'} flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl overflow-hidden`}>
-              <img
-                src="/sigunp-logo.png"
-                alt="SIGUNP Logo"
-                style={{ clipPath: 'circle(49% at 50% 50%)' }}
-                className="w-full h-full object-cover rounded-full drop-shadow-md"
-              />
+        {/* ── 1. PANTALLA DE BIENVENIDA ── */}
+        {vista === "bienvenida" && (
+          <div className="space-y-6 text-center animate-fadeIn">
+            {/* Logo de SIGUNP */}
+            <div className="relative group inline-flex items-center justify-center mt-2">
+              <div className={`absolute -inset-3 ${
+                tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
+              } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
+              
+              <div className={`relative w-28 h-28 sm:w-40 sm:h-40 rounded-full p-1.5 ${
+                tema === 'dark'
+                  ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35)]'
+                  : 'bg-white border-sky-300 shadow-2xl'
+              } border-2 ring-4 ${tema === 'dark' ? 'ring-amber-400/30' : 'ring-amber-400/40'} flex items-center justify-center backdrop-blur-xl overflow-hidden`}>
+                <img
+                  src="/sigunp-logo.png"
+                  alt="SIGUNP Logo"
+                  style={{ clipPath: 'circle(49% at 50% 50%)' }}
+                  className="w-full h-full object-cover rounded-full drop-shadow-md"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className={`inline-flex items-center space-x-2 px-4 py-1.5 rounded-full ${
+                tema === 'dark' ? 'bg-slate-950/80 border-amber-400/30 text-amber-400' : 'bg-amber-50/90 border-amber-300/80 text-amber-900'
+              } border text-xs font-extrabold mb-3 backdrop-blur-md`}>
+                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+                <span className="tracking-widest uppercase text-[11px] font-extrabold bg-gradient-to-r from-sky-500 via-amber-500 to-blue-600 dark:from-sky-400 dark:via-amber-300 dark:to-blue-400 bg-clip-text text-transparent">
+                  UNIVERSIDAD NACIONAL DE PIURA
+                </span>
+              </div>
+
+              <h1 className={`text-2xl sm:text-4xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                ¡Hola, Estudiante de la UNP! 👋
+              </h1>
+              <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-2 max-w-lg mx-auto leading-relaxed font-semibold`}>
+                Bienvenido al <strong>Portal SIGUNP</strong>, la plataforma para simular y calcular tu avance académico, mallas curriculares y créditos.
+              </p>
+            </div>
+
+            {/* Aviso Legal & Checkbox Términos */}
+            <div className={`p-4 rounded-2xl border text-xs leading-relaxed space-y-3 text-left ${
+              tema === 'dark' ? 'bg-slate-950/80 border-sky-500/30 text-slate-300' : 'bg-sky-50/90 border-sky-200 text-slate-700 shadow-sm'
+            }`}>
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-sky-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0" />
+                  <span>Proyecto Independiente · Desarrollado por JIAR</span>
+                </span>
+                <span className="text-[9px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                  No Oficial UNP
+                </span>
+              </div>
+              <p className="text-[11px] leading-relaxed">
+                <strong>Aviso Importante:</strong> Esta plataforma <strong>no es un sitio web oficial de la Universidad Nacional de Piura (UNP)</strong>. Es un proyecto académico creado por <strong>JIAR</strong> para brindar un simulador de mallas curriculares y gestión de créditos.
+              </p>
+
+              <label className="flex items-start space-x-2.5 cursor-pointer text-[11px] font-bold text-sky-400 dark:text-sky-300 pt-2 border-t border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 select-none">
+                <input
+                  type="checkbox"
+                  checked={aceptaTerminos}
+                  onChange={(e) => { setAceptaTerminos(e.target.checked); setMensaje(null); }}
+                  className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
+                />
+                <span className="leading-snug">
+                  He leído y acepto los Términos de Uso y entiendo que SIGUNP es un proyecto académico independiente no oficial.
+                </span>
+              </label>
+            </div>
+
+            {/* Mensajes Error */}
+            {mensaje && (
+              <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{mensaje.texto}</span>
+              </div>
+            )}
+
+            {/* Botones Principales */}
+            <div className="space-y-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (!aceptaTerminos) {
+                    setMensaje({ tipo: "error", texto: "Debes marcar la casilla para aceptar los Términos de Uso." });
+                    return;
+                  }
+                  setVista("registro_paso1");
+                  setMensaje(null);
+                }}
+                className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 active:scale-[0.99] shadow-purple-600/30 flex items-center justify-center space-x-2 text-sm cursor-pointer"
+              >
+                <UserPlus className="w-5 h-5 text-amber-300" />
+                <span>Crear mi Cuenta Estudiantil</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (!aceptaTerminos) {
+                    setMensaje({ tipo: "error", texto: "Debes marcar la casilla para aceptar los Términos de Uso." });
+                    return;
+                  }
+                  setVista("login");
+                  setMensaje(null);
+                }}
+                className={`w-full py-3.5 rounded-2xl font-extrabold text-xs transition-all border flex items-center justify-center space-x-2 cursor-pointer ${
+                  tema === 'dark'
+                    ? "bg-slate-950/80 border-slate-800 text-slate-200 hover:bg-slate-900"
+                    : "bg-white border-slate-300 text-slate-800 hover:bg-slate-50"
+                }`}
+              >
+                <LogIn className="w-4 h-4 text-blue-500" />
+                <span>Ya tengo una cuenta · Iniciar Sesión</span>
+              </button>
+            </div>
+
+            {/* Botón Demo Rápido */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  autocompletarDemo("estudiante");
+                  setVista("login");
+                }}
+                className="text-xs text-slate-400 font-bold hover:underline cursor-pointer"
+              >
+                ⚡ Usar cuenta demo rápida
+              </button>
             </div>
           </div>
-          
-          <div className="block">
-            <div className={`inline-flex items-center space-x-2 px-3.5 py-1 rounded-full ${
-              tema === 'dark'
-                ? 'bg-slate-950/80 border-amber-400/30 text-amber-400'
-                : 'bg-amber-50/90 border-amber-300/80 text-amber-900'
-            } border text-[11px] font-extrabold mb-2 backdrop-blur-md`}>
-              <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-              <span className="tracking-widest uppercase font-extrabold bg-gradient-to-r from-sky-500 via-amber-500 to-blue-600 dark:from-sky-400 dark:via-amber-300 dark:to-blue-400 bg-clip-text text-transparent">
-                UNIVERSIDAD NACIONAL DE PIURA
-              </span>
-            </div>
-          </div>
+        )}
 
-          <h1 className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-            Portal <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-sky-400 dark:via-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">SIGUNP</span>
-          </h1>
-          <p className={`text-xs ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-1 max-w-md mx-auto leading-relaxed font-semibold`}>
-            Sistema Integral de Gestión de la Universidad Nacional de Piura.
-          </p>
-        </div>
-
-        {/* Disclaimer JIAR & Términos y Condiciones */}
-        <div className={`p-4 rounded-2xl border text-xs leading-relaxed space-y-2.5 mb-6 backdrop-blur-md transition-all ${
-          tema === 'dark' ? 'bg-slate-950/80 border-sky-500/30 text-slate-300' : 'bg-sky-50/90 border-sky-200 text-slate-700 shadow-sm'
-        }`}>
-          <div className="flex items-center justify-between">
-            <span className="font-extrabold text-sky-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>Proyecto Independiente · Creado por JIAR</span>
-            </span>
-            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
-              No Oficial UNP
-            </span>
-          </div>
-          <p className="text-[11px] leading-relaxed">
-            Esta plataforma es un proyecto académico independiente creado por <strong>JIAR</strong>. <strong>No es un sitio web oficial de la Universidad Nacional de Piura (UNP)</strong>. Funciona como un simulador y gestor de mallas curriculares.
-          </p>
-
-          <label className="flex items-start space-x-2.5 cursor-pointer text-[11px] font-bold text-sky-400 dark:text-sky-300 pt-2 border-t border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 select-none">
-            <input
-              type="checkbox"
-              checked={aceptaTerminos}
-              onChange={(e) => { setAceptaTerminos(e.target.checked); setMensaje(null); }}
-              className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
-            />
-            <span className="leading-snug">
-              He leído y acepto los Términos de Uso y entiendo que SIGUNP es un proyecto académico independiente no oficial.
-            </span>
-          </label>
-        </div>
-
-        {/* ── SELECTOR DE PESTAÑAS: INICIAR SESIÓN / CREAR CUENTA ── */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-slate-950/60 dark:bg-slate-950/60 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-200 mb-6">
-          <button
-            type="button"
-            onClick={() => { setPestanaActiva("login"); setMensaje(null); }}
-            className={`py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-              pestanaActiva === "login"
-                ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-md"
-                : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-            }`}
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Iniciar Sesión</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => { setPestanaActiva("registro"); setMensaje(null); }}
-            className={`py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-              pestanaActiva === "registro"
-                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md"
-                : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-            }`}
-          >
-            <UserPlus className="w-4 h-4" />
-            <span>Crear Cuenta</span>
-          </button>
-        </div>
-
-        {/* ── FORMULARIO VISTA: INICIAR SESIÓN ── */}
-        {pestanaActiva === "login" && (
+        {/* ── 2. PANTALLA: INICIAR SESIÓN ── */}
+        {vista === "login" && (
           <form onSubmit={ejecutarLogin} className="space-y-4 animate-fadeIn">
+            <div className="flex items-center justify-between mb-2">
+              <button
+                type="button"
+                onClick={() => setVista("bienvenida")}
+                className="text-xs font-bold text-slate-400 hover:text-white flex items-center space-x-1 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Volver al Inicio</span>
+              </button>
+              <span className="text-xs font-black text-blue-500 uppercase tracking-wider">Iniciar Sesión</span>
+            </div>
+
             <div>
               <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
                 <User className="w-3.5 h-3.5 text-blue-500" />
@@ -523,12 +562,12 @@ export default function IniciarSesion() {
                 type="text"
                 value={identificadorLogin}
                 onChange={(e) => setIdentificadorLogin(e.target.value)}
-                placeholder="Ingresa tu DNI, Código o Correo"
+                placeholder="Ingresa tu DNI, Código UNP o Correo"
                 className={`w-full px-4 py-3 rounded-2xl ${
                   tema === 'dark'
-                    ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
-                    : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
-                } border text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner`}
+                    ? 'bg-slate-950/80 border-slate-800 text-slate-100'
+                    : 'bg-slate-50 border-slate-300 text-slate-900'
+                } border text-xs font-semibold focus:outline-none focus:border-blue-500`}
                 required
               />
             </div>
@@ -546,9 +585,9 @@ export default function IniciarSesion() {
                   placeholder="••••••••"
                   className={`w-full px-4 py-3 pr-11 rounded-2xl ${
                     tema === 'dark'
-                      ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
-                      : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
-                  } border text-xs transition-all shadow-inner`}
+                      ? 'bg-slate-950/80 border-slate-800 text-slate-100'
+                      : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs focus:outline-none focus:border-blue-500`}
                   required
                 />
                 <button
@@ -561,72 +600,71 @@ export default function IniciarSesion() {
               </div>
             </div>
 
-            {/* Mensajes (Éxito / Error) */}
-            {mensaje && (
-              <div
-                className={`p-3.5 rounded-2xl border flex items-start space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
-                  mensaje.tipo === "success"
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                    : "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                }`}
-              >
-                {mensaje.tipo === "success" ? (
-                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
-                )}
-                <span className="leading-relaxed">{mensaje.texto}</span>
+            {/* Selector Superusuario */}
+            {esSuperusuario && (
+              <div className="p-3 bg-blue-950/60 border border-blue-500/40 rounded-2xl space-y-1">
+                <label className="text-[10px] font-extrabold text-blue-300 uppercase tracking-wider flex items-center space-x-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Modo Superusuario</span>
+                </label>
+                <select
+                  value={modoIngreso}
+                  onChange={(e) => setModoIngreso(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-blue-100 text-xs font-bold border border-blue-500/40"
+                >
+                  <option value="Estudiante">Estudiante</option>
+                  <option value="Administrador">Administrador</option>
+                </select>
               </div>
             )}
 
-            {/* Acceso Rápido Demo */}
-            <div className="pt-2">
-              <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 flex items-center justify-between">
-                <span>Acceso Rápido Demo</span>
-                <span className="text-sky-500 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md">Supabase Ready</span>
+            {/* Feedback Error */}
+            {mensaje && (
+              <div className={`p-3.5 rounded-2xl border flex items-start space-x-2 text-xs font-semibold ${
+                mensaje.tipo === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-rose-500/10 border-rose-500/30 text-rose-400"
+              }`}>
+                {mensaje.tipo === "success" ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+                <span>{mensaje.texto}</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => autocompletarDemo("estudiante")}
-                  className="px-3 py-2 bg-slate-800/80 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-extrabold border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer"
-                >
-                  <User className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Estudiante Demo</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => autocompletarDemo("administrador")}
-                  className="px-3 py-2 bg-slate-800/80 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-extrabold border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Administrador Demo</span>
-                </button>
-              </div>
-            </div>
+            )}
 
             <button
               type="submit"
               disabled={cargando}
               className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer disabled:opacity-50"
             >
-              {cargando ? (
-                <span>Verificando...</span>
-              ) : (
-                <>
-                  <span>Ingresar al Portal Académico</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
+              {cargando ? <span>Verificando...</span> : <><span>Ingresar al Portal Académico</span><ArrowRight className="w-4 h-4" /></>}
             </button>
           </form>
         )}
 
-        {/* ── FORMULARIO VISTA: CREAR CUENTA (REGISTRO) ── */}
-        {pestanaActiva === "registro" && (
-          <form onSubmit={revisarRegistro} className="space-y-4 animate-fadeIn">
-            {/* Nombres y Apellidos */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* ── 3. REGISTRO PASO 1: DATOS PERSONALES BÁSICOS ── */}
+        {vista === "registro_paso1" && (
+          <form onSubmit={irPaso2} className="space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between mb-1">
+              <button
+                type="button"
+                onClick={() => setVista("bienvenida")}
+                className="text-xs font-bold text-slate-400 hover:text-white flex items-center space-x-1 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Volver</span>
+              </button>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                Paso 1 de 3: Datos Personales
+              </span>
+            </div>
+
+            <div className="text-left">
+              <h2 className={`text-lg font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                Ingresa tus Nombres y Apellidos Reales
+              </h2>
+              <p className="text-xs text-slate-400">
+                Estos datos se usarán para la vinculación de tu ficha académica universitaria.
+              </p>
+            </div>
+
+            <div className="space-y-3">
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
                   <User className="w-3.5 h-3.5 text-purple-500" />
@@ -637,7 +675,7 @@ export default function IniciarSesion() {
                   value={nombres}
                   onChange={(e) => setNombres(e.target.value)}
                   placeholder="Ej. Jhamir Walverdir"
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
                   required
@@ -654,7 +692,7 @@ export default function IniciarSesion() {
                   value={apellidos}
                   onChange={(e) => setApellidos(e.target.value)}
                   placeholder="Ej. Garcia Herrera"
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
                   required
@@ -662,12 +700,82 @@ export default function IniciarSesion() {
               </div>
             </div>
 
-            {/* DNI y Código Universitario (Opcionales individualmente, 1 obligatorio) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {mensaje && (
+              <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{mensaje.texto}</span>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer"
+            >
+              <span>Siguiente: Método de Identificación</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        )}
+
+        {/* ── 4. REGISTRO PASO 2: ELECCIÓN DEL MÉTODO DE REGISTRO ── */}
+        {vista === "registro_paso2" && (
+          <form onSubmit={irPaso3} className="space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between mb-1">
+              <button
+                type="button"
+                onClick={() => setVista("registro_paso1")}
+                className="text-xs font-bold text-slate-400 hover:text-white flex items-center space-x-1 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Atrás</span>
+              </button>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                Paso 2 de 3: Identificación y Clave
+              </span>
+            </div>
+
+            <div className="text-left space-y-1">
+              <h2 className={`text-lg font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                ¿Cómo deseas identificarte para tu registro?
+              </h2>
+              <p className="text-xs text-slate-400">
+                Selecciona tu método preferido de registro (DNI, Código UNP o Correo).
+              </p>
+            </div>
+
+            {/* Selector de Método de Registro */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: "dni", etiqueta: "DNI", icono: IdCard },
+                { id: "codigo", etiqueta: "Código UNP", icono: Hash },
+                { id: "email", etiqueta: "Correo", icono: Mail }
+              ].map((m) => {
+                const IconoComp = m.icono;
+                const estaSeleccionado = metodoRegistroPref === m.id;
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => setMetodoRegistroPref(m.id)}
+                    className={`py-3 px-2 rounded-2xl border text-xs font-extrabold transition-all flex flex-col items-center justify-center space-y-1 cursor-pointer ${
+                      estaSeleccionado
+                        ? "bg-purple-600/20 border-purple-500 text-purple-300 shadow-md"
+                        : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <IconoComp className={`w-4 h-4 ${estaSeleccionado ? 'text-purple-400' : 'text-slate-500'}`} />
+                    <span>{m.etiqueta}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Campo dinámico según selección */}
+            {metodoRegistroPref === "dni" && (
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
                   <IdCard className="w-3.5 h-3.5 text-purple-500" />
-                  <span>DNI (8 dígitos)</span>
+                  <span>Número de DNI (8 dígitos)</span>
                 </label>
                 <input
                   type="text"
@@ -675,16 +783,19 @@ export default function IniciarSesion() {
                   onChange={(e) => setDni(e.target.value.replace(/\D/g, "").slice(0, 8))}
                   maxLength={8}
                   placeholder="72839401"
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                  required
                 />
               </div>
+            )}
 
+            {metodoRegistroPref === "codigo" && (
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
                   <Hash className="w-3.5 h-3.5 text-purple-500" />
-                  <span>Código UNP (10 dígitos)</span>
+                  <span>Código Universitario (10 dígitos)</span>
                 </label>
                 <input
                   type="text"
@@ -692,32 +803,34 @@ export default function IniciarSesion() {
                   onChange={(e) => setCodigoUni(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   maxLength={10}
                   placeholder="0512021015"
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                  required
                 />
               </div>
-            </div>
+            )}
 
-            {/* Correo Electrónico */}
-            <div>
-              <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                <Mail className="w-3.5 h-3.5 text-purple-500" />
-                <span>Correo Electrónico</span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="estudiante@unp.edu.pe"
-                className={`w-full px-3.5 py-2.5 rounded-xl ${
-                  tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
-                required
-              />
-            </div>
+            {metodoRegistroPref === "email" && (
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <Mail className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Correo Electrónico</span>
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="estudiante@unp.edu.pe"
+                  className={`w-full px-4 py-3 rounded-2xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
+                  required
+                />
+              </div>
+            )}
 
-            {/* Contraseña y Confirmar Contraseña (mínimo 6 caracteres + ojito) */}
+            {/* Contraseñas con ojito */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
@@ -774,8 +887,50 @@ export default function IniciarSesion() {
               </div>
             </div>
 
-            {/* Selección de Facultad y Escuela */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {mensaje && (
+              <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{mensaje.texto}</span>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer"
+            >
+              <span>Siguiente: Datos Académicos</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        )}
+
+        {/* ── 5. REGISTRO PASO 3: SELECCIÓN DE FACULTAD Y ESCUELA ── */}
+        {vista === "registro_paso3" && (
+          <form onSubmit={revisarRegistroPaso3} className="space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between mb-1">
+              <button
+                type="button"
+                onClick={() => setVista("registro_paso2")}
+                className="text-xs font-bold text-slate-400 hover:text-white flex items-center space-x-1 cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Atrás</span>
+              </button>
+              <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                Paso 3 de 3: Datos Académicos
+              </span>
+            </div>
+
+            <div className="text-left space-y-1">
+              <h2 className={`text-lg font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                Selecciona tu Facultad y Escuela Profesional
+              </h2>
+              <p className="text-xs text-slate-400">
+                Con esta selección se cargará la malla curricular correspondiente a tu carrera.
+              </p>
+            </div>
+
+            <div className="space-y-3">
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
                   <Building2 className="w-3.5 h-3.5 text-purple-500" />
@@ -784,7 +939,7 @@ export default function IniciarSesion() {
                 <select
                   value={facultad}
                   onChange={manejarCambioFacultad}
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer`}
                   required
@@ -804,7 +959,7 @@ export default function IniciarSesion() {
                 <select
                   value={escuela}
                   onChange={(e) => setEscuela(e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer disabled:opacity-40`}
                   disabled={!facultad}
@@ -818,21 +973,10 @@ export default function IniciarSesion() {
               </div>
             </div>
 
-            {/* Mensajes (Éxito / Error) */}
             {mensaje && (
-              <div
-                className={`p-3.5 rounded-2xl border flex items-start space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
-                  mensaje.tipo === "success"
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                    : "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                }`}
-              >
-                {mensaje.tipo === "success" ? (
-                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
-                )}
-                <span className="leading-relaxed">{mensaje.texto}</span>
+              <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{mensaje.texto}</span>
               </div>
             )}
 
@@ -840,13 +984,13 @@ export default function IniciarSesion() {
               type="submit"
               className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer"
             >
-              <span>Revisar y Crear Cuenta</span>
+              <span>Revisar Ficha Académica</span>
               <Sparkles className="w-4 h-4 text-amber-300" />
             </button>
           </form>
         )}
 
-        {/* Footer legal & autoría */}
+        {/* Footer Legal */}
         <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center">
           <p className="text-[10px] text-slate-400 font-medium">
             © 2026 <strong>SIGUNP</strong> · Proyecto Académico Creado por <strong>JIAR</strong>.
@@ -854,7 +998,7 @@ export default function IniciarSesion() {
         </div>
       </div>
 
-      {/* ── MODAL DE CONFIRMACIÓN DE DATOS ("¿ESTÁS SEGURO?") ── */}
+      {/* ── MODAL DE CONFIRMACIÓN ("¿ESTÁS SEGURO DE QUE TUS DATOS SON CORRECTOS?") ── */}
       {mostrarModalConfirmacion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
           <div className={`w-full max-w-lg ${
@@ -884,7 +1028,7 @@ export default function IniciarSesion() {
               </button>
             </div>
 
-            {/* Tabla resumen de datos */}
+            {/* Tabla Resumen */}
             <div className={`p-4 rounded-2xl border space-y-2.5 text-xs font-semibold ${
               tema === 'dark' ? 'bg-slate-950/90 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
             }`}>
@@ -892,18 +1036,24 @@ export default function IniciarSesion() {
                 <span className="text-slate-400">Nombres completos:</span>
                 <span className="font-extrabold text-right">{nombres} {apellidos}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-slate-800/40">
-                <span className="text-slate-400">DNI:</span>
-                <span className="font-extrabold font-mono text-right">{dni || "No especificado"}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-800/40">
-                <span className="text-slate-400">Código Universitario:</span>
-                <span className="font-extrabold font-mono text-right">{codigoUni || "No especificado"}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-800/40">
-                <span className="text-slate-400">Correo Electrónico:</span>
-                <span className="font-extrabold text-right truncate max-w-[200px]">{email}</span>
-              </div>
+              {dni && (
+                <div className="flex justify-between py-1 border-b border-slate-800/40">
+                  <span className="text-slate-400">DNI:</span>
+                  <span className="font-extrabold font-mono text-right">{dni}</span>
+                </div>
+              )}
+              {codigoUni && (
+                <div className="flex justify-between py-1 border-b border-slate-800/40">
+                  <span className="text-slate-400">Código Universitario:</span>
+                  <span className="font-extrabold font-mono text-right">{codigoUni}</span>
+                </div>
+              )}
+              {email && (
+                <div className="flex justify-between py-1 border-b border-slate-800/40">
+                  <span className="text-slate-400">Correo Electrónico:</span>
+                  <span className="font-extrabold text-right truncate max-w-[200px]">{email}</span>
+                </div>
+              )}
               <div className="flex justify-between py-1 border-b border-slate-800/40">
                 <span className="text-slate-400">Facultad:</span>
                 <span className="font-extrabold text-right truncate max-w-[220px]">{facultad}</span>
@@ -914,20 +1064,18 @@ export default function IniciarSesion() {
               </div>
             </div>
 
-            {/* Advertencia */}
             <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-[11px] text-purple-300 leading-relaxed flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
               <span>Con esta escuela seleccionada se cargará automáticamente tu malla curricular correspondiente.</span>
             </div>
 
-            {/* Acciones del Modal */}
             <div className="flex items-center justify-end space-x-3 pt-2">
               <button
                 type="button"
                 onClick={() => setMostrarModalConfirmacion(false)}
                 className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 text-xs font-bold hover:bg-slate-800 transition-all cursor-pointer"
               >
-                ✏️ Modificar Datos
+                ✏️ Modificar
               </button>
               <button
                 type="button"
