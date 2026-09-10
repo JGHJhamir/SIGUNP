@@ -140,8 +140,8 @@ export default function InicioAdmin() {
           <div className="flex items-center space-x-5">
             <div className="relative shrink-0 hidden sm:flex items-center justify-center">
               <div className="absolute inset-0 bg-purple-500/20 rounded-full blur-xl pointer-events-none"></div>
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-purple-500/30 p-2 shadow-xl shadow-purple-500/20 ring-2 ring-indigo-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300">
-                <img src="/sigunp-logo.png" alt="SIGUNP Logo" className="w-full h-full object-contain drop-shadow-md" />
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-purple-500/30 p-1 shadow-xl shadow-purple-500/20 ring-2 ring-indigo-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
+                <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
               </div>
             </div>
 

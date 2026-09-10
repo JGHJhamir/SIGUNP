@@ -253,35 +253,36 @@ export default function IniciarSesion() {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="relative group inline-flex items-center justify-center mb-5">
-            {/* Ambient Backlight Glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/30 via-sky-400/20 to-amber-500/30 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none"></div>
+          <div className="relative group inline-flex items-center justify-center mb-6">
+            {/* Ambient Backlight Glows */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none"></div>
             
-            {/* Logo Ring Container */}
-            <div className={`relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 rounded-full p-2.5 ${
+            {/* Logo Ring Container with perfect circular clipping */}
+            <div className={`relative w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 rounded-full p-1.5 ${
               tema === 'dark'
-                ? 'bg-slate-950/90 border-sky-500/30 shadow-[0_0_50px_rgba(59,130,246,0.25)]'
+                ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35),0_0_25px_rgba(245,158,11,0.25)]'
                 : 'bg-white/95 border-sky-400/40 shadow-2xl shadow-sky-500/20'
-            } border-2 ring-4 ring-amber-400/20 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl`}>
+            } border-2 ring-4 ring-amber-400/30 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl overflow-hidden`}>
               <img
                 src="/sigunp-logo.png"
                 alt="SIGUNP Logo Oficial"
-                className="w-full h-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-105"
+                style={{ clipPath: 'circle(49% at 50% 50%)' }}
+                className="w-full h-full object-cover rounded-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105"
               />
             </div>
           </div>
           
           <div className="block">
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-sky-500/10 via-amber-500/10 to-blue-500/10 border border-sky-500/20 text-sky-600 dark:text-sky-400 text-xs font-extrabold mb-3 shadow-sm">
-              <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
-              <span className="tracking-wide">UNIVERSIDAD NACIONAL DE PIURA</span>
+            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-950/60 dark:bg-slate-950/80 border border-amber-400/30 text-amber-400 text-xs font-extrabold mb-3 shadow-md shadow-amber-500/10 backdrop-blur-md">
+              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+              <span className="tracking-widest uppercase text-[11px] font-extrabold bg-gradient-to-r from-sky-400 via-amber-300 to-blue-400 bg-clip-text text-transparent">UNIVERSIDAD NACIONAL DE PIURA</span>
             </div>
           </div>
 
-          <h1 className={`text-3xl md:text-4xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-            Portal SIGUNP
+          <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            Portal <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">SIGUNP</span>
           </h1>
-          <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-1.5 max-w-md mx-auto leading-relaxed font-semibold`}>
+          <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-2 max-w-md mx-auto leading-relaxed font-semibold`}>
             Sistema Integral de Gestión de la Universidad Nacional de Piura.
           </p>
         </div>

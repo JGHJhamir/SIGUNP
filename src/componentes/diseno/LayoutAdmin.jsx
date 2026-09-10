@@ -85,8 +85,8 @@ export default function LayoutAdmin() {
         {/* Header del Sidebar */}
         <div className={`p-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} space-y-4`}>
           <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-slate-950/80 p-1 border border-purple-500/40 flex items-center justify-center shadow-lg shadow-purple-600/20 ring-2 ring-indigo-400/20 shrink-0">
-              <img src="/sigunp-logo.png" alt="SIGUNP Logo" className="w-full h-full object-contain" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-950/80 p-0.5 border border-purple-500/40 flex items-center justify-center shadow-lg shadow-purple-600/20 ring-2 ring-indigo-400/20 shrink-0 overflow-hidden">
+              <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -189,8 +189,8 @@ export default function LayoutAdmin() {
       {/* Menú Móvil (Hamburguesa) */}
       <div className={`md:hidden flex items-center justify-between p-4 border-b ${tema === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'} relative z-40`}>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-950/80 p-1 border border-purple-500/40 flex items-center justify-center shadow-md shrink-0">
-            <img src="/sigunp-logo.png" alt="SIGUNP" className="w-full h-full object-contain" />
+          <div className="w-10 h-10 rounded-xl bg-slate-950/80 p-0.5 border border-purple-500/40 flex items-center justify-center shadow-md shrink-0 overflow-hidden">
+            <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>
             <span className="font-extrabold text-sm bg-gradient-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent block">

@@ -93,8 +93,8 @@ export default function LayoutEstudiante() {
         {/* Header del Sidebar */}
         <div className={`p-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} space-y-4`}>
           <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-slate-950/80 p-1 border border-sky-400/40 flex items-center justify-center shadow-lg shadow-sky-600/20 ring-2 ring-amber-400/20 shrink-0">
-              <img src="/sigunp-logo.png" alt="SIGUNP Logo" className="w-full h-full object-contain" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-950/80 p-0.5 border border-sky-400/40 flex items-center justify-center shadow-lg shadow-sky-600/20 ring-2 ring-amber-400/20 shrink-0 overflow-hidden">
+              <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
@@ -216,8 +216,8 @@ export default function LayoutEstudiante() {
       {/* Header en Móvil */}
       <header className={`md:hidden w-full ${tema === 'dark' ? 'bg-slate-900/90 border-slate-800/80' : 'bg-white/90 border-slate-200'} backdrop-blur-xl border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors duration-300`}>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-950/80 p-1 border border-sky-400/40 flex items-center justify-center shadow-md shrink-0">
-            <img src="/sigunp-logo.png" alt="SIGUNP" className="w-full h-full object-contain" />
+          <div className="w-10 h-10 rounded-xl bg-slate-950/80 p-0.5 border border-sky-400/40 flex items-center justify-center shadow-md shrink-0 overflow-hidden">
+            <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>
             <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight block`}>SIGUNP</span>
