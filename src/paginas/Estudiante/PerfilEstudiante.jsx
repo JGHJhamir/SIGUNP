@@ -140,11 +140,6 @@ export default function PerfilEstudiante() {
       return;
     }
 
-    if (!facultad || !escuela) {
-      setMensajePerfil({ tipo: "error", texto: "Selecciona tu Facultad y Escuela Profesional." });
-      return;
-    }
-
     setCargandoPerfil(true);
 
     try {
@@ -153,7 +148,6 @@ export default function PerfilEstudiante() {
       const emailLimpio = email.trim().toLowerCase() || `${codigoLimpio}@unp.edu.pe`;
       const nombreCompleto = `${nombres.trim()} ${apellidos.trim()}`;
 
-      // Actualizar en Supabase
       const payload = {
         nombres: nombres.trim(),
         apellidos: apellidos.trim(),
@@ -164,12 +158,29 @@ export default function PerfilEstudiante() {
         escuela
       };
 
-      const { error } = await supabase
-        .from("estudiantes")
-        .upsert(payload, { onConflict: "codigo_universitario" });
+      let updateError = null;
 
-      if (error) {
-        console.warn("Actualización perfil Supabase:", error.message);
+      // 1. Intentar actualizar el registro existente en Supabase por codigoActual
+      if (codigoActual) {
+        const { error } = await supabase
+          .from("estudiantes")
+          .update(payload)
+          .or(`codigo_universitario.eq.${codigoActual},dni.eq.${codigoActual},email.eq.${codigoActual}`);
+        
+        updateError = error;
+      }
+
+      // 2. Si no había codigoActual o no encontró la fila, hacer upsert por codigo_universitario o email
+      if (!codigoActual || updateError) {
+        const { error: upsertErr } = await supabase
+          .from("estudiantes")
+          .upsert(payload, { onConflict: "codigo_universitario" });
+
+        updateError = upsertErr;
+      }
+
+      if (updateError) {
+        console.warn("Actualización perfil Supabase:", updateError.message);
       }
 
       // Actualizar localStorage
@@ -180,7 +191,7 @@ export default function PerfilEstudiante() {
 
       setMensajePerfil({
         tipo: "success",
-        texto: "¡Perfil actualizado con éxito en Supabase y sesión local!"
+        texto: "¡Perfil actualizado con éxito en Supabase y guardado en tu sesión!"
       });
     } catch (err) {
       console.error("Error al actualizar perfil:", err);
@@ -395,47 +406,56 @@ export default function PerfilEstudiante() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <Building2 className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Facultad</span>
-                  </label>
-                  <select
-                    value={facultad}
-                    onChange={manejarCambioFacultad}
-                    className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer`}
-                    required
-                  >
-                    <option value="">Seleccione Facultad</option>
-                    {Object.keys(unpEstructura).map((fac) => (
-                      <option key={fac} value={fac}>{fac}</option>
-                    ))}
-                  </select>
+              {/* Carrera Universitaria (Bloqueada post-registro) */}
+              <div className={`p-4 rounded-2xl border ${
+                tema === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
+              } space-y-3`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center space-x-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Carrera Universitaria Asignada</span>
+                  </span>
+                  <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center space-x-1">
+                    <Lock className="w-3 h-3" />
+                    <span>Fija (No modificable)</span>
+                  </span>
                 </div>
 
-                <div>
-                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <BookOpenCheck className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Escuela Profesional</span>
-                  </label>
-                  <select
-                    value={escuela}
-                    onChange={(e) => setEscuela(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer disabled:opacity-40`}
-                    disabled={!facultad}
-                    required
-                  >
-                    <option value="">Seleccione Escuela</option>
-                    {facultad && unpEstructura[facultad].map((esc) => (
-                      <option key={esc} value={esc}>{esc}</option>
-                    ))}
-                  </select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
+                      Facultad
+                    </label>
+                    <input
+                      type="text"
+                      value={facultad || "Facultad de Ingeniería Industrial"}
+                      readOnly
+                      disabled
+                      className={`w-full px-4 py-3 rounded-2xl ${
+                        tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-700'
+                      } border text-xs font-semibold cursor-not-allowed opacity-80`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
+                      Escuela Profesional
+                    </label>
+                    <input
+                      type="text"
+                      value={escuela || "Ingeniería Informática"}
+                      readOnly
+                      disabled
+                      className={`w-full px-4 py-3 rounded-2xl ${
+                        tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-700'
+                      } border text-xs font-semibold cursor-not-allowed opacity-80`}
+                    />
+                  </div>
                 </div>
+
+                <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
+                  🔒 La facultad y escuela profesional se definieron al registrar tu cuenta y no se pueden cambiar. Si deseas editar tu DNI, Código UNP, Nombres o Correo, puedes hacerlo en las casillas superiores.
+                </p>
               </div>
 
               {mensajePerfil && (
