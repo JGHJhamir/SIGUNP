@@ -418,47 +418,62 @@ export default function PerfilEstudiante() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <Building2 className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Facultad</span>
-                  </label>
-                  <select
-                    value={facultad}
-                    onChange={manejarCambioFacultad}
-                    className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer`}
-                    required
-                  >
-                    <option value="">Seleccione Facultad</option>
-                    {Object.keys(unpEstructura).map((fac) => (
-                      <option key={fac} value={fac}>{fac}</option>
-                    ))}
-                  </select>
+              {/* Carrera Universitaria (Fija / No modificable) */}
+              <div className={`p-4 rounded-2xl border ${
+                tema === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100 border-slate-200'
+              } space-y-3`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center space-x-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Carrera Universitaria</span>
+                  </span>
+                  <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center space-x-1">
+                    <Lock className="w-3 h-3" />
+                    <span>No modificable</span>
+                  </span>
                 </div>
 
-                <div>
-                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <BookOpenCheck className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Escuela Profesional</span>
-                  </label>
-                  <select
-                    value={escuela}
-                    onChange={(e) => setEscuela(e.target.value)}
-                    className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer disabled:opacity-40`}
-                    disabled={!facultad}
-                    required
-                  >
-                    <option value="">Seleccione Escuela</option>
-                    {facultad && unpEstructura[facultad]?.map((esc) => (
-                      <option key={esc} value={esc}>{esc}</option>
-                    ))}
-                  </select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
+                      Facultad
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={facultad || "Facultad de Ingeniería Industrial"}
+                        disabled
+                        readOnly
+                        className={`w-full px-4 py-3 pr-10 rounded-2xl ${
+                          tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-600'
+                        } border text-xs font-semibold cursor-not-allowed opacity-80`}
+                      />
+                      <Lock className="w-3.5 h-3.5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
+                      Escuela Profesional
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={escuela || "Ingeniería Informática"}
+                        disabled
+                        readOnly
+                        className={`w-full px-4 py-3 pr-10 rounded-2xl ${
+                          tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-600'
+                        } border text-xs font-semibold cursor-not-allowed opacity-80`}
+                      />
+                      <Lock className="w-3.5 h-3.5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
                 </div>
+
+                <p className="text-[10px] text-slate-400 font-medium">
+                  🔒 La facultad y escuela profesional quedan registradas al crear tu cuenta y no se pueden cambiar.
+                </p>
               </div>
 
               {mensajePerfil && (
