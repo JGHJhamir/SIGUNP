@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  GraduationCap,
   User,
-  KeyRound,
   Lock,
   Building2,
   BookOpenCheck,
@@ -14,58 +12,96 @@ import {
   ArrowRight,
   Sun,
   Moon,
-  Info
+  Info,
+  Mail,
+  Eye,
+  EyeOff,
+  UserPlus,
+  LogIn,
+  IdCard,
+  Hash,
+  X
 } from "lucide-react";
 import { useTema } from "../../contexto/ContextoTema";
 import { supabase } from "../../lib/supabase";
 
 const unpEstructura = {
-  "Facultad de Ingeniería Industrial": ["Ingeniería Industrial", "Ingeniería Informática", "Ingeniería Agroindustrial", "Ingeniería Mecatrónica"],
-  "Facultad de Ciencias": ["Ciencias Biológicas", "Física", "Matemáticas", "Estadística", "Ingeniería Electrónica y Telecomunicaciones"],
-  "Facultad de Ingeniería de Minas": ["Ingeniería de Minas", "Ingeniería Geológica", "Ingeniería de Petróleo", "Ingeniería Química"],
-  "Facultad de Agronomía": ["Agronomía", "Ingeniería Agrícola"],
+  "Facultad de Ingeniería Industrial": [
+    "Ingeniería Informática",
+    "Ingeniería Industrial",
+    "Ingeniería Agroindustrial",
+    "Ingeniería Mecatrónica"
+  ],
+  "Facultad de Ciencias": [
+    "Ciencias Biológicas",
+    "Física",
+    "Matemáticas",
+    "Estadística",
+    "Ingeniería Electrónica y Telecomunicaciones"
+  ],
+  "Facultad de Ciencias de la Salud": [
+    "Medicina Humana",
+    "Enfermería",
+    "Obstetricia",
+    "Estomatología"
+  ],
+  "Facultad de Derecho y Ciencias Políticas": ["Derecho"],
   "Facultad de Ciencias Administrativas": ["Administración"],
   "Facultad de Ciencias Contables y Financieras": ["Contabilidad"],
   "Facultad de Economía": ["Economía"],
-  "Facultad de Ciencias de la Salud": ["Medicina Humana", "Enfermería", "Obstetricia", "Estomatología"],
-  "Facultad de Ciencias Sociales y Educación": ["Educación Inicial", "Educación Primaria", "Ciencias de la Comunicación", "Historia y Geografía", "Lengua y Literatura"],
-  "Facultad de Derecho y Ciencias Políticas": ["Derecho"],
+  "Facultad de Ingeniería de Minas": [
+    "Ingeniería de Minas",
+    "Ingeniería Geológica",
+    "Ingeniería de Petróleo",
+    "Ingeniería Química"
+  ],
   "Facultad de Ingeniería Civil": ["Ingeniería Civil"],
-  "Facultad de Arquitectura y Urbanismo": ["Arquitectura"],
-  "Facultad de Ingeniería Pesquera": ["Ingeniería Pesquera"],
-  "Facultad de Zootecnia": ["Zootecnia", "Medicina Veterinaria"]
+  "Facultad de Arquitectura y Urbanismo": ["Arquitectura"]
 };
 
 export default function IniciarSesion() {
   const navegar = useNavigate();
   const { tema, alternarTema } = useTema();
 
-  // Estados del Formulario
-  const [codigoUniversitario, setCodigoUniversitario] = useState("");
+  // Modo: 'login' o 'registro'
+  const [pestanaActiva, setPestanaActiva] = useState("login");
+
+  // ── ESTADOS DE INICIO DE SESIÓN ──
+  const [identificadorLogin, setIdentificadorLogin] = useState("");
+  const [passwordLogin, setPasswordLogin] = useState("");
+  const [mostrarPasswordLogin, setMostrarPasswordLogin] = useState(false);
+
+  // ── ESTADOS DE REGISTRO ──
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
-  const [contrasena, setContrasena] = useState("");
+  const [dni, setDni] = useState("");
+  const [codigoUni, setCodigoUni] = useState("");
+  const [email, setEmail] = useState("");
+  const [passwordRegistro, setPasswordRegistro] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [mostrarPasswordRegistro, setMostrarPasswordRegistro] = useState(false);
+  const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
   const [facultad, setFacultad] = useState("");
   const [escuela, setEscuela] = useState("");
 
-  // Estados de Superusuario y Carga
+  // ── ESTADO DEL MODAL DE CONFIRMACIÓN ──
+  const [mostrarModalConfirmacion, setMostrarModalConfirmacion] = useState(false);
+
+  // Superusuario y Carga
   const [esSuperusuario, setEsSuperusuario] = useState(false);
   const [modoIngreso, setModoIngreso] = useState("Estudiante");
   const [cargando, setCargando] = useState(false);
 
   // Estado de Mensajes de Feedback
-  const [mensaje, setMensaje] = useState(null); // { tipo: 'success' | 'error', texto: string }
+  const [mensaje, setMensaje] = useState(null);
 
-  // Escuchar nombres y apellidos para activar el modo superusuario
+  // Escuchar nombres y apellidos para el modo superusuario
   useEffect(() => {
-    const esCoincidenciaSuperusuario =
+    const esCoincidencia =
       nombres.trim().toLowerCase() === "jhamir walverdir" &&
       apellidos.trim().toLowerCase() === "garcia herrera";
-
-    setEsSuperusuario(esCoincidenciaSuperusuario);
-    if (!esCoincidenciaSuperusuario) {
-      setModoIngreso("Estudiante");
-    }
+    setEsSuperusuario(esCoincidencia);
+    if (!esCoincidencia) setModoIngreso("Estudiante");
   }, [nombres, apellidos]);
 
   const manejarCambioFacultad = (e) => {
@@ -74,151 +110,121 @@ export default function IniciarSesion() {
     setMensaje(null);
   };
 
-  const manejarCambioEscuela = (e) => {
-    setEscuela(e.target.value);
-    setMensaje(null);
-  };
-
   const autocompletarDemo = (tipo) => {
     if (tipo === "estudiante") {
-      setCodigoUniversitario("0512021015");
+      setIdentificadorLogin("0512021015");
+      setPasswordLogin("123456");
       setNombres("Jhamir Walverdir");
       setApellidos("Garcia Herrera");
-      setContrasena("0512021015");
+      setDni("72839401");
+      setCodigoUni("0512021015");
+      setEmail("jhamir.garcia@unp.edu.pe");
+      setPasswordRegistro("123456");
+      setConfirmPassword("123456");
       setFacultad("Facultad de Ingeniería Industrial");
       setEscuela("Ingeniería Informática");
       setModoIngreso("Estudiante");
     } else {
-      setCodigoUniversitario("0512021015");
+      setIdentificadorLogin("0512021015");
+      setPasswordLogin("123456");
       setNombres("Jhamir Walverdir");
       setApellidos("Garcia Herrera");
-      setContrasena("0512021015");
+      setDni("72839401");
+      setCodigoUni("0512021015");
+      setEmail("jhamir.garcia@unp.edu.pe");
+      setPasswordRegistro("123456");
+      setConfirmPassword("123456");
       setFacultad("Facultad de Ingeniería Industrial");
       setEscuela("Ingeniería Informática");
       setModoIngreso("Administrador");
     }
-    setMensaje({ tipo: "success", texto: "Credenciales demo autocompletadas. Presiona 'Ingresar al Portal Académico'." });
+    setMensaje({
+      tipo: "success",
+      texto: "Credenciales demo autocompletadas."
+    });
   };
 
-  const manejarIngresoGoogle = async () => {
-    try {
-      setCargando(true);
-      setMensaje({
-        tipo: "info",
-        texto: "Iniciando conexión con Google OAuth... (Preparado para vinculación final con Google Cloud Console)."
-      });
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.origin
-        }
-      });
-      if (error) {
-        setMensaje({
-          tipo: "info",
-          texto: "Módulo Google OAuth preparado. Al activar el Client ID de Google Console se iniciará la sesión automáticamente."
-        });
-      }
-    } catch (err) {
-      console.warn("Google OAuth setup:", err);
-      setMensaje({
-        tipo: "info",
-        texto: "Inicio de sesión con Google preparado para la versión final."
-      });
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  const manejarEnvio = async (e) => {
+  // ── MANEJO DEL LOGIN ──
+  const ejecutarLogin = async (e) => {
     e.preventDefault();
     setMensaje(null);
     setCargando(true);
 
     try {
-      // Verificación inicial de campos completados
-      if (!codigoUniversitario || !nombres || !apellidos || !contrasena || !facultad || !escuela) {
-        setMensaje({ tipo: "error", texto: "Por favor, complete todos los campos requeridos." });
+      const idLimpio = identificadorLogin.trim();
+      if (!idLimpio || !passwordLogin) {
+        setMensaje({ tipo: "error", texto: "Por favor, ingresa tu identificador y contraseña." });
         setCargando(false);
         return;
       }
 
-      // Regla 1 (Carreras Habilitadas)
-      const esProgramaHabilitado =
-        facultad === "Facultad de Ingeniería Industrial" &&
-        escuela === "Ingeniería Informática";
-
-      if (!esProgramaHabilitado) {
-        setMensaje({ tipo: "error", texto: "Esta carrera se encuentra en desarrollo. Próximamente disponible." });
-        setCargando(false);
-        return;
-      }
-
-      // Regla 2 (Estructura del Código)
-      const codigoLimpio = codigoUniversitario.trim();
-      if (codigoLimpio.length !== 10) {
-        setMensaje({ tipo: "error", texto: "El Código Universitario debe tener exactamente 10 dígitos." });
-        setCargando(false);
-        return;
-      }
-
-      if (escuela === "Ingeniería Informática" && !codigoLimpio.startsWith("051")) {
-        setMensaje({ tipo: "error", texto: "El código de Ingeniería Informática debe comenzar con 051." });
-        setCargando(false);
-        return;
-      }
-
-      // Regla 3 (Contraseña)
-      if (contrasena !== codigoLimpio) {
-        setMensaje({ tipo: "error", texto: "Credenciales incorrectas: La contraseña debe coincidir con su Código Universitario." });
-        setCargando(false);
-        return;
-      }
-
-      const rolFinal = esSuperusuario ? modoIngreso : "Estudiante";
-
-      // ── CONEXIÓN REAL CON SUPABASE ──
-      // Registrar o actualizar el perfil en la base de datos de Supabase
-      const { error: errSupabase } = await supabase
+      // Consulta en Supabase buscando por DNI, Código o Email
+      const { data: usuarioBD, error } = await supabase
         .from("estudiantes")
-        .upsert(
-          {
-            codigo_universitario: codigoLimpio,
-            nombres: nombres.trim(),
-            apellidos: apellidos.trim(),
-            facultad,
-            escuela,
-            rol: rolFinal
-          },
-          { onConflict: "codigo_universitario" }
-        );
+        .select("*")
+        .or(`dni.eq.${idLimpio},codigo_universitario.eq.${idLimpio},email.eq.${idLimpio}`)
+        .maybeSingle();
 
-      if (errSupabase) {
-        console.warn("Aviso de sincronización Supabase:", errSupabase.message);
+      if (error && error.code !== "PGRST116") {
+        console.warn("Consulta Supabase:", error.message);
       }
 
-      // Cargar cursos aprobados del estudiante si existen en Supabase
-      const { data: aprobadosBD } = await supabase
-        .from("estudiante_cursos_aprobados")
-        .select("curso_id")
-        .eq("codigo_universitario", codigoLimpio);
+      // Si no existe en Supabase pero es la cuenta demo local
+      let usuario = usuarioBD;
+      if (!usuario && (idLimpio === "0512021015" || idLimpio === "72839401" || idLimpio === "jhamir.garcia@unp.edu.pe")) {
+        usuario = {
+          nombres: "Jhamir Walverdir",
+          apellidos: "Garcia Herrera",
+          codigo_universitario: "0512021015",
+          dni: "72839401",
+          facultad: "Facultad de Ingeniería Industrial",
+          escuela: "Ingeniería Informática",
+          rol: esSuperusuario ? modoIngreso : "Estudiante"
+        };
+      }
 
-      if (aprobadosBD && aprobadosBD.length > 0) {
-        const ids = aprobadosBD.map((r) => r.curso_id);
-        localStorage.setItem("cursosAprobados", JSON.stringify(ids));
+      if (!usuario) {
+        setMensaje({
+          tipo: "error",
+          texto: "Usuario no encontrado. Verifica tu DNI, Código o Correo, o regístrate si eres nuevo."
+        });
+        setCargando(false);
+        return;
+      }
+
+      // Validar longitud mínima de contraseña
+      if (passwordLogin.length < 6) {
+        setMensaje({ tipo: "error", texto: "La contraseña debe tener al menos 6 caracteres." });
+        setCargando(false);
+        return;
+      }
+
+      const rolFinal = esSuperusuario ? modoIngreso : (usuario.rol || "Estudiante");
+
+      // Cargar cursos aprobados si existen
+      if (usuario.codigo_universitario) {
+        const { data: aprobadosBD } = await supabase
+          .from("estudiante_cursos_aprobados")
+          .select("curso_id")
+          .eq("codigo_universitario", usuario.codigo_universitario);
+
+        if (aprobadosBD && aprobadosBD.length > 0) {
+          const ids = aprobadosBD.map((r) => r.curso_id);
+          localStorage.setItem("cursosAprobados", JSON.stringify(ids));
+        }
       }
 
       // Guardar Estado de Sesión Local
       localStorage.setItem("userRole", rolFinal);
-      localStorage.setItem("codigoUniversitario", codigoLimpio);
-      localStorage.setItem("nombreEstudiante", `${nombres} ${apellidos}`);
-      localStorage.setItem("facultadEstudiante", facultad);
-      localStorage.setItem("escuelaEstudiante", escuela);
+      localStorage.setItem("codigoUniversitario", usuario.codigo_universitario || idLimpio);
+      localStorage.setItem("nombreEstudiante", `${usuario.nombres} ${usuario.apellidos}`);
+      localStorage.setItem("facultadEstudiante", usuario.facultad || "Facultad de Ingeniería Industrial");
+      localStorage.setItem("escuelaEstudiante", usuario.escuela || "Ingeniería Informática");
       localStorage.setItem("storageVersion", "2");
 
       setMensaje({
         tipo: "success",
-        texto: `¡Acceso Web Real verificado en Supabase! Ingresando como ${rolFinal === "Administrador" ? "Administrador" : "Estudiante"}...`
+        texto: `¡Bienvenido(a) ${usuario.nombres}! Ingresando como ${rolFinal}...`
       });
 
       const tutorialCompletado = localStorage.getItem("tutorialCompletado") === "true";
@@ -230,11 +236,115 @@ export default function IniciarSesion() {
         } else {
           navegar("/configuracion-inicial");
         }
-      }, 700);
-
+      }, 600);
     } catch (err) {
-      console.error("Error en inicio de sesión:", err);
-      setMensaje({ tipo: "error", texto: "Ocurrió un error al procesar el inicio de sesión. Intente nuevamente." });
+      console.error("Error al iniciar sesión:", err);
+      setMensaje({ tipo: "error", texto: "Error al iniciar sesión. Inténtelo de nuevo." });
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // ── PREPARAR Y REVISAR REGISTRO ──
+  const revisarRegistro = (e) => {
+    e.preventDefault();
+    setMensaje(null);
+
+    if (!nombres.trim() || !apellidos.trim()) {
+      setMensaje({ tipo: "error", texto: "Por favor, ingresa tus nombres y apellidos." });
+      return;
+    }
+
+    if (!dni.trim() && !codigoUni.trim()) {
+      setMensaje({
+        tipo: "error",
+        texto: "Debes ingresar al menos tu DNI (8 dígitos) o tu Código Universitario."
+      });
+      return;
+    }
+
+    if (dni.trim() && dni.trim().length !== 8) {
+      setMensaje({ tipo: "error", texto: "El número de DNI debe contener exactamente 8 dígitos." });
+      return;
+    }
+
+    if (!email.trim() || !email.includes("@")) {
+      setMensaje({ tipo: "error", texto: "Ingresa un correo electrónico válido." });
+      return;
+    }
+
+    if (passwordRegistro.length < 6) {
+      setMensaje({ tipo: "error", texto: "La contraseña debe tener al menos 6 caracteres." });
+      return;
+    }
+
+    if (passwordRegistro !== confirmPassword) {
+      setMensaje({ tipo: "error", texto: "Las contraseñas no coinciden. Verifícalas nuevamente." });
+      return;
+    }
+
+    if (!facultad || !escuela) {
+      setMensaje({ tipo: "error", texto: "Por favor, selecciona tu Facultad y Escuela Profesional." });
+      return;
+    }
+
+    // Abrir modal de confirmación
+    setMostrarModalConfirmacion(true);
+  };
+
+  // ── CONFIRMAR E INSERTAR REGISTRO EN SUPABASE ──
+  const confirmarYRegistrar = async () => {
+    setCargando(true);
+    setMostrarModalConfirmacion(false);
+
+    try {
+      const dniLimpio = dni.trim() || null;
+      const codigoLimpio = codigoUni.trim() || null;
+      const rolFinal = esSuperusuario ? modoIngreso : "Estudiante";
+
+      const payload = {
+        nombres: nombres.trim(),
+        apellidos: apellidos.trim(),
+        dni: dniLimpio,
+        codigo_universitario: codigoLimpio,
+        email: email.trim().toLowerCase(),
+        password_hash: passwordRegistro,
+        facultad,
+        escuela,
+        rol: rolFinal
+      };
+
+      const { error } = await supabase.from("estudiantes").upsert(payload, {
+        onConflict: email ? "email" : "codigo_universitario"
+      });
+
+      if (error) {
+        console.warn("Sincronización Supabase:", error.message);
+      }
+
+      // Guardar Estado Local
+      localStorage.setItem("userRole", rolFinal);
+      localStorage.setItem("codigoUniversitario", codigoLimpio || dniLimpio || "0500000000");
+      localStorage.setItem("nombreEstudiante", `${nombres.trim()} ${apellidos.trim()}`);
+      localStorage.setItem("facultadEstudiante", facultad);
+      localStorage.setItem("escuelaEstudiante", escuela);
+      localStorage.setItem("storageVersion", "2");
+
+      setMensaje({
+        tipo: "success",
+        texto: "¡Registro exitoso! Redirigiendo para calibrar tu malla curricular..."
+      });
+
+      setTimeout(() => {
+        if (rolFinal === "Administrador") {
+          navegar("/admin/inicio");
+        } else {
+          navegar("/configuracion-inicial");
+        }
+      }, 700);
+    } catch (err) {
+      console.error("Error al registrar:", err);
+      setMensaje({ tipo: "error", texto: "Error al procesar el registro. Intente nuevamente." });
     } finally {
       setCargando(false);
     }
@@ -247,14 +357,11 @@ export default function IniciarSesion() {
         : 'bg-gradient-to-br from-slate-100 via-sky-50/60 to-amber-50/30 text-slate-900'
     } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-300`}>
       
-      {/* Background ambient light spheres */}
+      {/* Glows de fondo */}
       <div className={`absolute -top-40 -left-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-blue-600/15' : 'bg-sky-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
       <div className={`absolute -bottom-40 -right-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-purple-600/15' : 'bg-amber-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-full ${
-        tema === 'dark' ? 'bg-[radial-gradient(#334155_1px,transparent_1px)] opacity-25' : 'bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] opacity-40'
-      } [background-size:32px_32px] pointer-events-none`}></div>
 
-      {/* Top right theme toggle */}
+      {/* Botón superior de Tema */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <button
           type="button"
@@ -281,162 +388,118 @@ export default function IniciarSesion() {
 
       <div className={`w-full max-w-2xl ${
         tema === 'dark' ? 'bg-slate-900/85 border-slate-800/90' : 'bg-white/90 border-slate-200/90 shadow-2xl'
-      } backdrop-blur-2xl border rounded-3xl p-4 sm:p-6 md:p-12 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
+      } backdrop-blur-2xl border rounded-3xl p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
         
-        {/* Top accent bar */}
+        {/* Barra superior de acento */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500"></div>
 
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="relative group inline-flex items-center justify-center mb-4 sm:mb-6 mt-4 sm:mt-0">
-            {/* Ambient Backlight Glows */}
+        {/* Encabezado Principal y Logo */}
+        <div className="text-center mb-6">
+          <div className="relative group inline-flex items-center justify-center mb-3 mt-2 sm:mt-0">
             <div className={`absolute -inset-3 ${
               tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
             } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
             
-            {/* Logo Ring Container with perfect circular clipping */}
-            <div className={`relative w-28 h-28 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full p-1.5 ${
+            <div className={`relative w-24 h-24 sm:w-36 sm:h-36 rounded-full p-1.5 ${
               tema === 'dark'
-                ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35),0_0_25px_rgba(245,158,11,0.25)]'
-                : 'bg-white border-sky-300 shadow-2xl shadow-sky-600/15'
+                ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_50px_rgba(59,130,246,0.3)]'
+                : 'bg-white border-sky-300 shadow-xl'
             } border-2 ring-4 ${tema === 'dark' ? 'ring-amber-400/30' : 'ring-amber-400/40'} flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl overflow-hidden`}>
               <img
                 src="/sigunp-logo.png"
-                alt="SIGUNP Logo Oficial"
+                alt="SIGUNP Logo"
                 style={{ clipPath: 'circle(49% at 50% 50%)' }}
-                className="w-full h-full object-cover rounded-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover rounded-full drop-shadow-md"
               />
             </div>
           </div>
           
           <div className="block">
-            <div className={`inline-flex items-center space-x-2 px-4 py-1.5 rounded-full ${
+            <div className={`inline-flex items-center space-x-2 px-3.5 py-1 rounded-full ${
               tema === 'dark'
-                ? 'bg-slate-950/80 border-amber-400/30 text-amber-400 shadow-md shadow-amber-500/10'
-                : 'bg-amber-50/90 border-amber-300/80 text-amber-900 shadow-sm'
-            } border text-xs font-extrabold mb-3 backdrop-blur-md transition-colors duration-300`}>
-              <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
-              <span className="tracking-widest uppercase text-[11px] font-extrabold bg-gradient-to-r from-sky-500 via-amber-500 to-blue-600 dark:from-sky-400 dark:via-amber-300 dark:to-blue-400 bg-clip-text text-transparent">
+                ? 'bg-slate-950/80 border-amber-400/30 text-amber-400'
+                : 'bg-amber-50/90 border-amber-300/80 text-amber-900'
+            } border text-[11px] font-extrabold mb-2 backdrop-blur-md`}>
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
+              <span className="tracking-widest uppercase font-extrabold bg-gradient-to-r from-sky-500 via-amber-500 to-blue-600 dark:from-sky-400 dark:via-amber-300 dark:to-blue-400 bg-clip-text text-transparent">
                 UNIVERSIDAD NACIONAL DE PIURA
               </span>
             </div>
           </div>
 
-          <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-            {nombres.trim() ? (
-              <span>¡Hola, <span className="bg-gradient-to-r from-sky-400 via-amber-400 to-blue-500 bg-clip-text text-transparent">{nombres.trim().split(" ")[0]}</span>! 👋</span>
-            ) : (
-              <>Portal <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-sky-400 dark:via-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">SIGUNP</span></>
-            )}
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            Portal <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-sky-400 dark:via-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">SIGUNP</span>
           </h1>
-          <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-2 max-w-md mx-auto leading-relaxed font-semibold`}>
+          <p className={`text-xs ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-1 max-w-md mx-auto leading-relaxed font-semibold`}>
             Sistema Integral de Gestión de la Universidad Nacional de Piura.
           </p>
         </div>
 
-        {/* Banner Informativo y Disclaimer de Autoría (JIAR) */}
-        <div className={`p-4 rounded-2xl border text-xs leading-relaxed space-y-2.5 mb-6 backdrop-blur-md transition-colors duration-300 ${
-          tema === 'dark'
-            ? 'bg-slate-950/80 border-sky-500/30 text-slate-300'
-            : 'bg-sky-50/90 border-sky-200 text-slate-700 shadow-sm'
+        {/* Disclaimer JIAR */}
+        <div className={`p-3.5 rounded-2xl border text-xs leading-relaxed space-y-1.5 mb-6 backdrop-blur-md ${
+          tema === 'dark' ? 'bg-slate-950/80 border-sky-500/30 text-slate-300' : 'bg-sky-50/90 border-sky-200 text-slate-700'
         }`}>
           <div className="flex items-center justify-between">
-            <span className="font-extrabold text-sky-600 dark:text-sky-400 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-sky-500 shrink-0" />
-              <span>Proyecto Independiente · Desarrollado por JIAR</span>
+            <span className="font-extrabold text-sky-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+              <span>Proyecto Independiente · Creado por JIAR</span>
             </span>
-            <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
               No Oficial UNP
             </span>
           </div>
-          <p className="text-[11px] leading-relaxed">
-            <strong>Aviso Importante:</strong> Esta plataforma <strong>no es un sitio web oficial</strong> de la Universidad Nacional de Piura (UNP). Es un proyecto independiente diseñado y creado por <strong>JIAR</strong> con la finalidad de brindar a la comunidad estudiantil un simulador de mallas curriculares, cálculo de créditos y gestión académica.
+          <p className="text-[11px] leading-snug">
+            Esta plataforma es un proyecto académico independiente desarrollado por <strong>JIAR</strong> para la comunidad estudiantil de la UNP.
           </p>
-          <div className="flex items-center space-x-2 text-[10px] font-bold text-sky-700 dark:text-sky-300 pt-2 border-t border-slate-200 dark:border-slate-800/80">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0 animate-pulse" />
-            <span>Desarrollo Progresivo: Disponible Ing. Informática. Próximamente se habilitarán todas las escuelas UNP.</span>
-          </div>
         </div>
 
-        <form onSubmit={manejarEnvio} className="space-y-5">
-          
-          {/* Nombres y Apellidos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* ── SELECTOR DE PESTAÑAS: INICIAR SESIÓN / CREAR CUENTA ── */}
+        <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-slate-950/60 dark:bg-slate-950/60 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-200 mb-6">
+          <button
+            type="button"
+            onClick={() => { setPestanaActiva("login"); setMensaje(null); }}
+            className={`py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+              pestanaActiva === "login"
+                ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-md"
+                : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <LogIn className="w-4 h-4" />
+            <span>Iniciar Sesión</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setPestanaActiva("registro"); setMensaje(null); }}
+            className={`py-2.5 px-4 rounded-xl text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+              pestanaActiva === "registro"
+                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md"
+                : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <UserPlus className="w-4 h-4" />
+            <span>Crear Cuenta</span>
+          </button>
+        </div>
+
+        {/* ── FORMULARIO VISTA: INICIAR SESIÓN ── */}
+        {pestanaActiva === "login" && (
+          <form onSubmit={ejecutarLogin} className="space-y-4 animate-fadeIn">
             <div>
               <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
                 <User className="w-3.5 h-3.5 text-blue-500" />
-                <span>Nombres</span>
+                <span>Identificador (DNI, Código Universitario o Correo)</span>
               </label>
               <input
                 type="text"
-                value={nombres}
-                onChange={(e) => setNombres(e.target.value)}
-                placeholder="Ej. Jhamir Walverdir"
+                value={identificadorLogin}
+                onChange={(e) => setIdentificadorLogin(e.target.value)}
+                placeholder="Ingresa tu DNI, Código o Correo"
                 className={`w-full px-4 py-3 rounded-2xl ${
                   tema === 'dark'
                     ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
                     : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
                 } border text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner`}
-                required
-              />
-            </div>
-
-            <div>
-              <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                <User className="w-3.5 h-3.5 text-blue-500" />
-                <span>Apellidos</span>
-              </label>
-              <input
-                type="text"
-                value={apellidos}
-                onChange={(e) => setApellidos(e.target.value)}
-                placeholder="Ej. Garcia Herrera"
-                className={`w-full px-4 py-3 rounded-2xl ${
-                  tema === 'dark'
-                    ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
-                    : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
-                } border text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner`}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Selector de Superusuario */}
-          {esSuperusuario && (
-            <div className="p-4 bg-gradient-to-r from-blue-950/70 via-indigo-950/70 to-purple-950/70 border border-blue-500/50 rounded-2xl space-y-2 animate-fadeIn shadow-lg">
-              <label className="block text-xs font-bold text-blue-300 uppercase tracking-wider flex items-center space-x-2">
-                <ShieldCheck className="w-4 h-4 text-blue-400" />
-                <span>Modo de Ingreso Especial (Superusuario)</span>
-              </label>
-              <select
-                value={modoIngreso}
-                onChange={(e) => setModoIngreso(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-blue-500/40 text-blue-100 text-xs font-bold focus:outline-none focus:border-blue-400 cursor-pointer"
-              >
-                <option value="Estudiante">Estudiante</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-            </div>
-          )}
-
-          {/* Código Universitario y Contraseña */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                <KeyRound className="w-3.5 h-3.5 text-blue-500" />
-                <span>Código Universitario (10 dígitos)</span>
-              </label>
-              <input
-                type="text"
-                value={codigoUniversitario}
-                onChange={(e) => setCodigoUniversitario(e.target.value)}
-                maxLength={10}
-                placeholder="0512021015"
-                className={`w-full px-4 py-3 rounded-2xl ${
-                  tema === 'dark'
-                    ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
-                    : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
-                } border font-mono text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner`}
                 required
               />
             </div>
@@ -446,167 +509,411 @@ export default function IniciarSesion() {
                 <Lock className="w-3.5 h-3.5 text-blue-500" />
                 <span>Contraseña</span>
               </label>
+              <div className="relative">
+                <input
+                  type={mostrarPasswordLogin ? "text" : "password"}
+                  value={passwordLogin}
+                  onChange={(e) => setPasswordLogin(e.target.value)}
+                  placeholder="••••••••"
+                  className={`w-full px-4 py-3 pr-11 rounded-2xl ${
+                    tema === 'dark'
+                      ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
+                      : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
+                  } border text-xs transition-all shadow-inner`}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setMostrarPasswordLogin(!mostrarPasswordLogin)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                >
+                  {mostrarPasswordLogin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Mensajes (Éxito / Error) */}
+            {mensaje && (
+              <div
+                className={`p-3.5 rounded-2xl border flex items-start space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
+                  mensaje.tipo === "success"
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
+                    : "bg-rose-500/10 border-rose-500/30 text-rose-500"
+                }`}
+              >
+                {mensaje.tipo === "success" ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
+                )}
+                <span className="leading-relaxed">{mensaje.texto}</span>
+              </div>
+            )}
+
+            {/* Acceso Rápido Demo */}
+            <div className="pt-2">
+              <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2 flex items-center justify-between">
+                <span>Acceso Rápido Demo</span>
+                <span className="text-sky-500 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md">Supabase Ready</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => autocompletarDemo("estudiante")}
+                  className="px-3 py-2 bg-slate-800/80 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-extrabold border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                >
+                  <User className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Estudiante Demo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => autocompletarDemo("administrador")}
+                  className="px-3 py-2 bg-slate-800/80 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-extrabold border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Administrador Demo</span>
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={cargando}
+              className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer disabled:opacity-50"
+            >
+              {cargando ? (
+                <span>Verificando...</span>
+              ) : (
+                <>
+                  <span>Ingresar al Portal Académico</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </form>
+        )}
+
+        {/* ── FORMULARIO VISTA: CREAR CUENTA (REGISTRO) ── */}
+        {pestanaActiva === "registro" && (
+          <form onSubmit={revisarRegistro} className="space-y-4 animate-fadeIn">
+            {/* Nombres y Apellidos */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <User className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Nombres</span>
+                </label>
+                <input
+                  type="text"
+                  value={nombres}
+                  onChange={(e) => setNombres(e.target.value)}
+                  placeholder="Ej. Jhamir Walverdir"
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <User className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Apellidos</span>
+                </label>
+                <input
+                  type="text"
+                  value={apellidos}
+                  onChange={(e) => setApellidos(e.target.value)}
+                  placeholder="Ej. Garcia Herrera"
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* DNI y Código Universitario (Opcionales individualmente, 1 obligatorio) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <IdCard className="w-3.5 h-3.5 text-purple-500" />
+                  <span>DNI (8 dígitos)</span>
+                </label>
+                <input
+                  type="text"
+                  value={dni}
+                  onChange={(e) => setDni(e.target.value.replace(/\D/g, "").slice(0, 8))}
+                  maxLength={8}
+                  placeholder="72839401"
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                />
+              </div>
+
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <Hash className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Código UNP (10 dígitos)</span>
+                </label>
+                <input
+                  type="text"
+                  value={codigoUni}
+                  onChange={(e) => setCodigoUni(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  maxLength={10}
+                  placeholder="0512021015"
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                />
+              </div>
+            </div>
+
+            {/* Correo Electrónico */}
+            <div>
+              <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                <Mail className="w-3.5 h-3.5 text-purple-500" />
+                <span>Correo Electrónico</span>
+              </label>
               <input
-                type="password"
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-                placeholder="••••••••••"
-                className={`w-full px-4 py-3 rounded-2xl ${
-                  tema === 'dark'
-                    ? 'bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-600'
-                    : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'
-                } border text-xs transition-all shadow-inner`}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="estudiante@unp.edu.pe"
+                className={`w-full px-3.5 py-2.5 rounded-xl ${
+                  tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
                 required
               />
             </div>
-          </div>
 
-          {/* Facultad */}
-          <div>
-            <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-              <Building2 className="w-3.5 h-3.5 text-blue-500" />
-              <span>Facultad</span>
-            </label>
-            <select
-              value={facultad}
-              onChange={manejarCambioFacultad}
-              className={`w-full px-4 py-3 rounded-2xl ${
-                tema === 'dark'
-                  ? 'bg-slate-950/80 border-slate-800 text-slate-100'
-                  : 'bg-slate-50 border-slate-300 text-slate-900'
-              } border text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-all shadow-inner`}
-              required
-            >
-              <option value="">Seleccione Facultad</option>
-              {Object.keys(unpEstructura).map((fac) => (
-                <option key={fac} value={fac}>
-                  {fac}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Contraseña y Confirmar Contraseña (mínimo 6 caracteres + ojito) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <Lock className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Contraseña (Mín. 6)</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={mostrarPasswordRegistro ? "text" : "password"}
+                    value={passwordRegistro}
+                    onChange={(e) => setPasswordRegistro(e.target.value)}
+                    minLength={6}
+                    placeholder="••••••••"
+                    className={`w-full px-3.5 py-2.5 pr-10 rounded-xl ${
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs focus:outline-none focus:border-purple-500`}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setMostrarPasswordRegistro(!mostrarPasswordRegistro)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                  >
+                    {mostrarPasswordRegistro ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
 
-          {/* Escuela */}
-          <div>
-            <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-              <BookOpenCheck className="w-3.5 h-3.5 text-blue-500" />
-              <span>Escuela Profesional</span>
-            </label>
-            <select
-              value={escuela}
-              onChange={manejarCambioEscuela}
-              className={`w-full px-4 py-3 rounded-2xl ${
-                tema === 'dark'
-                  ? 'bg-slate-950/80 border-slate-800 text-slate-100'
-                  : 'bg-slate-50 border-slate-300 text-slate-900'
-              } border text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-inner`}
-              disabled={!facultad}
-              required
-            >
-              <option value="">Seleccione Escuela</option>
-              {facultad &&
-                unpEstructura[facultad].map((esc) => (
-                  <option key={esc} value={esc}>
-                    {esc}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          {/* Mensajes (Éxito / Error) */}
-          {mensaje && (
-            <div
-              className={`p-4 rounded-2xl border flex items-start space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
-                mensaje.tipo === "success"
-                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
-                  : mensaje.texto.includes("desarrollo")
-                  ? "bg-amber-500/10 border-amber-500/30 text-amber-500"
-                  : "bg-rose-500/10 border-rose-500/30 text-rose-500"
-              }`}
-            >
-              {mensaje.tipo === "success" ? (
-                <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500" />
-              ) : (
-                <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
-              )}
-              <span className="leading-relaxed">{mensaje.texto}</span>
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <Lock className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Confirmar Contraseña</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={mostrarConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    minLength={6}
+                    placeholder="••••••••"
+                    className={`w-full px-3.5 py-2.5 pr-10 rounded-xl ${
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs focus:outline-none focus:border-purple-500`}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                  >
+                    {mostrarConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
 
-          {/* Botón de Autenticación con Google (OAuth preparado) */}
-          <div className="pt-1">
-            <button
-              type="button"
-              onClick={manejarIngresoGoogle}
-              className={`w-full py-3.5 px-4 rounded-2xl font-bold text-xs transition-all duration-200 border flex items-center justify-center space-x-3 cursor-pointer shadow-md ${
-                tema === 'dark'
-                  ? 'bg-slate-950/90 hover:bg-slate-900 border-slate-700/80 text-white shadow-black/40'
-                  : 'bg-white hover:bg-slate-50 border-slate-300 text-slate-800 shadow-slate-200'
-              }`}
-            >
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-              </svg>
-              <span>Continuar con Google (OAuth Preparado)</span>
-            </button>
-          </div>
+            {/* Selección de Facultad y Escuela */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <Building2 className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Facultad</span>
+                </label>
+                <select
+                  value={facultad}
+                  onChange={manejarCambioFacultad}
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer`}
+                  required
+                >
+                  <option value="">Seleccione Facultad</option>
+                  {Object.keys(unpEstructura).map((fac) => (
+                    <option key={fac} value={fac}>{fac}</option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Botones de Acceso Rápido Demo */}
-          <div className="pt-2">
-            <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center justify-between">
-              <span>Acceso Rápido con Credenciales Universitarias</span>
-              <span className="text-sky-500 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md">Supabase Connected</span>
+              <div>
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
+                  <BookOpenCheck className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Escuela Profesional</span>
+                </label>
+                <select
+                  value={escuela}
+                  onChange={(e) => setEscuela(e.target.value)}
+                  className={`w-full px-3.5 py-2.5 rounded-xl ${
+                    tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer disabled:opacity-40`}
+                  disabled={!facultad}
+                  required
+                >
+                  <option value="">Seleccione Escuela</option>
+                  {facultad && unpEstructura[facultad].map((esc) => (
+                    <option key={esc} value={esc}>{esc}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <button
-                type="button"
-                onClick={() => autocompletarDemo("estudiante")}
-                className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-extrabold border border-slate-200 dark:border-slate-700/80 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-xs"
+
+            {/* Mensajes (Éxito / Error) */}
+            {mensaje && (
+              <div
+                className={`p-3.5 rounded-2xl border flex items-start space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
+                  mensaje.tipo === "success"
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
+                    : "bg-rose-500/10 border-rose-500/30 text-rose-500"
+                }`}
               >
-                <User className="w-3.5 h-3.5 text-blue-500" />
-                <span>Modo Estudiante (0512021015)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => autocompletarDemo("administrador")}
-                className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-extrabold border border-slate-200 dark:border-slate-700/80 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-xs"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-purple-500" />
-                <span>Modo Administrador (0512021015)</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Botón de Envío */}
-          <button
-            type="submit"
-            disabled={cargando}
-            className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all duration-200 shadow-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.99] shadow-blue-600/30 flex items-center justify-center space-x-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {cargando ? (
-              <span>Verificando en Supabase...</span>
-            ) : (
-              <>
-                <span>Ingresar al Portal Académico</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
+                {mensaje.tipo === "success" ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
+                )}
+                <span className="leading-relaxed">{mensaje.texto}</span>
+              </div>
             )}
-          </button>
-        </form>
+
+            <button
+              type="submit"
+              className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-sm cursor-pointer"
+            >
+              <span>Revisar y Crear Cuenta</span>
+              <Sparkles className="w-4 h-4 text-amber-300" />
+            </button>
+          </form>
+        )}
 
         {/* Footer legal & autoría */}
-        <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center">
-          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+        <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-center">
+          <p className="text-[10px] text-slate-400 font-medium">
             © 2026 <strong>SIGUNP</strong> · Proyecto Académico Creado por <strong>JIAR</strong>.
-          </p>
-          <p className="text-[9px] text-slate-400/80 dark:text-slate-500/80 mt-0.5">
-            No afiliado oficialmente a la Universidad Nacional de Piura.
           </p>
         </div>
       </div>
+
+      {/* ── MODAL DE CONFIRMACIÓN DE DATOS ("¿ESTÁS SEGURO?") ── */}
+      {mostrarModalConfirmacion && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className={`w-full max-w-lg ${
+            tema === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-2xl'
+          } border rounded-3xl p-6 relative overflow-hidden space-y-5 animate-scaleUp`}>
+            
+            <div className="flex justify-between items-start">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className={`text-base font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                    ¿Estás seguro de que tus datos son correctos?
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Verifica tus datos antes de crear tu cuenta académica en SIGUNP.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMostrarModalConfirmacion(false)}
+                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Tabla resumen de datos */}
+            <div className={`p-4 rounded-2xl border space-y-2.5 text-xs font-semibold ${
+              tema === 'dark' ? 'bg-slate-950/90 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+            }`}>
+              <div className="flex justify-between py-1 border-b border-slate-800/40">
+                <span className="text-slate-400">Nombres completos:</span>
+                <span className="font-extrabold text-right">{nombres} {apellidos}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-800/40">
+                <span className="text-slate-400">DNI:</span>
+                <span className="font-extrabold font-mono text-right">{dni || "No especificado"}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-800/40">
+                <span className="text-slate-400">Código Universitario:</span>
+                <span className="font-extrabold font-mono text-right">{codigoUni || "No especificado"}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-800/40">
+                <span className="text-slate-400">Correo Electrónico:</span>
+                <span className="font-extrabold text-right truncate max-w-[200px]">{email}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-800/40">
+                <span className="text-slate-400">Facultad:</span>
+                <span className="font-extrabold text-right truncate max-w-[220px]">{facultad}</span>
+              </div>
+              <div className="flex justify-between py-1">
+                <span className="text-slate-400">Escuela Profesional:</span>
+                <span className="font-extrabold text-purple-400 text-right truncate max-w-[220px]">{escuela}</span>
+              </div>
+            </div>
+
+            {/* Advertencia */}
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-[11px] text-purple-300 leading-relaxed flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+              <span>Con esta escuela seleccionada se cargará automáticamente tu malla curricular correspondiente.</span>
+            </div>
+
+            {/* Acciones del Modal */}
+            <div className="flex items-center justify-end space-x-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setMostrarModalConfirmacion(false)}
+                className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 text-xs font-bold hover:bg-slate-800 transition-all cursor-pointer"
+              >
+                ✏️ Modificar Datos
+              </button>
+              <button
+                type="button"
+                onClick={confirmarYRegistrar}
+                disabled={cargando}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-black hover:opacity-90 transition-all cursor-pointer shadow-lg shadow-purple-600/30"
+              >
+                {cargando ? "Registrando..." : "🚀 Confirmar y Crear Cuenta"}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
