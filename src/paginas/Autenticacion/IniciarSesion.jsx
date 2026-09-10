@@ -12,7 +12,6 @@ import {
   ArrowRight,
   Sun,
   Moon,
-  Info,
   Mail,
   Eye,
   EyeOff,
@@ -82,7 +81,8 @@ export default function IniciarSesion() {
   const [mostrarPasswordRegistro, setMostrarPasswordRegistro] = useState(false);
   const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
   const [facultad, setFacultad] = useState("");
-  const [escuela, setEscuela] = useState("");
+  // ── ESTADO DE ACEPTACIÓN DE TÉRMINOS ──
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
 
   // ── ESTADO DEL MODAL DE CONFIRMACIÓN ──
   const [mostrarModalConfirmacion, setMostrarModalConfirmacion] = useState(false);
@@ -151,6 +151,15 @@ export default function IniciarSesion() {
     setCargando(true);
 
     try {
+      if (!aceptaTerminos) {
+        setMensaje({
+          tipo: "error",
+          texto: "Debes marcar la casilla para aceptar los Términos de Uso y el aviso de proyecto independiente."
+        });
+        setCargando(false);
+        return;
+      }
+
       const idLimpio = identificadorLogin.trim();
       if (!idLimpio || !passwordLogin) {
         setMensaje({ tipo: "error", texto: "Por favor, ingresa tu identificador y contraseña." });
@@ -249,6 +258,14 @@ export default function IniciarSesion() {
   const revisarRegistro = (e) => {
     e.preventDefault();
     setMensaje(null);
+
+    if (!aceptaTerminos) {
+      setMensaje({
+        tipo: "error",
+        texto: "Debes marcar la casilla para aceptar los Términos de Uso y el aviso de proyecto independiente."
+      });
+      return;
+    }
 
     if (!nombres.trim() || !apellidos.trim()) {
       setMensaje({ tipo: "error", texto: "Por favor, ingresa tus nombres y apellidos." });
@@ -435,22 +452,34 @@ export default function IniciarSesion() {
           </p>
         </div>
 
-        {/* Disclaimer JIAR */}
-        <div className={`p-3.5 rounded-2xl border text-xs leading-relaxed space-y-1.5 mb-6 backdrop-blur-md ${
-          tema === 'dark' ? 'bg-slate-950/80 border-sky-500/30 text-slate-300' : 'bg-sky-50/90 border-sky-200 text-slate-700'
+        {/* Disclaimer JIAR & Términos y Condiciones */}
+        <div className={`p-4 rounded-2xl border text-xs leading-relaxed space-y-2.5 mb-6 backdrop-blur-md transition-all ${
+          tema === 'dark' ? 'bg-slate-950/80 border-sky-500/30 text-slate-300' : 'bg-sky-50/90 border-sky-200 text-slate-700 shadow-sm'
         }`}>
           <div className="flex items-center justify-between">
             <span className="font-extrabold text-sky-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+              <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0" />
               <span>Proyecto Independiente · Creado por JIAR</span>
             </span>
             <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
               No Oficial UNP
             </span>
           </div>
-          <p className="text-[11px] leading-snug">
-            Esta plataforma es un proyecto académico independiente desarrollado por <strong>JIAR</strong> para la comunidad estudiantil de la UNP.
+          <p className="text-[11px] leading-relaxed">
+            Esta plataforma es un proyecto académico independiente creado por <strong>JIAR</strong>. <strong>No es un sitio web oficial de la Universidad Nacional de Piura (UNP)</strong>. Funciona como un simulador y gestor de mallas curriculares.
           </p>
+
+          <label className="flex items-start space-x-2.5 cursor-pointer text-[11px] font-bold text-sky-400 dark:text-sky-300 pt-2 border-t border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 select-none">
+            <input
+              type="checkbox"
+              checked={aceptaTerminos}
+              onChange={(e) => { setAceptaTerminos(e.target.checked); setMensaje(null); }}
+              className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
+            />
+            <span className="leading-snug">
+              He leído y acepto los Términos de Uso y entiendo que SIGUNP es un proyecto académico independiente no oficial.
+            </span>
+          </label>
         </div>
 
         {/* ── SELECTOR DE PESTAÑAS: INICIAR SESIÓN / CREAR CUENTA ── */}
