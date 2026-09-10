@@ -11,6 +11,7 @@ import MallaCurricular from "../paginas/Estudiante/MallaCurricular";
 import ApuntesNotion from "../paginas/Estudiante/ApuntesNotion";
 import SimuladorSemestres from "../paginas/Estudiante/SimuladorSemestres";
 import Matricula from "../paginas/Estudiante/Matricula";
+import PerfilEstudiante from "../paginas/Estudiante/PerfilEstudiante";
 
 // Módulo Administrador
 import LayoutAdmin from "../componentes/diseno/LayoutAdmin";
@@ -128,6 +129,7 @@ export default function EnrutadorApp() {
           <Route path="apuntes" element={<ApuntesNotion />} />
           <Route path="simulador" element={<SimuladorSemestres />} />
           <Route path="matricula" element={<Matricula />} />
+          <Route path="perfil" element={<PerfilEstudiante />} />
         </Route>
 
         {/* Módulo del Administrador (Rutas Hijas) */}

@@ -12,6 +12,7 @@ import {
   Sparkles,
   ChevronRight,
   UserCheck,
+  User,
   ShieldAlert,
   Compass,
   Sun,
@@ -62,6 +63,12 @@ export default function LayoutEstudiante() {
       etiqueta: "Matrícula",
       descripcion: "Inscripción de grupos",
       icono: <GraduationCap className="w-4 h-4" />
+    },
+    {
+      ruta: "/estudiante/perfil",
+      etiqueta: "Mi Perfil",
+      descripcion: "Editar datos y contraseña",
+      icono: <User className="w-4 h-4" />
     }
   ];
 
@@ -107,21 +114,30 @@ export default function LayoutEstudiante() {
             </div>
           </div>
 
-          {/* User Profile Card */}
-          <div className={`p-3 rounded-2xl ${tema === 'dark' ? 'bg-slate-950/70 border-slate-800/90' : 'bg-slate-100 border-slate-200'} border flex items-center justify-between shadow-inner`}>
+          {/* User Profile Card (Clickable to /estudiante/perfil) */}
+          <Link
+            to="/estudiante/perfil"
+            title="Editar Mi Perfil y Cambiar Contraseña"
+            className={`p-3 rounded-2xl ${
+              tema === 'dark' ? 'bg-slate-950/70 border-slate-800/90 hover:border-blue-500/50' : 'bg-slate-100 border-slate-200 hover:border-blue-400'
+            } border flex items-center justify-between shadow-inner transition-all group cursor-pointer`}
+          >
             <div className="flex items-center space-x-3 overflow-hidden">
-              <div className={`w-9 h-9 rounded-xl ${tema === 'dark' ? 'bg-slate-800 border-slate-700/80 text-slate-200' : 'bg-white border-slate-200 text-slate-800'} border flex items-center justify-center font-bold text-xs shrink-0 shadow-sm`}>
+              <div className={`w-9 h-9 rounded-xl ${tema === 'dark' ? 'bg-slate-800 border-slate-700/80 text-slate-200' : 'bg-white border-slate-200 text-slate-800'} border flex items-center justify-center font-bold text-xs shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
                 {userRole === "Administrador" ? <ShieldAlert className="w-4 h-4 text-amber-500" /> : <UserCheck className="w-4 h-4 text-blue-500" />}
               </div>
               <div className="truncate">
-                <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-800'} truncate`}>Estudiante UNP</div>
+                <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-800'} truncate group-hover:text-blue-400 transition-colors`}>
+                  {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}
+                </div>
                 <div className={`text-[10px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} truncate flex items-center space-x-1.5 mt-0.5`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>Rol: {userRole}</span>
+                  <span>Mi Perfil (Ver/Editar)</span>
                 </div>
               </div>
             </div>
-          </div>
+            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+          </Link>
         </div>
 
         {/* Links de Navegación Lateral */}
@@ -226,6 +242,14 @@ export default function LayoutEstudiante() {
         </div>
 
         <div className="flex items-center space-x-2">
+          <Link
+            to="/estudiante/perfil"
+            title="Mi Perfil y Contraseña"
+            className="p-2 rounded-xl text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer"
+          >
+            <User className="w-4 h-4" />
+          </Link>
+
           <button
             type="button"
             onClick={alternarTema}
@@ -273,6 +297,14 @@ export default function LayoutEstudiante() {
           </div>
 
           <div className="flex items-center space-x-3">
+            <Link
+              to="/estudiante/perfil"
+              title="Ver y Editar Mi Perfil"
+              className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer bg-blue-500/10 border-blue-500/30 text-blue-400 hover:bg-blue-500/20 shadow-sm"
+            >
+              <User className="w-4 h-4 text-blue-400" />
+              <span>Mi Perfil</span>
+            </Link>
             <button
               type="button"
               onClick={alternarTema}
