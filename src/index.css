@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  
+  html.dark body {
+    background-color: #020617;
+    color: #f8fafc;
+  }
+
+  html.light body {
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+  
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.6);
+}
+
+/* Premium Light & Dark Utilities */
+@layer utilities {
+  /* Dark Mode Surfaces */
+  html.dark .app-surface-card {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(30, 41, 59, 0.9);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Light Mode Surfaces - Executive High-End Polish */
+  html.light .app-surface-card {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.08), 0 2px 6px -1px rgba(148, 163, 184, 0.04);
+  }
+
+  html.light .app-surface-card-hover {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.light .app-surface-card-hover:hover {
+    border-color: rgba(148, 163, 184, 0.5);
+    box-shadow: 0 12px 28px -4px rgba(148, 163, 184, 0.15), 0 4px 10px -2px rgba(148, 163, 184, 0.08);
+    transform: translateY(-1px);
+  }
+
+  /* Sub-surfaces / Inset boxes */
+  html.dark .app-inset-box {
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(30, 41, 59, 0.8);
+  }
+  html.light .app-inset-box {
+    background: #f1f5f9;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+  }
+
+  /* Text Gradients */
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-purple {
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Colores Institucionales UNP (Azul Cyan, Rojo Carmesí Imperial y Dorado Sol) */
+  .text-gradient-unp {
+    background: linear-gradient(135deg, #0284c7 0%, #eab308 50%, #dc2626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bg-unp-gradient {
+    background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 50%, #b91c1c 100%);
+  }
+
+  .bg-unp-subtle {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(234, 179, 8, 0.08) 50%, rgba(220, 38, 38, 0.1) 100%);
+  }
+
+  /* Glows Institucionales */
+  html.dark .glow-blue {
+    box-shadow: 0 0 30px -5px rgba(37, 99, 235, 0.35);
+  }
+  html.light .glow-blue {
+    box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.15);
+  }
+
+  html.dark .glow-unp {
+    box-shadow: 0 0 35px -5px rgba(2, 132, 199, 0.4);
+  }
+  html.light .glow-unp {
+    box-shadow: 0 4px 25px -2px rgba(2, 132, 199, 0.2);
+  }
+
+  html.dark .glow-purple {
+    box-shadow: 0 0 30px -5px rgba(147, 51, 234, 0.35);
+  }
+  html.light .glow-purple {
+    box-shadow: 0 4px 20px -2px rgba(147, 51, 234, 0.15);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
