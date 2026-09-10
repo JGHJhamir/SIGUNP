@@ -214,7 +214,9 @@ export default function IniciarSesion() {
       }
 
       localStorage.setItem("userRole", rolFinal);
-      localStorage.setItem("codigoUniversitario", usuario.codigo_universitario || idLimpio);
+      localStorage.setItem("codigoUniversitario", usuario.codigo_universitario || "");
+      localStorage.setItem("dniEstudiante", usuario.dni || "");
+      localStorage.setItem("emailEstudiante", usuario.email || "");
       localStorage.setItem("nombreEstudiante", `${usuario.nombres} ${usuario.apellidos}`);
       localStorage.setItem("facultadEstudiante", usuario.facultad || "Facultad de Ingeniería Industrial");
       localStorage.setItem("escuelaEstudiante", usuario.escuela || "Ingeniería Informática");
@@ -333,7 +335,9 @@ export default function IniciarSesion() {
       }
 
       localStorage.setItem("userRole", rolFinal);
-      localStorage.setItem("codigoUniversitario", codigoLimpio || dniLimpio || "0500000000");
+      localStorage.setItem("codigoUniversitario", codigoLimpio || "");
+      localStorage.setItem("dniEstudiante", dniLimpio || "");
+      localStorage.setItem("emailEstudiante", emailLimpio || "");
       localStorage.setItem("nombreEstudiante", `${nombres.trim()} ${apellidos.trim()}`);
       localStorage.setItem("facultadEstudiante", facultad);
       localStorage.setItem("escuelaEstudiante", escuela);

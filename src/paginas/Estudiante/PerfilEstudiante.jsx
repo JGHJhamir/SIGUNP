@@ -82,6 +82,9 @@ export default function PerfilEstudiante() {
   const [mensajePassword, setMensajePassword] = useState(null);
 
   const codigoActual = localStorage.getItem("codigoUniversitario") || "";
+  const dniActual = localStorage.getItem("dniEstudiante") || "";
+  const emailActual = localStorage.getItem("emailEstudiante") || "";
+  const idBusqueda = codigoActual || dniActual || emailActual;
 
   // Cargar datos actuales del perfil desde Supabase o localStorage
   useEffect(() => {
@@ -95,24 +98,26 @@ export default function PerfilEstudiante() {
 
       setNombres(nom);
       setApellidos(ape);
+      setDni(dniActual);
       setCodigoUni(codigoActual);
+      setEmail(emailActual);
       setFacultad(fac);
       setEscuela(esc);
 
-      if (codigoActual) {
+      if (idBusqueda) {
         try {
           const { data, error } = await supabase
             .from("estudiantes")
             .select("*")
-            .or(`codigo_universitario.eq.${codigoActual},dni.eq.${codigoActual},email.eq.${codigoActual}`)
+            .or(`codigo_universitario.eq.${idBusqueda},dni.eq.${idBusqueda},email.eq.${idBusqueda}`)
             .maybeSingle();
 
           if (data && !error) {
-            if (data.nombres) setNombres(data.nombres);
-            if (data.apellidos) setApellidos(data.apellidos);
-            if (data.dni) setDni(data.dni);
-            if (data.codigo_universitario) setCodigoUni(data.codigo_universitario);
-            if (data.email) setEmail(data.email);
+            setNombres(data.nombres || nom);
+            setApellidos(data.apellidos || ape);
+            setDni(data.dni || dniActual || "");
+            setCodigoUni(data.codigo_universitario || "");
+            setEmail(data.email || emailActual || "");
             if (data.facultad) setFacultad(data.facultad);
             if (data.escuela) setEscuela(data.escuela);
           }
@@ -122,7 +127,7 @@ export default function PerfilEstudiante() {
       }
     };
     cargarPerfil();
-  }, [codigoActual]);
+  }, [idBusqueda]);
 
   const manejarCambioFacultad = (e) => {
     setFacultad(e.target.value);
@@ -140,12 +145,17 @@ export default function PerfilEstudiante() {
       return;
     }
 
+    if (!facultad || !escuela) {
+      setMensajePerfil({ tipo: "error", texto: "Selecciona tu Facultad y Escuela Profesional." });
+      return;
+    }
+
     setCargandoPerfil(true);
 
     try {
       const dniLimpio = dni.trim() || null;
-      const codigoLimpio = codigoUni.trim() || codigoActual;
-      const emailLimpio = email.trim().toLowerCase() || `${codigoLimpio}@unp.edu.pe`;
+      const codigoLimpio = codigoUni.trim() || null;
+      const emailLimpio = email.trim().toLowerCase() || `${codigoLimpio || dniLimpio}@unp.edu.pe`;
       const nombreCompleto = `${nombres.trim()} ${apellidos.trim()}`;
 
       const payload = {
@@ -160,21 +170,21 @@ export default function PerfilEstudiante() {
 
       let updateError = null;
 
-      // 1. Intentar actualizar el registro existente en Supabase por codigoActual
-      if (codigoActual) {
+      // 1. Intentar actualizar el registro existente en Supabase
+      if (idBusqueda) {
         const { error } = await supabase
           .from("estudiantes")
           .update(payload)
-          .or(`codigo_universitario.eq.${codigoActual},dni.eq.${codigoActual},email.eq.${codigoActual}`);
+          .or(`codigo_universitario.eq.${idBusqueda},dni.eq.${idBusqueda},email.eq.${idBusqueda}`);
         
         updateError = error;
       }
 
-      // 2. Si no había codigoActual o no encontró la fila, hacer upsert por codigo_universitario o email
-      if (!codigoActual || updateError) {
+      // 2. Si no existía o falló el update, hacer upsert por email o codigo
+      if (!idBusqueda || updateError) {
         const { error: upsertErr } = await supabase
           .from("estudiantes")
-          .upsert(payload, { onConflict: "codigo_universitario" });
+          .upsert(payload, { onConflict: emailLimpio ? "email" : "codigo_universitario" });
 
         updateError = upsertErr;
       }
@@ -185,7 +195,9 @@ export default function PerfilEstudiante() {
 
       // Actualizar localStorage
       localStorage.setItem("nombreEstudiante", nombreCompleto);
-      localStorage.setItem("codigoUniversitario", codigoLimpio);
+      localStorage.setItem("codigoUniversitario", codigoLimpio || "");
+      localStorage.setItem("dniEstudiante", dniLimpio || "");
+      localStorage.setItem("emailEstudiante", emailLimpio || "");
       localStorage.setItem("facultadEstudiante", facultad);
       localStorage.setItem("escuelaEstudiante", escuela);
 
@@ -288,11 +300,11 @@ export default function PerfilEstudiante() {
         } border text-xs space-y-1 font-mono shrink-0`}>
           <div className="flex items-center space-x-2 text-slate-400">
             <Hash className="w-3.5 h-3.5 text-blue-500" />
-            <span>Código: <strong className="text-white dark:text-white light:text-slate-900">{codigoUni || "0512021015"}</strong></span>
+            <span>Código: <strong className="text-white dark:text-white light:text-slate-900">{codigoUni || "Sin registrar"}</strong></span>
           </div>
           <div className="flex items-center space-x-2 text-slate-400">
             <IdCard className="w-3.5 h-3.5 text-purple-500" />
-            <span>DNI: <strong className="text-white dark:text-white light:text-slate-900">{dni || "No registrado"}</strong></span>
+            <span>DNI: <strong className="text-white dark:text-white light:text-slate-900">{dni || "Sin registrar"}</strong></span>
           </div>
         </div>
       </div>
@@ -406,56 +418,47 @@ export default function PerfilEstudiante() {
                 />
               </div>
 
-              {/* Carrera Universitaria (Bloqueada post-registro) */}
-              <div className={`p-4 rounded-2xl border ${
-                tema === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-100/80 border-slate-200'
-              } space-y-3`}>
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center space-x-1.5">
-                    <Building2 className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Carrera Universitaria Asignada</span>
-                  </span>
-                  <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center space-x-1">
-                    <Lock className="w-3 h-3" />
-                    <span>Fija (No modificable)</span>
-                  </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
+                    <Building2 className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Facultad</span>
+                  </label>
+                  <select
+                    value={facultad}
+                    onChange={manejarCambioFacultad}
+                    className={`w-full px-4 py-3 rounded-2xl ${
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer`}
+                    required
+                  >
+                    <option value="">Seleccione Facultad</option>
+                    {Object.keys(unpEstructura).map((fac) => (
+                      <option key={fac} value={fac}>{fac}</option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
-                      Facultad
-                    </label>
-                    <input
-                      type="text"
-                      value={facultad || "Facultad de Ingeniería Industrial"}
-                      readOnly
-                      disabled
-                      className={`w-full px-4 py-3 rounded-2xl ${
-                        tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-700'
-                      } border text-xs font-semibold cursor-not-allowed opacity-80`}
-                    />
-                  </div>
-
-                  <div>
-                    <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} mb-1`}>
-                      Escuela Profesional
-                    </label>
-                    <input
-                      type="text"
-                      value={escuela || "Ingeniería Informática"}
-                      readOnly
-                      disabled
-                      className={`w-full px-4 py-3 rounded-2xl ${
-                        tema === 'dark' ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-200 border-slate-300 text-slate-700'
-                      } border text-xs font-semibold cursor-not-allowed opacity-80`}
-                    />
-                  </div>
+                <div>
+                  <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
+                    <BookOpenCheck className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Escuela Profesional</span>
+                  </label>
+                  <select
+                    value={escuela}
+                    onChange={(e) => setEscuela(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-2xl ${
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer disabled:opacity-40`}
+                    disabled={!facultad}
+                    required
+                  >
+                    <option value="">Seleccione Escuela</option>
+                    {facultad && unpEstructura[facultad]?.map((esc) => (
+                      <option key={esc} value={esc}>{esc}</option>
+                    ))}
+                  </select>
                 </div>
-
-                <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
-                  🔒 La facultad y escuela profesional se definieron al registrar tu cuenta y no se pueden cambiar. Si deseas editar tu DNI, Código UNP, Nombres o Correo, puedes hacerlo en las casillas superiores.
-                </p>
               </div>
 
               {mensajePerfil && (
