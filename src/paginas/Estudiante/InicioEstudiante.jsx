@@ -216,12 +216,18 @@ export default function InicioEstudiante() {
             </div>
 
             <div className="space-y-2">
-              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>PANEL ACADÉMICO PRINCIPAL</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>PANEL ACADÉMICO PRINCIPAL</span>
+                </div>
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold shadow-sm">
+                  <Info className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Proyecto Independiente por JIAR (No Oficial UNP)</span>
+                </div>
               </div>
               <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight">
-                ¡Bienvenido al Portal SIGUNP!
+                ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}! 👋
               </h1>
               <p className="text-xs md:text-sm text-slate-400 max-w-lg leading-relaxed">
                 Sistema Integral de Gestión de la Universidad Nacional de Piura.
