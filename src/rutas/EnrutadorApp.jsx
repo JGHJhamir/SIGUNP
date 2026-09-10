@@ -30,17 +30,12 @@ function RutaAutenticada({ children }) {
   return children;
 }
 
-// Controla el onboarding. Redirige a la aplicación si ya se completó el tutorial.
+// Controla el acceso a la configuración / calibración de malla inicial o reconfiguración
 function RutaOnboarding({ children }) {
   const rol = localStorage.getItem("userRole");
-  const tutorialCompletado = localStorage.getItem("tutorialCompletado") === "true";
 
   if (!rol) {
     return <Navigate to="/" replace />;
-  }
-
-  if (tutorialCompletado) {
-    return <Navigate to="/estudiante/inicio" replace />;
   }
 
   return children;

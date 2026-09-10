@@ -78,10 +78,6 @@ export default function LayoutEstudiante() {
   };
 
   const manejarReconfigurar = () => {
-    localStorage.removeItem("tutorialCompletado");
-    localStorage.removeItem("cursosAprobados");
-    localStorage.removeItem("cursosInscritos");
-    localStorage.removeItem("asignacionGrupos");
     navegar("/configuracion-inicial");
   };
 

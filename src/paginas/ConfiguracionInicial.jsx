@@ -125,9 +125,20 @@ export default function ConfiguracionInicial() {
   const navigate = useNavigate();
   const { tema, alternarTema } = useTema();
   
-  const [aprobados, setAprobados] = useState([]);
+  const [aprobados, setAprobados] = useState(() => {
+    const guardados = localStorage.getItem("cursosAprobados");
+    if (guardados) {
+      try {
+        return JSON.parse(guardados);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  });
   const [cicloActivo, setCicloActivo] = useState("I");
   const [filtroElectivosCiclo, setFiltroElectivosCiclo] = useState("todos");
+  const tutorialPrevioCompletado = localStorage.getItem("tutorialCompletado") === "true";
 
   // Lista de 11 Pestañas: Ciclo I al X + Pestaña Especial "ELECTIVOS"
   const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "ELECTIVOS"];
@@ -248,6 +259,21 @@ export default function ConfiguracionInicial() {
           </div>
 
           <div className="flex items-center space-x-3 shrink-0">
+            {tutorialPrevioCompletado && (
+              <button
+                type="button"
+                onClick={() => navigate("/estudiante/inicio")}
+                className={`px-3.5 py-1.5 rounded-xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
+                  tema === 'dark'
+                    ? "bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-800"
+                    : "bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-blue-500" />
+                <span>Volver al Panel</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={alternarTema}
@@ -573,6 +599,19 @@ export default function ConfiguracionInicial() {
           </div>
 
           <div className="flex items-center space-x-3 w-full sm:w-auto">
+            {tutorialPrevioCompletado && (
+              <button
+                type="button"
+                onClick={() => navigate("/estudiante/inicio")}
+                className={`w-full sm:w-auto px-4 py-3.5 ${
+                  tema === 'dark' ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-200 border-slate-700' : 'bg-slate-200 hover:bg-slate-300 text-slate-800 border-slate-300'
+                } font-extrabold rounded-2xl text-xs border transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm`}
+              >
+                <ArrowLeft className="w-4 h-4 text-blue-500" />
+                <span>Volver al Panel</span>
+              </button>
+            )}
+
             {cicloActivo !== "I" && (
               <button
                 type="button"
