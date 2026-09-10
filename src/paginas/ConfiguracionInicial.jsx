@@ -241,8 +241,8 @@ export default function ConfiguracionInicial() {
               </div>
               <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} block font-medium mt-0.5`}>
                 {esModoElectivos
-                  ? "Selecciona individualmente solo los electivos que cursaste y aprobaste (15 CR requeridos)."
-                  : "Los electivos han sido removidos de los ciclos normales y se ubican al final."}
+                  ? "Selecciona los cursos electivos que hayas aprobado."
+                  : "Marca las asignaturas obligatorias que ya has aprobado."}
               </span>
             </div>
           </div>
@@ -284,8 +284,8 @@ export default function ConfiguracionInicial() {
           </h1>
           <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-1.5 max-w-xl mx-auto leading-relaxed`}>
             {esModoElectivos
-              ? "Selecciona únicamente los cursos electivos que hayas cursado y aprobado (Requerido: 15 créditos electivos acumulados)."
-              : "Marca los cursos obligatorios que ya has superado del Ciclo I al X. Los electivos se gestionan al final en su propia pestaña."}
+              ? "Selecciona únicamente las asignaturas electivas que hayas cursado y aprobado."
+              : "Marca los cursos obligatorios que ya has superado del Ciclo I al X."}
           </p>
         </div>
 
@@ -485,19 +485,6 @@ export default function ConfiguracionInicial() {
         {/* ── CONTENIDO PESTAÑA DEDICADA: "⚡ CURSOS ELECTIVOS" (UBICADA DESPUÉS DEL CICLO X) ── */}
         {esModoElectivos && (
           <div className="space-y-6 animate-fadeIn">
-            {/* Banner de Indicación sobre Electivos UNP */}
-            <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center space-x-2 text-purple-300">
-                <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
-                <span className="leading-relaxed">
-                  <strong>Regla de Electivos UNP:</strong> Los estudiantes llevan únicamente de 1 a 2 asignaturas electivas según su especialización (hasta sumar 15 CR electivos). Selecciona solo los que cursaste.
-                </span>
-              </div>
-              <div className="px-3.5 py-1.5 rounded-xl bg-purple-950/90 border border-purple-500/40 text-purple-300 font-black shrink-0 text-xs shadow-sm">
-                ⚡ {electivosAprobados} electivo(s) ({creditosElectivosAprobados} / 15 CR)
-              </div>
-            </div>
-
             {/* Pestañas de filtro por ciclo para Electivos */}
             <div className={`flex space-x-1.5 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
               {[
