@@ -211,13 +211,17 @@ export default function IniciarSesion() {
 
   return (
     <div className={`min-h-screen flex items-center justify-center ${
-      tema === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+      tema === 'dark'
+        ? 'bg-slate-950 text-slate-100'
+        : 'bg-gradient-to-br from-slate-100 via-sky-50/60 to-amber-50/30 text-slate-900'
     } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-300`}>
       
       {/* Background ambient light spheres */}
-      <div className={`absolute -top-40 -left-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-blue-600/15' : 'bg-blue-500/10'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
-      <div className={`absolute -bottom-40 -right-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-purple-600/15' : 'bg-purple-500/10'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-full bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:32px_32px] opacity-25 pointer-events-none"></div>
+      <div className={`absolute -top-40 -left-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-blue-600/15' : 'bg-sky-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
+      <div className={`absolute -bottom-40 -right-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-purple-600/15' : 'bg-amber-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-full ${
+        tema === 'dark' ? 'bg-[radial-gradient(#334155_1px,transparent_1px)] opacity-25' : 'bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] opacity-40'
+      } [background-size:32px_32px] pointer-events-none`}></div>
 
       {/* Top right theme toggle */}
       <div className="absolute top-6 right-6 z-20">
@@ -255,32 +259,40 @@ export default function IniciarSesion() {
         <div className="text-center mb-8">
           <div className="relative group inline-flex items-center justify-center mb-6">
             {/* Ambient Backlight Glows */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none"></div>
+            <div className={`absolute -inset-3 ${
+              tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
+            } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
             
             {/* Logo Ring Container with perfect circular clipping */}
             <div className={`relative w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 rounded-full p-1.5 ${
               tema === 'dark'
                 ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35),0_0_25px_rgba(245,158,11,0.25)]'
-                : 'bg-white/95 border-sky-400/40 shadow-2xl shadow-sky-500/20'
-            } border-2 ring-4 ring-amber-400/30 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl overflow-hidden`}>
+                : 'bg-white border-sky-300 shadow-2xl shadow-sky-600/15'
+            } border-2 ring-4 ${tema === 'dark' ? 'ring-amber-400/30' : 'ring-amber-400/40'} flex items-center justify-center transition-transform duration-300 group-hover:scale-105 backdrop-blur-xl overflow-hidden`}>
               <img
                 src="/sigunp-logo.png"
                 alt="SIGUNP Logo Oficial"
                 style={{ clipPath: 'circle(49% at 50% 50%)' }}
-                className="w-full h-full object-cover rounded-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover rounded-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105"
               />
             </div>
           </div>
           
           <div className="block">
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-950/60 dark:bg-slate-950/80 border border-amber-400/30 text-amber-400 text-xs font-extrabold mb-3 shadow-md shadow-amber-500/10 backdrop-blur-md">
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span className="tracking-widest uppercase text-[11px] font-extrabold bg-gradient-to-r from-sky-400 via-amber-300 to-blue-400 bg-clip-text text-transparent">UNIVERSIDAD NACIONAL DE PIURA</span>
+            <div className={`inline-flex items-center space-x-2 px-4 py-1.5 rounded-full ${
+              tema === 'dark'
+                ? 'bg-slate-950/80 border-amber-400/30 text-amber-400 shadow-md shadow-amber-500/10'
+                : 'bg-amber-50/90 border-amber-300/80 text-amber-900 shadow-sm'
+            } border text-xs font-extrabold mb-3 backdrop-blur-md transition-colors duration-300`}>
+              <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+              <span className="tracking-widest uppercase text-[11px] font-extrabold bg-gradient-to-r from-sky-500 via-amber-500 to-blue-600 dark:from-sky-400 dark:via-amber-300 dark:to-blue-400 bg-clip-text text-transparent">
+                UNIVERSIDAD NACIONAL DE PIURA
+              </span>
             </div>
           </div>
 
           <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-            Portal <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">SIGUNP</span>
+            Portal <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-sky-400 dark:via-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">SIGUNP</span>
           </h1>
           <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} mt-2 max-w-md mx-auto leading-relaxed font-semibold`}>
             Sistema Integral de Gestión de la Universidad Nacional de Piura.
