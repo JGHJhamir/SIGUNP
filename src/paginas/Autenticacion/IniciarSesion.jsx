@@ -193,6 +193,15 @@ export default function IniciarSesion() {
         return;
       }
 
+      if (usuario.password_hash && usuario.password_hash !== passwordLogin) {
+        setMensaje({
+          tipo: "error",
+          texto: "Contraseña incorrecta. Por favor verifícala e inténtalo nuevamente."
+        });
+        setCargando(false);
+        return;
+      }
+
       if (passwordLogin.length < 6) {
         setMensaje({ tipo: "error", texto: "La contraseña debe tener al menos 6 caracteres." });
         setCargando(false);
@@ -326,12 +335,22 @@ export default function IniciarSesion() {
         rol: rolFinal
       };
 
+      let onConflictTarget = "email";
+      if (dniLimpio) onConflictTarget = "dni";
+      else if (codigoLimpio) onConflictTarget = "codigo_universitario";
+
       const { error } = await supabase.from("estudiantes").upsert(payload, {
-        onConflict: emailLimpio ? "email" : "codigo_universitario"
+        onConflict: onConflictTarget
       });
 
       if (error) {
-        console.warn("Sincronización Supabase:", error.message);
+        console.error("Error al registrar en Supabase:", error.message);
+        setMensaje({
+          tipo: "error",
+          texto: `No se pudo registrar en la base de datos: ${error.message}`
+        });
+        setCargando(false);
+        return;
       }
 
       localStorage.setItem("userRole", rolFinal);
