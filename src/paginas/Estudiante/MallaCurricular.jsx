@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTema } from "../../contexto/ContextoTema";
 import {
   Search,
   CheckCircle2,
@@ -154,6 +155,7 @@ const planEstudios = [
 ];
 
 export default function MallaCurricular() {
+  const { tema } = useTema();
   const [aprobados, setAprobados] = useState([]);
   const [mensajeError, setMensajeError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
@@ -323,26 +325,29 @@ export default function MallaCurricular() {
     <div className="space-y-6">
 
       {/* Metric Header Section */}
-      <div className="bg-slate-900/90 dark:bg-slate-900/90 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-2xl space-y-6">
+      <div className={`rounded-2xl border ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } p-5 sm:p-6 md:p-8 space-y-6 transition-colors`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 light:text-blue-600 text-xs font-bold shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold">
               <span>PLAN DE ESTUDIOS 2018-1</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white dark:text-white light:text-slate-900 tracking-tight">
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Malla Curricular — Ing. Informática
             </h1>
-            <p className="text-xs text-slate-400 light:text-slate-500">
+            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
               Universidad Nacional de Piura • 10 Ciclos Académicos Completos
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 bg-slate-950/80 dark:bg-slate-950/80 light:bg-slate-50 border border-slate-800 dark:border-slate-800 light:border-slate-200 px-4 py-3 rounded-2xl shadow-md">
-            <BookOpen className="w-5 h-5 text-blue-400 light:text-blue-600" />
+          <div className={`flex items-center space-x-3 ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } border px-4 py-3 rounded-xl shadow-sm`}>
+            <BookOpen className="w-5 h-5 text-blue-500" />
             <div>
-              <div className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400 light:text-slate-500">Créditos Totales</div>
-              <div className="text-sm font-black text-white dark:text-white light:text-slate-900">{totalCreditosAprobados} / 274 CR</div>
+              <div className={`text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Créditos Totales</div>
+              <div className={`text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalCreditosAprobados} / 274 CR</div>
             </div>
           </div>
         </div>
@@ -351,73 +356,80 @@ export default function MallaCurricular() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           
           {/* Cursos Obligatorios */}
-          <div className="bg-slate-950/70 dark:bg-slate-950/70 light:bg-blue-50/50 border border-blue-500/20 light:border-blue-200 p-4 rounded-2xl space-y-2">
-            <div className="flex justify-between items-center text-[10px] font-extrabold text-blue-400 light:text-blue-700 uppercase tracking-wider">
+          <div className={`p-4 rounded-xl border ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } space-y-2`}>
+            <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
               <span>Cursos Obligatorios</span>
-              <span className="bg-blue-500/20 text-blue-300 light:bg-blue-200 light:text-blue-800 px-2 py-0.5 rounded-full font-black">{porcentajeObligatorios}%</span>
+              <span className="bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded font-bold border border-blue-500/20">{porcentajeObligatorios}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-white dark:text-white light:text-slate-900">
-                {totalObligatoriosAprobados} <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ {totalObligatoriosPlan}</span>
+              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalObligatoriosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
               </div>
-              <span className="text-[10px] font-bold text-slate-400 light:text-slate-500">Obligatorios</span>
+              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Obligatorios</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeObligatorios}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-blue-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeObligatorios}%` }}></div>
             </div>
           </div>
 
           {/* Cursos Electivos */}
-          <div className="bg-slate-950/70 dark:bg-slate-950/70 light:bg-purple-50/50 border border-purple-500/30 light:border-purple-200 p-4 rounded-2xl space-y-2">
-            <div className="flex justify-between items-center text-[10px] font-extrabold text-purple-400 light:text-purple-700 uppercase tracking-wider">
+          <div className={`p-4 rounded-xl border ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } space-y-2`}>
+            <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
               <span className="flex items-center space-x-1">
-                <Sparkles className="w-3 h-3 text-purple-400 light:text-purple-600" />
                 <span>Créditos Electivos</span>
               </span>
-              <span className="bg-purple-500/20 text-purple-300 light:bg-purple-200 light:text-purple-800 px-2 py-0.5 rounded-full font-black">{porcentajeElectivos}%</span>
+              <span className="bg-purple-500/10 text-purple-500 px-2 py-0.5 rounded font-bold border border-purple-500/20">{porcentajeElectivos}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-purple-300 dark:text-purple-300 light:text-purple-900">
-                {creditosElectivosAprobados} <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ 15 CR</span>
+              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {creditosElectivosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR</span>
               </div>
-              <span className="text-[10px] font-bold text-purple-400/80 light:text-purple-600">{totalElectivosAprobados} electivos</span>
+              <span className="text-[10px] font-medium text-purple-500">{totalElectivosAprobados} electivos</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-500 via-violet-400 to-amber-400 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeElectivos}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-purple-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeElectivos}%` }}></div>
             </div>
           </div>
 
           {/* Créditos Acumulados */}
-          <div className="bg-slate-950/70 dark:bg-slate-950/70 light:bg-emerald-50/50 border border-emerald-500/20 light:border-emerald-200 p-4 rounded-2xl space-y-2">
-            <div className="flex justify-between items-center text-[10px] font-extrabold text-emerald-400 light:text-emerald-700 uppercase tracking-wider">
+          <div className={`p-4 rounded-xl border ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } space-y-2`}>
+            <div className="flex justify-between items-center text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
               <span>Créditos Totales</span>
-              <span className="bg-emerald-500/20 text-emerald-300 light:bg-emerald-200 light:text-emerald-800 px-2 py-0.5 rounded-full font-black">{porcentajeProgreso}%</span>
+              <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded font-bold border border-emerald-500/20">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-white dark:text-white light:text-slate-900">
-                {totalCreditosAprobados} <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ 274 CR</span>
+              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCreditosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
               </div>
-              <span className="text-[10px] font-bold text-emerald-400/80 light:text-emerald-600">Aprobados</span>
+              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Aprobados</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeProgreso}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
           {/* Avance Global */}
-          <div className="bg-slate-950/70 dark:bg-slate-950/70 light:bg-sky-50/50 border border-sky-500/20 light:border-sky-200 p-4 rounded-2xl space-y-2">
-            <div className="flex justify-between items-center text-[10px] font-extrabold text-sky-400 light:text-sky-700 uppercase tracking-wider">
+          <div className={`p-4 rounded-xl border ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } space-y-2`}>
+            <div className="flex justify-between items-center text-[10px] font-bold text-sky-500 uppercase tracking-wider">
               <span>Progreso Global</span>
-              <span className="text-sky-400 light:text-sky-700 font-black">{porcentajeProgreso}%</span>
+              <span className="text-sky-500 font-bold">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-white dark:text-white light:text-slate-900">
-                {totalCursosAprobados} <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ {totalObligatoriosPlan + totalElectivosPlan}</span>
+              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCursosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan + totalElectivosPlan}</span>
               </div>
-              <span className="text-[10px] font-bold text-slate-400 light:text-slate-500">Total Cursos</span>
+              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Total Cursos</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeProgreso}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-blue-600 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
@@ -426,24 +438,30 @@ export default function MallaCurricular() {
 
       {/* Error Alert Toast */}
       {mensajeError && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex items-start space-x-3 text-rose-300 text-xs font-semibold animate-fadeIn shadow-lg">
-          <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start space-x-3 text-rose-500 text-xs font-semibold animate-fadeIn shadow-sm">
+          <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
           <span className="leading-relaxed">{mensajeError}</span>
         </div>
       )}
 
       {/* Search & Filter Toolbar */}
-      <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-4 md:p-5 shadow-xl light:shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 backdrop-blur-xl">
+      <div className={`rounded-2xl border ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 transition-colors`}>
         
         {/* Search Input */}
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 light:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por asignatura o código (ej. Algoritmos)..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-950/80 dark:bg-slate-950/80 light:bg-slate-50 border border-slate-800 dark:border-slate-800 light:border-slate-200 text-slate-200 dark:text-slate-200 light:text-slate-900 placeholder-slate-500 light:placeholder-slate-400 text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-inner light:shadow-none"
+            className={`w-full pl-10 pr-4 py-2 rounded-xl text-xs font-medium outline-none transition-all ${
+              tema === 'dark'
+                ? 'bg-[#090e1a] border-slate-800 text-slate-200 focus:border-blue-500'
+                : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-600'
+            } border`}
           />
         </div>
 

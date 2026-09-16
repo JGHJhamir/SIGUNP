@@ -130,46 +130,42 @@ export default function InicioAdmin() {
     <div className="space-y-8 animate-fadeIn">
       
       {/* Banner de Bienvenida Ejecutivo */}
-      <div className={`p-6 sm:p-8 rounded-3xl ${
-        tema === 'dark'
-          ? 'bg-gradient-to-r from-purple-900/40 via-indigo-900/30 to-slate-900 border-purple-500/20'
-          : 'bg-gradient-to-r from-purple-600/10 via-indigo-600/5 to-slate-100 border-purple-200'
-      } border relative overflow-hidden backdrop-blur-xl shadow-xl`}>
-        <div className="absolute right-0 top-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className={`p-5 sm:p-6 md:p-8 rounded-2xl ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } border relative overflow-hidden transition-colors`}>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center space-x-5">
-            <div className="relative shrink-0 hidden sm:flex items-center justify-center">
-              <div className="absolute inset-0 bg-purple-500/20 rounded-full blur-xl pointer-events-none"></div>
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-purple-500/30 p-1 shadow-xl shadow-purple-500/20 ring-2 ring-indigo-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
-                <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
+          <div className="flex items-center space-x-4">
+            <div className="shrink-0 hidden sm:flex items-center justify-center">
+              <div className="w-16 h-16 rounded-xl bg-slate-900 border border-purple-500/30 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+                <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20 text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" /> SIGUNP — Administrador Principal
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 text-purple-500 dark:text-purple-400 border border-purple-500/20 text-xs font-bold uppercase tracking-wider">
+                <span>SIGUNP — Administrador Principal</span>
               </div>
-              <h2 className={`text-2xl sm:text-3xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 ¡Bienvenido al Panel, {usuarioNombre.split(" ")[0]}!
               </h2>
-              <p className={`text-sm ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} max-w-2xl`}>
+              <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-2xl`}>
                 Gestión centralizada del Sistema Integral de Gestión de la Universidad Nacional de Piura. Administra facultades, carreras, usuarios, mallas curriculares y periodos lectivos.
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
               to="/admin/usuarios"
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold text-xs shadow-lg shadow-purple-600/30 hover:opacity-95 transition-all duration-200 flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-2"
             >
               <UserPlus className="w-4 h-4" /> Nuevo Usuario
             </Link>
             <Link
               to="/admin/configuracion"
-              className={`px-4 py-2.5 rounded-xl border font-semibold text-xs transition-all duration-200 ${
+              className={`px-3.5 py-2 rounded-xl border font-bold text-xs transition-all ${
                 tema === 'dark'
-                  ? 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-800'
-                  : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-100 shadow-sm'
+                  ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
               }`}
             >
               Ajustes de Sistema

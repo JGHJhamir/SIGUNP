@@ -251,11 +251,11 @@ export default function GestionUsuarios() {
     const coincideRol = filtroRol === "Todos" || u.rol === filtroRol;
     const q = busqueda.toLowerCase();
     const coincideBusqueda =
-      u.codigo_universitario.toLowerCase().includes(q) ||
-      u.nombres.toLowerCase().includes(q) ||
-      u.apellidos.toLowerCase().includes(q) ||
-      u.facultad.toLowerCase().includes(q) ||
-      u.escuela.toLowerCase().includes(q);
+      (u.codigo_universitario && u.codigo_universitario.toLowerCase().includes(q)) ||
+      (u.nombres && u.nombres.toLowerCase().includes(q)) ||
+      (u.apellidos && u.apellidos.toLowerCase().includes(q)) ||
+      (u.facultad && u.facultad.toLowerCase().includes(q)) ||
+      (u.escuela && u.escuela.toLowerCase().includes(q));
     return coincideRol && coincideBusqueda;
   });
 

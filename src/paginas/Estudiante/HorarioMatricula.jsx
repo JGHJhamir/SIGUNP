@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTema } from "../../contexto/ContextoTema";
 import {
   Calendar,
   Clock,
@@ -309,6 +310,7 @@ const informacionGrupos = {
 };
 
 export default function HorarioMatricula() {
+  const { tema } = useTema();
   const [matriculasPorSemestre, setMatriculasPorSemestre] = useState({});
   const [semestreVista, setSemestreVista] = useState(semestresDisponibles[0]);
   const [modoVista, setModoVista] = useState("grilla"); // "grilla" | "agenda" | "tarjetas"
@@ -519,23 +521,24 @@ export default function HorarioMatricula() {
       `}</style>
 
       {/* Header Principal */}
-      <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 shadow-xl backdrop-blur-2xl space-y-6 no-print">
+      <div className={`rounded-2xl border ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } p-5 sm:p-6 md:p-8 space-y-6 no-print transition-colors`}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-2 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold mb-2">
               <span>CALENDARIO SEMANAL & HORARIO DE CLASES</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center space-x-3">
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} flex items-center space-x-3`}>
               <span>Mi Horario Universitario</span>
               {diaHoyNombre && (
-                <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5 shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20 flex items-center space-x-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   <span>Hoy es {diaHoyNombre}</span>
                 </span>
               )}
             </h1>
-            <p className="text-xs md:text-sm text-slate-400 mt-1">
+            <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-1`}>
               Visualización interactiva, sincronizada automáticamente con tu plan de estudios y matrícula.
             </p>
           </div>
@@ -547,7 +550,7 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={() => setModoDemoActivo(true)}
-                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white text-xs font-black rounded-2xl shadow-lg shadow-blue-600/25 transition-all flex items-center space-x-2 cursor-pointer active:scale-95"
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-2 cursor-pointer shadow-sm"
               >
                 <Zap className="w-4 h-4" />
                 <span>Cargar Horario de Ejemplo (Demo)</span>
@@ -558,15 +561,15 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={() => setModoDemoActivo(false)}
-                className="px-3.5 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold rounded-2xl transition-all flex items-center space-x-2 cursor-pointer hover:bg-amber-500/20"
+                className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer hover:bg-amber-500/20"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
                 <span>Desactivar Demo</span>
               </button>
             )}
 
             {/* Selector de Semestres */}
-            <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800 overflow-x-auto no-scrollbar max-w-full">
+            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border overflow-x-auto no-scrollbar max-w-full`}>
               {semestresDisponibles.map((sem) => {
                 const tieneMatriculaGuardada = matriculasPorSemestre[sem]?.cursos?.length > 0;
                 return (
@@ -577,14 +580,14 @@ export default function HorarioMatricula() {
                       setSemestreVista(sem);
                       setModoDemoActivo(false);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
                       semestreVista === sem && !modoDemoActivo
-                        ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                        : "text-slate-400 hover:text-slate-200"
+                        ? "bg-blue-600 text-white shadow-sm"
+                        : tema === 'dark' ? "text-slate-400 hover:text-slate-200" : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     <span>{sem}</span>
-                    {tieneMatriculaGuardada && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>}
+                    {tieneMatriculaGuardada && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>}
                   </button>
                 );
               })}
@@ -595,7 +598,9 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={manejarCopiarResumen}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-2xl border border-slate-700 transition-all flex items-center space-x-2 cursor-pointer shadow-sm"
+                className={`px-3 py-1.5 ${
+                  tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm`}
                 title="Copiar horario en formato texto"
               >
                 {mensajeCopiado ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}

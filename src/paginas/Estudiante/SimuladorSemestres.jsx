@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTema } from "../../contexto/ContextoTema";
 import {
   Sparkles,
   Plus,
@@ -109,6 +110,7 @@ const ELECTIVOS_SET = new Set([
 ]);
 
 export default function SimuladorSemestres() {
+  const { tema } = useTema();
   const [cursosAprobadosReales, setCursosAprobadosReales] = useState([]);
   const [semestresSimulados, setSemestresSimulados] = useState([]);
   const [asignacionCursos, setAsignacionCursos] = useState({});
@@ -326,58 +328,73 @@ export default function SimuladorSemestres() {
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-2xl space-y-4">
+      <div className={`rounded-2xl border ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } p-5 sm:p-6 md:p-8 space-y-4 transition-colors`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-500 dark:text-purple-400 text-xs font-bold">
               <span>SIMULADOR DE CICLOS FUTUROS</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center space-x-3">
-              <span>Planificación de Semestres</span>
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              Planificación de Semestres
             </h1>
-            <p className="text-xs text-slate-400 max-w-lg leading-relaxed">
+            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-lg`}>
               Organiza de forma prospectiva tus asignaturas pendientes respetando prerrequisitos y límites de créditos.
             </p>
           </div>
 
           <Link
             to="/estudiante/malla"
-            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-2xl border border-slate-700 transition-all flex items-center space-x-2 shrink-0 cursor-pointer shadow-sm"
+            className={`px-3.5 py-2 ${
+              tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
+            } text-xs font-bold rounded-xl border transition-all flex items-center space-x-2 shrink-0 cursor-pointer`}
           >
             <span>Volver a Malla</span>
-            <ChevronRight className="w-4 h-4 text-purple-400" />
+            <ChevronRight className="w-4 h-4 text-purple-500" />
           </Link>
         </div>
       </div>
 
       {/* Formulario: Crear Semestre */}
-      <div className="bg-slate-900/80 border border-slate-800/90 rounded-3xl p-6 shadow-xl space-y-6 backdrop-blur-2xl">
-        <h2 className="text-xs font-black text-slate-400 uppercase tracking-wider border-b border-slate-800/80 pb-3 flex items-center space-x-2">
-          <Plus className="w-4 h-4 text-purple-400" />
+      <div className={`rounded-2xl border ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } p-5 sm:p-6 space-y-6 transition-colors`}>
+        <h2 className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider border-b ${
+          tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        } pb-3 flex items-center space-x-2`}>
+          <Plus className="w-4 h-4 text-purple-500" />
           <span>Crear Nuevo Semestre en la Simulación</span>
         </h2>
 
         <form onSubmit={manejarCrearSemestre} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">Año Académico</label>
+            <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-2`}>Año Académico</label>
             <input
               type="number"
               value={nuevoAnio}
               onChange={(e) => setNuevoAnio(e.target.value)}
               placeholder={`Ej. ${new Date().getFullYear()}`}
               min={new Date().getFullYear()}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs font-semibold text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
+              className={`w-full px-3.5 py-2 rounded-xl text-xs font-medium outline-none transition-all ${
+                tema === 'dark'
+                  ? 'bg-[#090e1a] border-slate-800 text-slate-200 focus:border-purple-500'
+                  : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-purple-600'
+              } border`}
               required
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">Ciclo</label>
+            <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-2`}>Ciclo</label>
             <select
               value={nuevoCiclo}
               onChange={(e) => setNuevoCiclo(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs font-semibold text-slate-100 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 cursor-pointer shadow-inner"
+              className={`w-full px-3.5 py-2 rounded-xl text-xs font-medium outline-none transition-all ${
+                tema === 'dark'
+                  ? 'bg-[#090e1a] border-slate-800 text-slate-200 focus:border-purple-500'
+                  : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-purple-600'
+              } border cursor-pointer`}
             >
               <option value="I">I (Enero - Junio)</option>
               <option value="II">II (Agosto - Diciembre)</option>
@@ -386,12 +403,16 @@ export default function SimuladorSemestres() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">Límite de Créditos</label>
+            <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-2`}>Límite de Créditos</label>
             <input
               type="number"
               value={nuevoLimite}
               onChange={(e) => setNuevoLimite(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs font-semibold text-slate-100 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
+              className={`w-full px-3.5 py-2 rounded-xl text-xs font-medium outline-none transition-all ${
+                tema === 'dark'
+                  ? 'bg-[#090e1a] border-slate-800 text-slate-200 focus:border-purple-500'
+                  : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-purple-600'
+              } border`}
               min="1"
               max="35"
               required
@@ -400,7 +421,7 @@ export default function SimuladorSemestres() {
 
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-purple-600/25 transition-all flex items-center justify-center space-x-1.5 cursor-pointer active:scale-[0.98]"
+            className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Crear Semestre</span>
@@ -408,11 +429,15 @@ export default function SimuladorSemestres() {
         </form>
 
         {/* Acciones globales */}
-        <div className="flex flex-col sm:flex-row justify-end items-center gap-3 pt-4 border-t border-slate-800/80">
+        <div className={`flex flex-col sm:flex-row justify-end items-center gap-3 pt-4 border-t ${
+          tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        }`}>
           <button
             type="button"
             onClick={() => setModoCompacto(!modoCompacto)}
-            className="w-full sm:w-auto px-4 py-2 bg-slate-950/80 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm"
+            className={`w-full sm:w-auto px-3.5 py-2 ${
+              tema === 'dark' ? 'bg-[#090e1a] border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200'
+            } border text-xs font-bold rounded-xl transition-all cursor-pointer`}
           >
             {modoCompacto ? "📋 Vista Detallada" : "📦 Vista Compacta"}
           </button>
@@ -420,7 +445,7 @@ export default function SimuladorSemestres() {
           <button
             type="button"
             onClick={() => setMostrarHistorial(!mostrarHistorial)}
-            className="w-full sm:w-auto px-4 py-2 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 text-purple-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm"
+            className="w-full sm:w-auto px-3.5 py-2 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 text-purple-500 text-xs font-bold rounded-xl transition-all cursor-pointer"
           >
             {mostrarHistorial ? "Ocultar historial" : "Mostrar historial"}
           </button>
@@ -428,7 +453,7 @@ export default function SimuladorSemestres() {
           <button
             type="button"
             onClick={limpiarTodo}
-            className="w-full sm:w-auto px-4 py-2 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm flex items-center justify-center space-x-1"
+            className="w-full sm:w-auto px-3.5 py-2 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-500 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center space-x-1"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Limpiar Todo</span>
@@ -438,8 +463,8 @@ export default function SimuladorSemestres() {
 
       {/* Grid de Semestres Simulados */}
       <div className="space-y-4">
-        <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider pl-1 flex items-center space-x-2">
-          <Layers className="w-4 h-4 text-purple-400" />
+        <h3 className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider pl-1 flex items-center space-x-2`}>
+          <Layers className="w-4 h-4 text-purple-500" />
           <span>Tus Semestres Planificados ({semestresSimulados.length})</span>
         </h3>
 

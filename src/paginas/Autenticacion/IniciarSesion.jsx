@@ -386,23 +386,19 @@ export default function IniciarSesion() {
   return (
     <div className={`min-h-screen flex items-center justify-center ${
       tema === 'dark'
-        ? 'bg-slate-950 text-slate-100'
-        : 'bg-gradient-to-br from-slate-100 via-sky-50/60 to-amber-50/30 text-slate-900'
-    } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-300`}>
-      
-      {/* Background Lights */}
-      <div className={`absolute -top-40 -left-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-blue-600/15' : 'bg-sky-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
-      <div className={`absolute -bottom-40 -right-40 w-[600px] h-[600px] ${tema === 'dark' ? 'bg-purple-600/15' : 'bg-amber-400/15'} rounded-full blur-[150px] pointer-events-none animate-pulseSubtle`}></div>
+        ? 'bg-[#090d16] text-slate-100'
+        : 'bg-slate-100 text-slate-900'
+    } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200`}>
 
       {/* Botón Tema */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <button
           type="button"
           onClick={alternarTema}
-          className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-lg ${
+          className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
             tema === 'dark'
-              ? "bg-slate-900/80 border-slate-700 text-amber-300 hover:bg-slate-800"
-              : "bg-white/90 border-slate-200 text-amber-600 hover:bg-slate-100"
+              ? "bg-[#0e1526] border-slate-700 text-slate-200 hover:bg-slate-800"
+              : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
           }`}
         >
           {tema === 'dark' ? (
@@ -419,32 +415,28 @@ export default function IniciarSesion() {
         </button>
       </div>
 
-      <div className={`w-full max-w-2xl ${
-        tema === 'dark' ? 'bg-slate-900/85 border-slate-800/90' : 'bg-white/90 border-slate-200/90 shadow-2xl'
-      } backdrop-blur-2xl border rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden z-10 transition-all duration-300 max-w-full`}>
+      <div className={`w-full max-w-xl ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-xl'
+      } border rounded-2xl p-6 sm:p-8 md:p-10 relative overflow-hidden z-10 transition-all duration-200`}>
         
         {/* Accent Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-purple-600"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600"></div>
 
         {/* ── 1. PANTALLA DE BIENVENIDA ── */}
         {vista === "bienvenida" && (
           <div className="space-y-6 text-center animate-fadeIn">
             {/* Logo de SIGUNP */}
-            <div className="relative group inline-flex items-center justify-center mt-2">
-              <div className={`absolute -inset-3 ${
-                tema === 'dark' ? 'bg-gradient-to-r from-blue-600/40 via-amber-500/30 to-sky-400/40' : 'bg-gradient-to-r from-sky-400/30 via-amber-400/25 to-blue-500/30'
-              } rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300 pointer-events-none`}></div>
-              
-              <div className={`relative w-28 h-28 sm:w-40 sm:h-40 rounded-full p-1.5 ${
+            <div className="inline-flex items-center justify-center mt-2">
+              <div className={`w-28 h-28 sm:w-36 sm:h-36 rounded-full p-1 ${
                 tema === 'dark'
-                  ? 'bg-slate-950/95 border-sky-400/40 shadow-[0_0_60px_rgba(59,130,246,0.35)]'
-                  : 'bg-white border-sky-300 shadow-2xl'
-              } border-2 ring-4 ${tema === 'dark' ? 'ring-amber-400/30' : 'ring-amber-400/40'} flex items-center justify-center backdrop-blur-xl overflow-hidden`}>
+                  ? 'bg-slate-900 border-slate-700'
+                  : 'bg-white border-slate-200 shadow-md'
+              } border flex items-center justify-center overflow-hidden`}>
                 <img
                   src="/sigunp-logo.png"
                   alt="SIGUNP Logo"
                   style={{ clipPath: 'circle(49% at 50% 50%)' }}
-                  className="w-full h-full object-cover rounded-full drop-shadow-md"
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
             </div>

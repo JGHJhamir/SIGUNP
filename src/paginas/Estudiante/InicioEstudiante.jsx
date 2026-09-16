@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTema } from "../../contexto/ContextoTema";
 import {
   Bell,
   Award,
@@ -115,6 +116,7 @@ const ELECTIVOS_SET = new Set([
 ]);
 
 export default function InicioEstudiante() {
+  const { tema } = useTema();
   const [cursosAprobados, setCursosAprobados] = useState([]);
   const [cursosInscritos, setCursosInscritos] = useState([]);
   const [filtroNotif, setFiltroNotif] = useState("todas");
@@ -204,73 +206,78 @@ export default function InicioEstudiante() {
     <div className="space-y-6">
 
       {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 border border-slate-800/90 p-4 sm:p-6 md:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/15 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6">
-          <div className="flex items-center space-x-3 sm:space-x-5">
-            <div className="relative shrink-0 hidden sm:flex items-center justify-center">
-              <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl pointer-events-none"></div>
-              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
-                <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
+      <div className={`relative overflow-hidden rounded-2xl ${
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+      } border p-5 sm:p-6 md:p-8 transition-colors`}>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
+          <div className="flex items-center space-x-4">
+            <div className="shrink-0 hidden sm:flex items-center justify-center">
+              <div className="w-16 h-16 rounded-xl bg-slate-900 border border-slate-700 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+                <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] sm:text-xs font-bold shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>PANEL ACADÉMICO PRINCIPAL</span>
-                </div>
-                <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] sm:text-[11px] font-bold shadow-sm">
-                  <Info className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>Proyecto Independiente por JIAR (No Oficial UNP)</span>
-                </div>
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/20">
+                  <span>PANEL ACADÉMICO</span>
+                </span>
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                  <Info className="w-3 h-3 text-amber-500 shrink-0" />
+                  <span>Proyecto Independiente JIAR (No Oficial UNP)</span>
+                </span>
               </div>
-              <h1 className="text-xl sm:text-2xl md:text-4xl font-black text-white tracking-tight">
-                ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}! 👋
+              <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}!
               </h1>
-              <p className="text-xs md:text-sm text-slate-400 max-w-lg leading-relaxed">
+              <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-xl`}>
                 Sistema Integral de Gestión de la Universidad Nacional de Piura.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 bg-slate-950/80 border border-slate-800 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-md shadow-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start">
-            <Calendar className="w-5 h-5 text-blue-400" />
+          <div className={`flex items-center space-x-3 ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+          } border px-4 py-3 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start`}>
+            <Calendar className="w-5 h-5 text-blue-500" />
             <div>
-              <div className="text-[10px] uppercase tracking-widest font-extrabold text-slate-400">Semestre Vigente</div>
-              <div className="text-sm font-black text-white">2026-II</div>
+              <div className={`text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Vigente</div>
+              <div className={`text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-II</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Resumen Académico Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Créditos Aprobados */}
-        <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between backdrop-blur-xl">
+        <div className={`p-5 rounded-xl border ${
+          tema === 'dark'
+            ? 'bg-[#0e1526] border-slate-800 text-white'
+            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+        } flex flex-col justify-between transition-all`}>
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className="text-[10px] font-extrabold text-slate-400 light:text-slate-500 uppercase tracking-wider block">Créditos Aprobados</span>
+              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Créditos Aprobados</span>
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-black text-white dark:text-white light:text-slate-900">{creditosAprobados}</span>
-                <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ 274 CR</span>
+                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
               </div>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 light:text-blue-600 flex items-center justify-center shadow-inner">
+            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'} border border-blue-500/20 flex items-center justify-center`}>
               <Award className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="mt-5 space-y-2">
-            <div className="flex justify-between text-[11px] font-bold text-slate-400 light:text-slate-600">
+          <div className="mt-4 space-y-1.5">
+            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
               <span>Avance de Carrera</span>
-              <span className="text-blue-400 light:text-blue-600 font-black">{porcentajeProgreso}%</span>
+              <span className="text-blue-500 font-bold">{porcentajeProgreso}%</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-2 rounded-full overflow-hidden">
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
               <div
-                className="bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400 h-full rounded-full transition-all duration-500"
+                className="bg-blue-600 h-full rounded-full transition-all duration-300"
                 style={{ width: `${porcentajeProgreso}%` }}
               />
             </div>
@@ -278,91 +285,110 @@ export default function InicioEstudiante() {
         </div>
 
         {/* Cursos Obligatorios */}
-        <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between backdrop-blur-xl">
+        <div className={`p-5 rounded-xl border ${
+          tema === 'dark'
+            ? 'bg-[#0e1526] border-slate-800 text-white'
+            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+        } flex flex-col justify-between transition-all`}>
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className="text-[10px] font-extrabold text-blue-400 light:text-blue-700 uppercase tracking-wider block">Cursos Obligatorios</span>
+              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Cursos Obligatorios</span>
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-black text-white dark:text-white light:text-slate-900">{totalObligatoriosAprobados}</span>
-                <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ 69 completados</span>
+                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 69 completados</span>
               </div>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 light:text-blue-600 flex items-center justify-center shadow-inner">
+            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'} border border-blue-500/20 flex items-center justify-center`}>
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="mt-5 space-y-2">
-            <div className="flex justify-between text-[11px] font-bold text-slate-400 light:text-slate-600">
+          <div className="mt-4 space-y-1.5">
+            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
               <span>Progreso Obligatorio</span>
-              <span className="text-blue-400 light:text-blue-600 font-black">{porcentajeObligatorios}%</span>
+              <span className="text-blue-500 font-bold">{porcentajeObligatorios}%</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-2 rounded-full overflow-hidden">
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeObligatorios}%` }} />
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
+              <div className="bg-blue-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeObligatorios}%` }} />
             </div>
           </div>
         </div>
 
         {/* Cursos Electivos */}
-        <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-purple-50/30 border border-purple-500/30 dark:border-purple-500/30 light:border-purple-200 rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between backdrop-blur-xl">
+        <div className={`p-5 rounded-xl border ${
+          tema === 'dark'
+            ? 'bg-[#0e1526] border-slate-800 text-white'
+            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+        } flex flex-col justify-between transition-all`}>
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className="text-[10px] font-extrabold text-purple-400 light:text-purple-700 uppercase tracking-wider block flex items-center space-x-1">
-                <span>⚡ Créditos Electivos</span>
-              </span>
+              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'} uppercase tracking-wider block`}>Créditos Electivos</span>
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-black text-purple-300 dark:text-purple-300 light:text-purple-900">{creditosElectivosAprobados}</span>
-                <span className="text-xs font-bold text-slate-400 light:text-slate-500">/ 15 CR requeridos</span>
+                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosElectivosAprobados}</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR requeridos</span>
               </div>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-purple-400 light:text-purple-700 flex items-center justify-center shadow-inner">
+            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-700'} border border-purple-500/20 flex items-center justify-center`}>
               <Sparkles className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="mt-5 space-y-2">
-            <div className="flex justify-between text-[11px] font-bold text-slate-400 light:text-slate-600">
+          <div className="mt-4 space-y-1.5">
+            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
               <span>Progreso Electivo ({totalElectivosAprobados} cursos)</span>
-              <span className="text-purple-400 light:text-purple-700 font-black">{porcentajeElectivos}%</span>
+              <span className={`font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'}`}>{porcentajeElectivos}%</span>
             </div>
-            <div className="w-full bg-slate-800/80 light:bg-slate-200 h-2 rounded-full overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-500 via-violet-400 to-amber-400 h-full rounded-full transition-all duration-500" style={{ width: `${porcentajeElectivos}%` }} />
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
+              <div className="bg-purple-600 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeElectivos}%` }} />
             </div>
           </div>
         </div>
 
         {/* Ciclo Estimado */}
-        <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 shadow-xl flex flex-col justify-between backdrop-blur-xl">
+        <div className={`p-5 rounded-xl border ${
+          tema === 'dark'
+            ? 'bg-[#0e1526] border-slate-800 text-white'
+            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+        } flex flex-col justify-between transition-all`}>
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className="text-[10px] font-extrabold text-slate-400 light:text-slate-500 uppercase tracking-wider block">Ciclo Estimado</span>
-              <div className="text-2xl font-black text-white dark:text-white light:text-slate-900 mt-1">{nombreCiclo}</div>
+              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Ciclo Estimado</span>
+              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>{nombreCiclo}</div>
             </div>
-            <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 flex items-center justify-center shadow-inner">
+            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600'} border border-emerald-500/20 flex items-center justify-center`}>
               <Layers className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="mt-5 pt-3 border-t border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 flex items-center justify-between text-xs text-slate-400 light:text-slate-600 font-medium">
+          <div className={`mt-4 pt-3 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
             <span>Según Malla Curricular</span>
-            <span className="text-emerald-400 light:text-emerald-700 font-extrabold text-[10px] bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">Actualizado</span>
+            <span className={`font-bold text-[10px] px-2 py-0.5 rounded ${
+              tema === 'dark'
+                ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'
+                : 'text-emerald-700 bg-emerald-50 border border-emerald-200'
+            }`}>Actualizado</span>
           </div>
         </div>
 
       </div>
 
-      {/* Grid: Notificaciones & Accesos Rápidos */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Bandeja de Notificaciones */}
         <div className="lg:col-span-2 space-y-4">
           
-          <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 shadow-xl light:shadow-sm space-y-5 backdrop-blur-xl">
+          <div className={`p-5 sm:p-6 rounded-2xl border ${
+            tema === 'dark'
+              ? 'bg-[#0e1526] border-slate-800 text-white'
+              : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+          } space-y-4 transition-colors`}>
             
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 pb-4">
+            <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b ${
+              tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+            } pb-4`}>
               <div className="flex items-center space-x-2.5">
-                <Bell className="w-5 h-5 text-blue-400 light:text-blue-600" />
-                <h2 className="text-base font-black text-white dark:text-white light:text-slate-900 tracking-tight">
+                <Bell className={`w-5 h-5 ${tema === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} />
+                <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
                   Bandeja de Notificaciones
                 </h2>
               </div>
@@ -370,7 +396,7 @@ export default function InicioEstudiante() {
               <button
                 type="button"
                 onClick={marcarTodasLeidas}
-                className="text-xs text-blue-400 light:text-blue-600 font-bold hover:underline transition-colors cursor-pointer text-left flex items-center space-x-1"
+                className={`text-xs ${tema === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} font-bold transition-colors cursor-pointer text-left flex items-center space-x-1`}
               >
                 <CheckCheck className="w-4 h-4" />
                 <span>Marcar todas como leídas</span>
@@ -389,10 +415,12 @@ export default function InicioEstudiante() {
                   key={f.id}
                   type="button"
                   onClick={() => setFiltroNotif(f.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     filtroNotif === f.id
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                      : "bg-slate-950/60 dark:bg-slate-950/60 light:bg-slate-100 text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-white dark:hover:text-white light:hover:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-800 light:hover:bg-slate-200"
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : tema === 'dark'
+                      ? "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
+                      : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200"
                   }`}
                 >
                   {f.etiqueta}
@@ -401,42 +429,38 @@ export default function InicioEstudiante() {
             </div>
 
             {/* Lista de Notificaciones */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {notificacionesFiltradas.map((notif) => {
                 const estaLeida = !!notifLeidas[notif.id];
                 return (
                   <div
                     key={notif.id}
-                    className={`p-4 rounded-2xl border transition-all duration-200 flex items-start space-x-4 ${
+                    className={`p-4 rounded-xl border transition-all flex items-start space-x-3.5 ${
                       estaLeida
-                        ? "bg-slate-950/40 dark:bg-slate-950/40 light:bg-slate-100/50 border-slate-800/50 dark:border-slate-800/50 light:border-slate-200 opacity-60"
-                        : "bg-slate-950/80 dark:bg-slate-950/80 light:bg-slate-50 border-slate-800 dark:border-slate-800 light:border-slate-200/90 shadow-md light:shadow-sm"
+                        ? tema === 'dark'
+                          ? "bg-slate-900/40 border-slate-800/50 text-slate-400 opacity-60"
+                          : "bg-slate-100/70 border-slate-200 text-slate-500 opacity-60"
+                        : tema === 'dark'
+                          ? "bg-[#090e1a] border-slate-800 text-white"
+                          : "bg-slate-50 border-slate-200 text-slate-900"
                     }`}
                   >
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-sm ${
-                        notif.tipo === "urgente"
-                          ? "bg-rose-500/10 text-rose-400 light:bg-rose-50 light:text-rose-600 border-rose-500/20 light:border-rose-200"
-                          : notif.tipo === "info"
-                          ? "bg-amber-500/10 text-amber-400 light:bg-amber-50 light:text-amber-600 border-amber-500/20 light:border-amber-200"
-                          : "bg-blue-500/10 text-blue-400 light:bg-blue-50 light:text-blue-600 border-blue-500/20 light:border-blue-200"
-                      }`}
-                    >
-                      {notif.tipo === "urgente" ? (
-                        <AlertTriangle className="w-5 h-5" />
-                      ) : notif.tipo === "info" ? (
-                        <Info className="w-5 h-5" />
-                      ) : (
-                        <CheckCircle2 className="w-5 h-5" />
-                      )}
+                    <div className="shrink-0 mt-0.5">
+                      {notif.tipo === "urgente" && <AlertTriangle className="w-4 h-4 text-rose-500" />}
+                      {notif.tipo === "info" && <Info className="w-4 h-4 text-blue-500" />}
+                      {notif.tipo === "sistema" && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
                     </div>
 
-                    <div className="flex-1 min-w-0 space-y-1">
+                    <div className="flex-1 space-y-1">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-extrabold text-white dark:text-white light:text-slate-900 truncate">{notif.titulo}</h3>
-                        <span className="text-[10px] text-slate-400 light:text-slate-500 font-semibold shrink-0 ml-2">{notif.fecha}</span>
+                        <h3 className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-800'}`}>
+                          {notif.titulo}
+                        </h3>
+                        <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{notif.fecha}</span>
                       </div>
-                      <p className="text-xs text-slate-400 light:text-slate-600 leading-relaxed font-medium">{notif.mensaje}</p>
+                      <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} leading-relaxed`}>
+                        {notif.mensaje}
+                      </p>
                     </div>
                   </div>
                 );
@@ -444,79 +468,118 @@ export default function InicioEstudiante() {
             </div>
 
           </div>
+
         </div>
 
-        {/* Acceso Rápido a Módulos */}
+        {/* Accesos Rápidos */}
         <div className="space-y-4">
-          <div className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl p-6 shadow-xl light:shadow-sm space-y-4 backdrop-blur-xl">
+          <div className={`p-5 sm:p-6 rounded-2xl border ${
+            tema === 'dark'
+              ? 'bg-[#0e1526] border-slate-800 text-white'
+              : 'bg-white border-slate-200 text-slate-900 shadow-sm'
+          } space-y-4 transition-colors`}>
             
-            <h2 className="text-xs font-black text-slate-400 light:text-slate-500 tracking-wider uppercase border-b border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 pb-3">
-              Módulos Principales
+            <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight pb-2 border-b ${
+              tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+            }`}>
+              Accesos Rápidos
             </h2>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <Link
                 to="/estudiante/horario"
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-blue-500/50 light:hover:border-blue-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
+                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                  tema === 'dark'
+                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                }`}
               >
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 light:text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                    <Calendar className="w-5 h-5" />
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                    <Calendar className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Mi Horario</div>
-                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Ver clases semanales</div>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-blue-500 transition-colors`}>
+                      Mi Horario
+                    </div>
+                    <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Ver clases semanales
+                    </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
               </Link>
 
               <Link
                 to="/estudiante/malla"
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-emerald-500/50 light:hover:border-emerald-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
+                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                  tema === 'dark'
+                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                }`}
               >
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 light:text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                    <GraduationCap className="w-5 h-5" />
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                    <BookOpen className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Malla Curricular</div>
-                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Plan de estudios 10 ciclos</div>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-emerald-500 transition-colors`}>
+                      Malla Curricular
+                    </div>
+                    <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Plan de estudios 10 ciclos
+                    </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-emerald-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors" />
               </Link>
 
               <Link
                 to="/estudiante/simulador"
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-purple-500/50 light:hover:border-purple-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
+                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                  tema === 'dark'
+                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                }`}
               >
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 light:text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                    <Sliders className="w-5 h-5" />
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20">
+                    <Sliders className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Simulador</div>
-                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Planificar futuros ciclos</div>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-purple-500 transition-colors`}>
+                      Simulador
+                    </div>
+                    <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Planificar futuros ciclos
+                    </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-purple-500 transition-colors" />
               </Link>
 
               <Link
                 to="/estudiante/matricula"
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 dark:bg-slate-950/70 light:bg-slate-50 border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200 hover:border-amber-500/50 light:hover:border-amber-400 hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-100 transition-all group shadow-sm"
+                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                  tema === 'dark'
+                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                }`}
               >
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 light:text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
-                    <BookOpen className="w-5 h-5" />
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                    <GraduationCap className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-white dark:text-white light:text-slate-900">Pre-Matrícula</div>
-                    <div className="text-[10px] text-slate-400 light:text-slate-500 font-medium">Inscripción y horarios</div>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-amber-500 transition-colors`}>
+                      Pre-Matrícula
+                    </div>
+                    <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Inscripción y horarios
+                    </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 transition-colors" />
               </Link>
             </div>
 
@@ -528,3 +591,4 @@ export default function InicioEstudiante() {
     </div>
   );
 }
+
