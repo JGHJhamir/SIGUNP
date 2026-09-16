@@ -206,13 +206,11 @@ export default function InicioEstudiante() {
     <div className="space-y-6">
 
       {/* Hero Welcome Banner */}
-      <div className={`relative overflow-hidden rounded-2xl ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } border p-4 sm:p-6 md:p-8 transition-colors`}>
+      <div className="relative overflow-hidden rounded-2xl liquid-glass-card p-4 sm:p-6 md:p-8 transition-all">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-5">
           <div className="flex items-center space-x-3.5">
             <div className="shrink-0 hidden sm:flex items-center justify-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-900 border border-slate-700 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-900/90 border border-slate-700/80 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
                 <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
@@ -220,6 +218,7 @@ export default function InicioEstudiante() {
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-subtle"></span>
                   <span>SISTEMA INTEGRAL ACADÉMICO</span>
                 </span>
                 <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20">
@@ -237,8 +236,8 @@ export default function InicioEstudiante() {
           </div>
 
           <div className={`flex items-center space-x-3 ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } border px-3.5 py-2.5 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start`}>
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
+          } border px-3.5 py-2.5 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start shadow-sm`}>
             <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
             <div>
               <div className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Lectivo</div>
@@ -252,11 +251,7 @@ export default function InicioEstudiante() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
         {/* Créditos Aprobados */}
-        <div className={`p-5 rounded-xl border ${
-          tema === 'dark'
-            ? 'bg-[#0e1526] border-slate-800 text-white'
-            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        } flex flex-col justify-between transition-all`}>
+        <div className="p-5 rounded-2xl liquid-glass-card flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Créditos Aprobados</span>
@@ -265,7 +260,7 @@ export default function InicioEstudiante() {
                 <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
               </div>
             </div>
-            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'} border border-blue-500/20 flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
               <Award className="w-5 h-5" />
             </div>
           </div>
@@ -275,9 +270,9 @@ export default function InicioEstudiante() {
               <span>Avance de Carrera</span>
               <span className="text-blue-500 font-bold">{porcentajeProgreso}%</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
               <div
-                className="bg-blue-600 h-full rounded-full transition-all duration-300"
+                className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${porcentajeProgreso}%` }}
               />
             </div>
@@ -285,11 +280,7 @@ export default function InicioEstudiante() {
         </div>
 
         {/* Cursos Obligatorios */}
-        <div className={`p-5 rounded-xl border ${
-          tema === 'dark'
-            ? 'bg-[#0e1526] border-slate-800 text-white'
-            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        } flex flex-col justify-between transition-all`}>
+        <div className="p-5 rounded-2xl liquid-glass-card flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Cursos Obligatorios</span>
@@ -298,7 +289,7 @@ export default function InicioEstudiante() {
                 <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 69 completados</span>
               </div>
             </div>
-            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'} border border-blue-500/20 flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
@@ -308,18 +299,14 @@ export default function InicioEstudiante() {
               <span>Progreso Obligatorio</span>
               <span className="text-blue-500 font-bold">{porcentajeObligatorios}%</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeObligatorios}%` }} />
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
+              <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }} />
             </div>
           </div>
         </div>
 
         {/* Cursos Electivos */}
-        <div className={`p-5 rounded-xl border ${
-          tema === 'dark'
-            ? 'bg-[#0e1526] border-slate-800 text-white'
-            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        } flex flex-col justify-between transition-all`}>
+        <div className="p-5 rounded-2xl liquid-glass-card flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'} uppercase tracking-wider block`}>Créditos Electivos</span>
@@ -328,7 +315,7 @@ export default function InicioEstudiante() {
                 <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR requeridos</span>
               </div>
             </div>
-            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-700'} border border-purple-500/20 flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-purple-50 text-purple-700 border-purple-200'} border flex items-center justify-center shadow-sm`}>
               <Sparkles className="w-5 h-5" />
             </div>
           </div>
@@ -338,24 +325,20 @@ export default function InicioEstudiante() {
               <span>Progreso Electivo ({totalElectivosAprobados} cursos)</span>
               <span className={`font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'}`}>{porcentajeElectivos}%</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
-              <div className="bg-purple-600 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeElectivos}%` }} />
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-100'} h-2 rounded-full overflow-hidden`}>
+              <div className="bg-purple-600 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeElectivos}%` }} />
             </div>
           </div>
         </div>
 
         {/* Ciclo Estimado */}
-        <div className={`p-5 rounded-xl border ${
-          tema === 'dark'
-            ? 'bg-[#0e1526] border-slate-800 text-white'
-            : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-        } flex flex-col justify-between transition-all`}>
+        <div className="p-5 rounded-2xl liquid-glass-card flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block`}>Ciclo Estimado</span>
               <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>{nombreCiclo}</div>
             </div>
-            <div className={`w-10 h-10 rounded-lg ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600'} border border-emerald-500/20 flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} border flex items-center justify-center shadow-sm`}>
               <Layers className="w-5 h-5" />
             </div>
           </div>
@@ -377,14 +360,10 @@ export default function InicioEstudiante() {
         {/* Bandeja de Notificaciones */}
         <div className="lg:col-span-2 space-y-4">
           
-          <div className={`p-5 sm:p-6 rounded-2xl border ${
-            tema === 'dark'
-              ? 'bg-[#0e1526] border-slate-800 text-white'
-              : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-          } space-y-4 transition-colors`}>
+          <div className="p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4">
             
             <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b ${
-              tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+              tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
             } pb-4`}>
               <div className="flex items-center space-x-2.5">
                 <Bell className={`w-5 h-5 ${tema === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} />
@@ -396,7 +375,7 @@ export default function InicioEstudiante() {
               <button
                 type="button"
                 onClick={marcarTodasLeidas}
-                className={`text-xs ${tema === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} font-bold transition-colors cursor-pointer text-left flex items-center space-x-1`}
+                className={`text-xs ${tema === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} font-bold transition-colors cursor-pointer text-left flex items-center space-x-1 liquid-btn`}
               >
                 <CheckCheck className="w-4 h-4" />
                 <span>Marcar todas como leídas</span>
@@ -415,11 +394,11 @@ export default function InicioEstudiante() {
                   key={f.id}
                   type="button"
                   onClick={() => setFiltroNotif(f.id)}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer liquid-btn ${
                     filtroNotif === f.id
                       ? "bg-blue-600 text-white shadow-sm"
                       : tema === 'dark'
-                      ? "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800"
+                      ? "bg-[#090e1a]/80 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-slate-800"
                       : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200"
                   }`}
                 >
@@ -435,14 +414,14 @@ export default function InicioEstudiante() {
                 return (
                   <div
                     key={notif.id}
-                    className={`p-4 rounded-xl border transition-all flex items-start space-x-3.5 ${
+                    className={`p-4 rounded-xl border transition-all flex items-start space-x-3.5 liquid-btn ${
                       estaLeida
                         ? tema === 'dark'
-                          ? "bg-slate-900/40 border-slate-800/50 text-slate-400 opacity-60"
+                          ? "bg-[#090e1a]/40 border-slate-800/40 text-slate-400 opacity-60"
                           : "bg-slate-100/70 border-slate-200 text-slate-500 opacity-60"
                         : tema === 'dark'
-                          ? "bg-[#090e1a] border-slate-800 text-white"
-                          : "bg-slate-50 border-slate-200 text-slate-900"
+                          ? "bg-[#090e1a]/80 border-slate-800/80 text-white hover:border-slate-700"
+                          : "bg-slate-50/90 border-slate-200 text-slate-900 hover:border-slate-300"
                     }`}
                   >
                     <div className="shrink-0 mt-0.5">
@@ -473,14 +452,10 @@ export default function InicioEstudiante() {
 
         {/* Accesos Rápidos */}
         <div className="space-y-4">
-          <div className={`p-5 sm:p-6 rounded-2xl border ${
-            tema === 'dark'
-              ? 'bg-[#0e1526] border-slate-800 text-white'
-              : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-          } space-y-4 transition-colors`}>
+          <div className="p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4">
             
             <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight pb-2 border-b ${
-              tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+              tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
             }`}>
               Accesos Rápidos
             </h2>
@@ -488,10 +463,10 @@ export default function InicioEstudiante() {
             <div className="space-y-2">
               <Link
                 to="/estudiante/horario"
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                className={`flex items-center justify-between p-3 rounded-xl border transition-all group liquid-btn ${
                   tema === 'dark'
-                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
-                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                    ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-blue-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-blue-500/40'
                 }`}
               >
                 <div className="flex items-center space-x-3">

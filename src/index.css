@@ -17,7 +17,7 @@
   }
   
   html.dark body {
-    background-color: #090d16;
+    background-color: #080c14;
     color: #f1f5f9;
   }
 
@@ -54,48 +54,76 @@ html.light ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.5);
 }
 
-/* Executive SaaS Design Token System */
+/* Liquid Glass Design System Tokens */
 @layer utilities {
-  /* Dark Mode Surfaces */
-  html.dark .app-surface-card {
-    background: #0e1526;
-    border: 1px solid rgba(30, 41, 59, 0.8);
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+  /* Liquid Glass Base */
+  html.dark .liquid-glass {
+    background: rgba(14, 21, 38, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
-  html.dark .app-surface-card-hover {
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  html.dark .app-surface-card-hover:hover {
-    border-color: rgba(51, 65, 85, 0.9);
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
-    transform: translateY(-1px);
-  }
-
-  /* Light Mode Surfaces */
-  html.light .app-surface-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  html.light .liquid-glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 8px 24px -4px rgba(148, 163, 184, 0.12);
   }
 
-  html.light .app-surface-card-hover {
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Liquid Glass Interactive Cards */
+  html.dark .liquid-glass-card {
+    background: rgba(14, 21, 38, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  html.light .app-surface-card-hover:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.12), 0 4px 6px -2px rgba(148, 163, 184, 0.04);
-    transform: translateY(-1px);
+
+  html.dark .liquid-glass-card:hover {
+    border-color: rgba(59, 130, 246, 0.35);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 12px 36px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.12);
+    transform: translateY(-2px);
+  }
+
+  html.light .liquid-glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 2px 8px rgba(148, 163, 184, 0.08);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.light .liquid-glass-card:hover {
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 1), 0 12px 30px -4px rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
   }
 
   /* Inset boxes / Sub-surfaces */
   html.dark .app-inset-box {
-    background: #090e1a;
-    border: 1px solid #1e293b;
+    background: rgba(9, 14, 26, 0.85);
+    border: 1px solid rgba(30, 41, 59, 0.9);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
   }
+
   html.light .app-inset-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: rgba(248, 250, 252, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Liquid Glass Buttons & Micro-Interactions */
+  .liquid-btn {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+  .liquid-btn:active {
+    transform: scale(0.97);
   }
 
   /* Subtle Focus Rings */
@@ -104,12 +132,12 @@ html.light ::-webkit-scrollbar-thumb:hover {
     transition: all 0.15s ease-in-out;
   }
   html.dark .app-input-focus:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   }
   html.light .app-input-focus:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    border-color: rgba(37, 99, 235, 0.6);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
   }
 
   /* Hide Scrollbar helper */
@@ -126,7 +154,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -134,7 +162,36 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes pulseSubtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
 }
 
+@keyframes liquidSheen {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 3s ease-in-out infinite;
+}
+
+.liquid-sheen {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  background-size: 200% 100%;
+  animation: liquidSheen 4s ease-in-out infinite;
+}

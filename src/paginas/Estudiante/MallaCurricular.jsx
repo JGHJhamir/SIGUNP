@@ -325,15 +325,14 @@ export default function MallaCurricular() {
     <div className="space-y-6">
 
       {/* Metric Header Section */}
-      <div className={`rounded-2xl border ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } p-5 sm:p-6 md:p-8 space-y-6 transition-colors`}>
+      <div className="rounded-2xl liquid-glass-card p-5 sm:p-6 md:p-8 space-y-6 transition-all">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-subtle"></span>
               <span>PLAN DE ESTUDIOS 2018-1</span>
             </div>
-            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Malla Curricular — Ing. Informática
             </h1>
             <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -342,7 +341,7 @@ export default function MallaCurricular() {
           </div>
 
           <div className={`flex items-center space-x-3 ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } border px-4 py-3 rounded-xl shadow-sm`}>
             <BookOpen className="w-5 h-5 text-blue-500" />
             <div>
@@ -357,8 +356,8 @@ export default function MallaCurricular() {
           
           {/* Cursos Obligatorios */}
           <div className={`p-4 rounded-xl border ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } space-y-2`}>
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
+          } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
               <span>Cursos Obligatorios</span>
               <span className="bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded font-bold border border-blue-500/20">{porcentajeObligatorios}%</span>
@@ -369,15 +368,15 @@ export default function MallaCurricular() {
               </div>
               <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Obligatorios</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeObligatorios}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }}></div>
             </div>
           </div>
 
           {/* Cursos Electivos */}
           <div className={`p-4 rounded-xl border ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } space-y-2`}>
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
+          } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
               <span className="flex items-center space-x-1">
                 <span>Créditos Electivos</span>
@@ -390,15 +389,15 @@ export default function MallaCurricular() {
               </div>
               <span className="text-[10px] font-medium text-purple-500">{totalElectivosAprobados} electivos</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-purple-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeElectivos}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-purple-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeElectivos}%` }}></div>
             </div>
           </div>
 
           {/* Créditos Acumulados */}
           <div className={`p-4 rounded-xl border ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } space-y-2`}>
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
+          } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
               <span>Créditos Totales</span>
               <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded font-bold border border-emerald-500/20">{porcentajeProgreso}%</span>
@@ -409,15 +408,15 @@ export default function MallaCurricular() {
               </div>
               <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Aprobados</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeProgreso}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
           {/* Avance Global */}
           <div className={`p-4 rounded-xl border ${
-            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } space-y-2`}>
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
+          } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-sky-500 uppercase tracking-wider">
               <span>Progreso Global</span>
               <span className="text-sky-500 font-bold">{porcentajeProgreso}%</span>
@@ -428,8 +427,8 @@ export default function MallaCurricular() {
               </div>
               <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Total Cursos</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-blue-600 h-full rounded-full transition-all duration-300" style={{ width: `${porcentajeProgreso}%` }}></div>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+              <div className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
@@ -445,9 +444,7 @@ export default function MallaCurricular() {
       )}
 
       {/* Search & Filter Toolbar */}
-      <div className={`rounded-2xl border ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 transition-colors`}>
+      <div className="rounded-2xl liquid-glass-card p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 transition-all">
         
         {/* Search Input */}
         <div className="relative w-full md:w-80">
