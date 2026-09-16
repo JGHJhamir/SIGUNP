@@ -469,9 +469,9 @@ export default function SimuladorSemestres() {
         </h3>
 
         {semestresSimulados.length === 0 ? (
-          <div className="text-center py-12 bg-slate-900/80 border border-slate-800/90 rounded-3xl shadow-xl text-slate-400 backdrop-blur-2xl space-y-2">
+          <div className={`text-center py-12 ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-500 shadow-sm'} border rounded-2xl space-y-2`}>
             <Calendar className="w-12 h-12 mx-auto text-slate-600" />
-            <p className="text-xs font-extrabold text-slate-200">No tienes semestres planificados en el simulador.</p>
+            <p className={`text-xs font-extrabold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>No tienes semestres planificados en el simulador.</p>
             <p className="text-[11px] text-slate-500">Crea un ciclo arriba (ej. 2026-II) para comenzar tu simulación.</p>
           </div>
         ) : (
@@ -487,15 +487,15 @@ export default function SimuladorSemestres() {
                 .sort((a, b) => a.ciclo - b.ciclo);
 
               return (
-                <div key={semestre.id} className="bg-slate-900/80 rounded-3xl border border-slate-800/90 shadow-xl overflow-hidden flex flex-col justify-between backdrop-blur-2xl">
+                <div key={semestre.id} className={`${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl border overflow-hidden flex flex-col justify-between`}>
                   
                   {/* Cabecera del Semestre */}
-                  <div className="px-5 py-4 border-b border-slate-800/80 flex items-center justify-between bg-slate-950/60 shrink-0">
+                  <div className={`px-5 py-4 border-b ${tema === 'dark' ? 'border-slate-800 bg-[#090e1a]' : 'border-slate-200 bg-slate-50'} flex items-center justify-between shrink-0`}>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-black text-white tracking-tight">
+                      <span className={`text-sm font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
                         {semestre.año}-{semestre.ciclo === "0" ? "0" : semestre.ciclo}
                       </span>
-                      <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full font-black">
+                      <span className="text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2.5 py-0.5 rounded-full font-bold">
                         {totalCreditos} / {semestre.limiteCreditos} CR
                       </span>
                     </div>

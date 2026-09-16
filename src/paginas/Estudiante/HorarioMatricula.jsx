@@ -670,14 +670,14 @@ export default function HorarioMatricula() {
 
       {/* Selector de Modo de Vista y Opciones */}
       {tieneDatos && (
-        <div className="bg-slate-900/80 border border-slate-800/90 rounded-2xl p-3 shadow-xl backdrop-blur-2xl flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 no-print`}>
           {/* Conmutador de 3 Vistas */}
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 w-full sm:w-auto">
+          <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border w-full sm:w-auto`}>
             <button
               type="button"
               onClick={() => setModoVista("grilla")}
-              className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "grilla" ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-400 hover:text-white"
+              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+                modoVista === "grilla" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Grid className="w-4 h-4" />
@@ -687,8 +687,8 @@ export default function HorarioMatricula() {
             <button
               type="button"
               onClick={() => setModoVista("agenda")}
-              className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "agenda" ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-400 hover:text-white"
+              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+                modoVista === "agenda" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <List className="w-4 h-4" />
@@ -698,8 +698,8 @@ export default function HorarioMatricula() {
             <button
               type="button"
               onClick={() => setModoVista("tarjetas")}
-              className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "tarjetas" ? "bg-blue-600 text-white shadow-md shadow-blue-600/20" : "text-slate-400 hover:text-white"
+              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+                modoVista === "tarjetas" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <Layers className="w-4 h-4" />
@@ -716,7 +716,7 @@ export default function HorarioMatricula() {
                 className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
                   esVistaCompacta
                     ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
-                    : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white"
+                    : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white" : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
                 }`}
               >
                 <Sliders className="w-3.5 h-3.5" />
@@ -732,16 +732,16 @@ export default function HorarioMatricula() {
 
           {/* Filtro de día para Vista Agenda */}
           {modoVista === "agenda" && (
-            <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 overflow-x-auto max-w-full">
+            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border overflow-x-auto max-w-full`}>
               {diasSemana.map((dia) => (
                 <button
                   key={dia}
                   type="button"
                   onClick={() => setDiaFiltroAgenda(dia)}
-                  className={`px-3 py-1 rounded-lg text-[11px] font-black transition-all whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
                     diaFiltroAgenda === dia
                       ? "bg-blue-600 text-white shadow-sm"
-                      : "text-slate-400 hover:text-slate-200"
+                      : tema === 'dark' ? "text-slate-400 hover:text-slate-200" : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
                   {dia}
@@ -755,14 +755,14 @@ export default function HorarioMatricula() {
 
       {/* Mensaje de Estado Vacío (Sin Datos) */}
       {!tieneDatos && (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-12 text-center shadow-xl backdrop-blur-2xl space-y-4 no-print">
-          <div className="w-20 h-20 rounded-3xl bg-slate-800/80 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 shadow-inner">
-            <Calendar className="w-10 h-10" />
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl p-8 sm:p-12 text-center space-y-4 no-print`}>
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 shadow-sm">
+            <Calendar className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-lg font-black text-white">Tu Horario está actualmente vacío</h3>
-            <p className="text-xs md:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-              No se han encontrado registros de matrícula activa para el semestre <strong className="text-blue-400">{semestreVista}</strong>.
+            <h3 className={`text-base sm:text-lg font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>Tu Horario está actualmente vacío</h3>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+              No se han encontrado registros de matrícula activa para el semestre <strong className="text-blue-500">{semestreVista}</strong>.
             </p>
           </div>
 
@@ -770,7 +770,7 @@ export default function HorarioMatricula() {
             <button
               type="button"
               onClick={() => setModoDemoActivo(true)}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-black text-xs transition-all shadow-lg shadow-blue-600/20 flex items-center space-x-2 cursor-pointer active:scale-95"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-sm flex items-center space-x-2 cursor-pointer active:scale-95"
             >
               <Zap className="w-4 h-4" />
               <span>Ver Horario de Ejemplo (Demo)</span>
@@ -778,7 +778,7 @@ export default function HorarioMatricula() {
 
             <Link
               to="/estudiante/matricula"
-              className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold text-xs border border-slate-700 transition-all flex items-center space-x-2 shadow-sm"
+              className={`px-5 py-2.5 rounded-xl ${tema === 'dark' ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'} font-bold text-xs border transition-all flex items-center space-x-2 shadow-sm`}
             >
               <span>Ir a Módulo de Matrícula</span>
               <ArrowRight className="w-4 h-4" />
@@ -789,14 +789,18 @@ export default function HorarioMatricula() {
 
       {/* VISTA 1: GRILLA SEMANAL (CALENDAR GRID) */}
       {tieneDatos && modoVista === "grilla" && (
-        <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl shadow-xl overflow-hidden p-4 md:p-6 backdrop-blur-2xl print-container">
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl overflow-hidden p-3.5 sm:p-6 print-container`}>
+          <div className="md:hidden flex items-center space-x-1.5 text-[10px] text-slate-400 font-medium mb-3 no-print">
+            <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            <span>Desliza horizontalmente para navegar la grilla de días</span>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse min-w-[960px] text-xs print-table">
               <thead>
-                <tr className="border-b border-slate-800 text-[11px] font-black text-slate-400 uppercase tracking-wider bg-slate-950/80">
-                  <th className="py-4 px-4 text-left w-44 border-r border-slate-800">
-                    <div className="flex items-center space-x-2 text-slate-300">
-                      <Clock className="w-4 h-4 text-blue-400" />
+                <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-600 bg-slate-100'} text-[11px] font-bold uppercase tracking-wider`}>
+                  <th className={`py-3.5 px-4 text-left w-44 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                    <div className="flex items-center space-x-2 text-slate-400">
+                      <Clock className="w-4 h-4 text-blue-500" />
                       <span>Bloque Horario</span>
                     </div>
                   </th>

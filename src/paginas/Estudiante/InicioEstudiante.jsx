@@ -167,24 +167,24 @@ export default function InicioEstudiante() {
   const notificaciones = [
     {
       id: 1,
-      titulo: "Matrícula Extemporánea Semestre 2026-II",
-      mensaje: "Se informa a la comunidad universitaria que el proceso de matrícula extemporánea estará disponible del 5 al 8 de Agosto de 2026.",
+      titulo: "Cronograma OCRE: Matrícula Regular 2026-I",
+      mensaje: "La Oficina Central de Registro y Estadística (OCRE - UNP) comunica la publicación de horarios y prioridades según promedio ponderado acumulado.",
       tipo: "urgente",
       categoria: "urgentes",
       fecha: "Hace 2 horas"
     },
     {
       id: 2,
-      titulo: "Seminario de Inteligencia Artificial - FIIS",
-      mensaje: "Este viernes a las 4:00 PM se llevará a cabo el taller interactivo de Machine Learning en el auditorio de Ingeniería Industrial.",
+      titulo: "Jornada Académica - Escuela Profesional de Informática",
+      mensaje: "Conferencia presencial sobre Sistemas Distribuidos y Arquitectura Software en el Auditorio Central de la Facultad de Ingeniería Industrial.",
       tipo: "info",
       categoria: "eventos",
       fecha: "Ayer"
     },
     {
       id: 3,
-      titulo: "Calibración de Malla Curricular Activa",
-      mensaje: "Tu perfil académico ha sido calibrado. Puedes revisar y modificar tus cursos aprobados directamente desde la pestaña 'Malla Curricular'.",
+      titulo: "Consolidación de Créditos Plan 2018-1",
+      mensaje: "Se ha verificado la asignación de créditos obligatorios y electivos. Puedes consultar tu avance en el módulo Malla Curricular.",
       tipo: "sistema",
       categoria: "sistema",
       fecha: "Hace 1 día"
@@ -208,48 +208,48 @@ export default function InicioEstudiante() {
       {/* Hero Welcome Banner */}
       <div className={`relative overflow-hidden rounded-2xl ${
         tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } border p-5 sm:p-6 md:p-8 transition-colors`}>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
-          <div className="flex items-center space-x-4">
+      } border p-4 sm:p-6 md:p-8 transition-colors`}>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-5">
+          <div className="flex items-center space-x-3.5">
             <div className="shrink-0 hidden sm:flex items-center justify-center">
-              <div className="w-16 h-16 rounded-xl bg-slate-900 border border-slate-700 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-slate-900 border border-slate-700 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
                 <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/20">
-                  <span>PANEL ACADÉMICO</span>
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold bg-blue-500/10 text-blue-500 dark:text-blue-400 border border-blue-500/20">
+                  <span>SISTEMA INTEGRAL ACADÉMICO</span>
                 </span>
-                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                  <Info className="w-3 h-3 text-amber-500 shrink-0" />
-                  <span>Proyecto Independiente JIAR (No Oficial UNP)</span>
+                <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20">
+                  <Info className="w-3 h-3 text-blue-500 shrink-0" />
+                  <span>Universidad Nacional de Piura (OCRE - UNP)</span>
                 </span>
               </div>
-              <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              <h1 className={`text-lg sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}!
               </h1>
               <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-xl`}>
-                Sistema Integral de Gestión de la Universidad Nacional de Piura.
+                Escuela Profesional de Ingeniería Informática · Plan Curricular 2018-1.
               </p>
             </div>
           </div>
 
           <div className={`flex items-center space-x-3 ${
             tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'
-          } border px-4 py-3 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start`}>
-            <Calendar className="w-5 h-5 text-blue-500" />
+          } border px-3.5 py-2.5 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start`}>
+            <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
             <div>
-              <div className={`text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Vigente</div>
-              <div className={`text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-II</div>
+              <div className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Lectivo</div>
+              <div className={`text-xs sm:text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-I</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Resumen Académico Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
         {/* Créditos Aprobados */}
         <div className={`p-5 rounded-xl border ${

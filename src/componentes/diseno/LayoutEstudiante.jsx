@@ -31,36 +31,42 @@ export default function LayoutEstudiante() {
     {
       ruta: "/estudiante/inicio",
       etiqueta: "Inicio",
+      etiquetaCorta: "Inicio",
       descripcion: "Resumen y notificaciones",
       icono: <LayoutDashboard className="w-4 h-4" />
     },
     {
       ruta: "/estudiante/horario",
       etiqueta: "Horario",
+      etiquetaCorta: "Horario",
       descripcion: "Grilla semanal de clases",
       icono: <Calendar className="w-4 h-4" />
     },
     {
       ruta: "/estudiante/malla",
       etiqueta: "Malla Curricular",
+      etiquetaCorta: "Malla",
       descripcion: "Plan de estudios y requisitos",
       icono: <GitFork className="w-4 h-4" />
     },
     {
       ruta: "/estudiante/simulador",
       etiqueta: "Simulador",
+      etiquetaCorta: "Simulador",
       descripcion: "Planificación de ciclos",
       icono: <Sliders className="w-4 h-4" />
     },
     {
       ruta: "/estudiante/matricula",
       etiqueta: "Matrícula",
+      etiquetaCorta: "Matrícula",
       descripcion: "Inscripción de grupos",
       icono: <GraduationCap className="w-4 h-4" />
     },
     {
       ruta: "/estudiante/perfil",
       etiqueta: "Mi Perfil",
+      etiquetaCorta: "Perfil",
       descripcion: "Editar datos y contraseña",
       icono: <User className="w-4 h-4" />
     }
@@ -216,14 +222,14 @@ export default function LayoutEstudiante() {
       </aside>
 
       {/* Header en Móvil */}
-      <header className={`md:hidden w-full ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200'} border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
-        <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-lg bg-slate-900 p-0.5 border border-slate-700 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
+      <header className={`md:hidden w-full ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200'} border-b px-3.5 py-2.5 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
+        <div className="flex items-center space-x-2.5">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 p-0.5 border border-slate-700 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
             <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>
-            <span className={`text-xs font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight block`}>SIGUNP</span>
-            <span className="text-[10px] text-blue-500 font-semibold block">{itemActivo.etiqueta}</span>
+            <span className={`text-xs font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight block leading-none`}>SIGUNP</span>
+            <span className="text-[10px] text-blue-500 font-bold block mt-0.5">{itemActivo.etiqueta}</span>
           </div>
         </div>
 
@@ -231,7 +237,7 @@ export default function LayoutEstudiante() {
           <Link
             to="/estudiante/perfil"
             title="Mi Perfil"
-            className="p-2 rounded-lg text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer"
           >
             <User className="w-4 h-4" />
           </Link>
@@ -239,7 +245,7 @@ export default function LayoutEstudiante() {
           <button
             type="button"
             onClick={alternarTema}
-            className={`p-2 rounded-lg border transition-all cursor-pointer ${
+            className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
               tema === 'dark' ? "bg-slate-800 border-slate-700 text-amber-400" : "bg-slate-100 border-slate-200 text-indigo-600"
             }`}
             title="Alternar Modo Claro / Oscuro"
@@ -251,7 +257,7 @@ export default function LayoutEstudiante() {
             type="button"
             onClick={manejarReconfigurar}
             title="Reconfigurar Malla"
-            className="p-2 rounded-lg text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 transition-all cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -260,7 +266,7 @@ export default function LayoutEstudiante() {
             type="button"
             onClick={manejarCerrarSesion}
             title="Cerrar Sesión"
-            className="p-2 rounded-lg text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 transition-all cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -268,7 +274,7 @@ export default function LayoutEstudiante() {
       </header>
 
       {/* Contenido Principal */}
-      <main className={`flex-1 flex flex-col min-w-0 pb-24 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-[#090d16]' : 'bg-slate-50'} relative z-10 transition-colors`}>
+      <main className={`flex-1 flex flex-col min-w-0 pb-20 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-[#090d16]' : 'bg-slate-50'} relative z-10 transition-colors`}>
         {/* Top App Bar Header Desktop */}
         <header className={`hidden md:flex items-center justify-between px-8 py-3.5 ${
           tema === 'dark' ? 'bg-[#0e1526]/80 border-slate-800/80' : 'bg-white/80 border-slate-200'
@@ -322,7 +328,7 @@ export default function LayoutEstudiante() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn overflow-x-hidden">
+        <div className="p-3.5 sm:p-6 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn overflow-x-hidden">
           <Outlet />
         </div>
       </main>
@@ -330,14 +336,14 @@ export default function LayoutEstudiante() {
       {/* Bottom Bar Móvil */}
       <nav className={`md:hidden fixed bottom-0 left-0 right-0 ${
         tema === 'dark' ? 'bg-[#0e1526]/95 border-slate-800' : 'bg-white/95 border-slate-200'
-      } backdrop-blur-md border-t flex items-center justify-between py-2 z-50 px-1 shadow-lg transition-colors overflow-x-auto no-scrollbar`}>
+      } backdrop-blur-md border-t flex items-center justify-around py-1.5 z-50 px-1 shadow-lg transition-colors`}>
         {menuItems.map((item) => {
           const estaActivo = localizacion.pathname === item.ruta;
           return (
             <Link
               key={item.ruta}
               to={item.ruta}
-              className={`flex flex-col items-center justify-center px-1 sm:px-2.5 py-1 rounded-lg transition-all shrink-0 min-w-0 flex-1 ${
+              className={`flex flex-col items-center justify-center py-1 px-1 rounded-lg transition-all flex-1 min-w-0 ${
                 estaActivo
                   ? "text-blue-500 dark:text-blue-400 font-bold"
                   : tema === 'dark'
@@ -346,8 +352,8 @@ export default function LayoutEstudiante() {
               }`}
             >
               <div className={`shrink-0 ${estaActivo ? "text-blue-500 dark:text-blue-400" : ""}`}>{item.icono}</div>
-              <span className="text-[9px] font-bold mt-0.5 tracking-tight truncate max-w-[56px] text-center">
-                {item.etiqueta}
+              <span className="text-[10px] font-extrabold mt-0.5 tracking-tight truncate w-full text-center">
+                {item.etiquetaCorta}
               </span>
             </Link>
           );
