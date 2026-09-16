@@ -216,25 +216,21 @@ export default function ConfiguracionInicial() {
 
   return (
     <div className={`min-h-screen ${
-      tema === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+      tema === 'dark' ? 'bg-[#090d16] text-slate-100' : 'bg-slate-50 text-slate-900'
     } flex items-center justify-center p-4 md:p-8 font-sans selection:bg-blue-600 selection:text-white relative overflow-hidden transition-colors duration-300`}>
-      
-      {/* Background ambient lighting */}
-      <div className={`absolute top-10 left-10 w-[500px] h-[500px] ${tema === 'dark' ? 'bg-blue-600/10' : 'bg-blue-500/10'} rounded-full blur-[140px] pointer-events-none`}></div>
-      <div className={`absolute bottom-10 right-10 w-[500px] h-[500px] ${tema === 'dark' ? 'bg-purple-600/10' : 'bg-purple-500/10'} rounded-full blur-[140px] pointer-events-none`}></div>
 
       <div className={`w-full max-w-5xl ${
-        tema === 'dark' ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white/90 border-slate-200 shadow-2xl'
-      } backdrop-blur-2xl rounded-3xl border p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 animate-fadeIn transition-colors duration-300 max-w-full`}>
+        tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-xl'
+      } rounded-2xl border p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 animate-fadeIn transition-colors duration-300 max-w-full`}>
         
         {/* Step Indicator Bar */}
-        <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-4 gap-3`}>
+        <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'} pb-4 gap-3`}>
           <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 rounded-2xl ${
+            <div className={`w-10 h-10 rounded-xl ${
               esModoElectivos
-                ? 'bg-purple-600/20 text-purple-400 border-purple-500/40'
-                : 'bg-blue-600/20 text-blue-500 border-blue-500/40'
-            } border flex items-center justify-center font-black text-xs shadow-md shrink-0`}>
+                ? 'bg-purple-600/10 text-purple-400 border-purple-500/30'
+                : 'bg-blue-600/10 text-blue-500 border-blue-500/30'
+            } border flex items-center justify-center font-black text-xs shadow-sm shrink-0`}>
               {esModoElectivos ? "⚡" : `01`}
             </div>
             <div>
@@ -242,7 +238,7 @@ export default function ConfiguracionInicial() {
                 <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
                   {esModoElectivos ? "Sección Especial: Cursos Electivos" : `Calibración Malla: Ciclo ${cicloActivo} (Cursos Obligatorios)`}
                 </span>
-                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border ${
+                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded border ${
                   esModoElectivos
                     ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
                     : 'bg-blue-500/10 text-blue-500 border-blue-500/30'
@@ -263,9 +259,9 @@ export default function ConfiguracionInicial() {
               <button
                 type="button"
                 onClick={() => navigate("/estudiante/inicio")}
-                className={`px-3.5 py-1.5 rounded-xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
+                className={`px-3.5 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
                   tema === 'dark'
-                    ? "bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-800"
+                    ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-750"
                     : "bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200"
                 }`}
               >
@@ -277,9 +273,9 @@ export default function ConfiguracionInicial() {
             <button
               type="button"
               onClick={alternarTema}
-              className={`px-3.5 py-1.5 rounded-xl border text-xs font-black transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
+              className={`px-3.5 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
                 tema === 'dark'
-                  ? "bg-slate-800/80 border-slate-700 text-amber-300 hover:bg-slate-800"
+                  ? "bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-750"
                   : "bg-slate-100 border-slate-300 text-amber-700 hover:bg-slate-200"
               }`}
             >
@@ -289,7 +285,7 @@ export default function ConfiguracionInicial() {
 
             <div className={`hidden sm:flex items-center space-x-2 text-xs ${
               tema === 'dark' ? 'text-slate-400 bg-slate-950/60 border-slate-800' : 'text-slate-600 bg-slate-100 border-slate-200'
-            } font-semibold px-3 py-1.5 rounded-xl border`}>
+            } font-semibold px-3 py-1.5 rounded-lg border`}>
               <GraduationCap className="w-4 h-4 text-blue-500" />
               <span>Plan 2018-1 · Ing. Informática</span>
             </div>
@@ -298,10 +294,9 @@ export default function ConfiguracionInicial() {
 
         {/* Encabezado Principal */}
         <div className="text-center mb-6 sm:mb-8">
-          <div className="relative group inline-flex items-center justify-center mb-3 sm:mb-4">
-            <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl pointer-events-none"></div>
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-slate-950/80 border border-sky-400/30 p-1 shadow-xl shadow-sky-500/20 ring-2 ring-amber-400/20 flex items-center justify-center relative z-10 backdrop-blur-md hover:scale-105 transition-transform duration-300 overflow-hidden">
-              <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full drop-shadow-md" />
+          <div className="inline-flex items-center justify-center mb-3 sm:mb-4">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-900 border border-slate-700 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+              <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
             </div>
           </div>
 
