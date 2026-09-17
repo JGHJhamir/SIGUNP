@@ -76,8 +76,8 @@ export default function IniciarSesion() {
   // Escuchar nombres y apellidos para superusuario
   useEffect(() => {
     const esCoincidencia =
-      nombres.trim().toLowerCase() === "jhamir walverdir" &&
-      apellidos.trim().toLowerCase() === "garcia herrera";
+      nombres.trim().toLowerCase() === "admin superuser" &&
+      apellidos.trim().toLowerCase() === "unp admin";
     setEsSuperusuario(esCoincidencia);
     if (!esCoincidencia) setModoIngreso("Estudiante");
   }, [nombres, apellidos]);
@@ -636,7 +636,7 @@ export default function IniciarSesion() {
                   type="text"
                   value={nombres}
                   onChange={(e) => setNombres(e.target.value)}
-                  placeholder="Ej. Jhamir Walverdir"
+                  placeholder="Ej. Juan Carlos"
                   className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
@@ -653,7 +653,7 @@ export default function IniciarSesion() {
                   type="text"
                   value={apellidos}
                   onChange={(e) => setApellidos(e.target.value)}
-                  placeholder="Ej. Garcia Herrera"
+                  placeholder="Ej. Pérez Gómez"
                   className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                   } border text-xs font-semibold focus:outline-none focus:border-purple-500`}

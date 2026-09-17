@@ -25,7 +25,7 @@ export default function LayoutAdmin() {
   const { tema, alternarTema } = useTema();
   const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
 
-  const nombreUsuario = localStorage.getItem("nombreEstudiante") || "Jhamir Walverdir Garcia Herrera";
+  const nombreUsuario = localStorage.getItem("nombreEstudiante") || "Administrador UNP";
   const codigoUsuario = localStorage.getItem("codigoUniversitario") || "0512021015";
 
   const menuItems = [

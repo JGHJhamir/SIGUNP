@@ -24,7 +24,7 @@ import { useTema } from "../../contexto/ContextoTema";
 export default function InicioAdmin() {
   const { tema } = useTema();
 
-  const usuarioNombre = localStorage.getItem("nombreEstudiante") || "Jhamir Walverdir Garcia Herrera";
+  const usuarioNombre = localStorage.getItem("nombreEstudiante") || "Administrador UNP";
 
   // Estadísticas clave del sistema
   const stats = [
@@ -99,7 +99,7 @@ export default function InicioAdmin() {
     {
       id: 1,
       evento: "Registro de estudiante verificado en Supabase",
-      detalle: "Jhamir Walverdir Garcia Herrera (0512021015) ingresó con rol Administrador",
+      detalle: "Administrador Principal UNP (0512021015) ingresó con rol Administrador",
       tiempo: "Hace 2 minutos",
       tipo: "success"
     },

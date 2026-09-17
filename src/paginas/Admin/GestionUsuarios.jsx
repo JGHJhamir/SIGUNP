@@ -19,8 +19,8 @@ import { supabase } from "../../lib/supabase";
 const usuariosIniciales = [
   {
     codigo_universitario: "0512021015",
-    nombres: "Jhamir Walverdir",
-    apellidos: "Garcia Herrera",
+    nombres: "Administrador",
+    apellidos: "Principal UNP",
     facultad: "Facultad de Ingeniería Industrial",
     escuela: "Ingeniería Informática",
     rol: "Administrador",
