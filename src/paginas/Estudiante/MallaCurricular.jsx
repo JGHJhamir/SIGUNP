@@ -103,50 +103,50 @@ export default function MallaCurricular() {
     return todosLosCursos.filter((c) => c.requisitos.includes(cursoDetalleModal.id));
   }, [cursoDetalleModal, todosLosCursos]);
 
-  // Cargar cursos aprobados al iniciar
+  // Cargar cursos aprobados al iniciar o cambiar de carrera
   useEffect(() => {
     const cargarCursos = async () => {
+      const storageKey = `cursosAprobados_${carreraKey}`;
       const codigoUni = localStorage.getItem("codigoUniversitario");
       if (codigoUni) {
         try {
           const { data } = await supabase
             .from("estudiante_cursos_aprobados")
             .select("curso_id")
-            .eq("codigo_universitario", codigoUni);
+            .eq("codigo_universitario", codigoUni)
+            .eq("carrera", carreraKey);
           if (data && data.length > 0) {
             const ids = data.map((r) => r.curso_id);
             setAprobados(ids);
-            localStorage.setItem("cursosAprobados", JSON.stringify(ids));
+            localStorage.setItem(storageKey, JSON.stringify(ids));
             return;
           }
         } catch (e) {
           console.warn("Error Supabase fallback local", e);
         }
       }
-      const cursosGuardados = localStorage.getItem("cursosAprobados");
+      const cursosGuardados = localStorage.getItem(storageKey);
       if (cursosGuardados) {
         try {
           setAprobados(JSON.parse(cursosGuardados));
         } catch (e) {
           console.error("Error al cargar cursos aprobados", e);
+          setAprobados([]);
         }
       } else {
-        // Fallback por defecto si es usuario nuevo
-        const defaultAprobados = [
-          "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
-          "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
-        ];
-        setAprobados(defaultAprobados);
-        localStorage.setItem("cursosAprobados", JSON.stringify(defaultAprobados));
+        // Usuario nuevo: 0 cursos aprobados por defecto (sin datos ficticios/demo)
+        setAprobados([]);
+        localStorage.setItem(storageKey, JSON.stringify([]));
       }
     };
     cargarCursos();
-  }, []);
+  }, [carreraKey]);
 
   // Guardar en localStorage y Supabase
   const guardarAprobados = async (nuevaLista) => {
     setAprobados(nuevaLista);
-    localStorage.setItem("cursosAprobados", JSON.stringify(nuevaLista));
+    const storageKey = `cursosAprobados_${carreraKey}`;
+    localStorage.setItem(storageKey, JSON.stringify(nuevaLista));
 
     const codigoUni = localStorage.getItem("codigoUniversitario");
     if (codigoUni) {
@@ -154,12 +154,14 @@ export default function MallaCurricular() {
         await supabase
           .from("estudiante_cursos_aprobados")
           .delete()
-          .eq("codigo_universitario", codigoUni);
+          .eq("codigo_universitario", codigoUni)
+          .eq("carrera", carreraKey);
 
         if (nuevaLista.length > 0) {
           const payload = nuevaLista.map((id) => ({
             codigo_universitario: codigoUni,
-            curso_id: id
+            curso_id: id,
+            carrera: carreraKey
           }));
           await supabase.from("estudiante_cursos_aprobados").insert(payload);
         }

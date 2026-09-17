@@ -120,23 +120,6 @@ export default function IniciarSesion() {
     setMensaje(null);
   };
 
-  const autocompletarDemo = (tipo) => {
-    setIdentificadorLogin("0512021015");
-    setPasswordLogin("123456");
-    setNombres("Jhamir Walverdir");
-    setApellidos("Garcia Herrera");
-    setDni("72839401");
-    setCodigoUni("0512021015");
-    setEmail("jhamir.garcia@unp.edu.pe");
-    setPasswordRegistro("123456");
-    setConfirmPassword("123456");
-    setFacultad("Facultad de Ingeniería Industrial");
-    setEscuela("Ingeniería Informática");
-    setAceptaTerminos(true);
-    setModoIngreso(tipo === "estudiante" ? "Estudiante" : "Administrador");
-    setMensaje({ tipo: "success", texto: "Credenciales demo autocompletadas." });
-  };
-
   // ── EJECUTAR INICIO DE SESIÓN ──
   const ejecutarLogin = async (e) => {
     e.preventDefault();
@@ -172,22 +155,11 @@ export default function IniciarSesion() {
       }
 
       let usuario = usuarioBD;
-      if (!usuario && (idLimpio === "0512021015" || idLimpio === "72839401" || idLimpio === "jhamir.garcia@unp.edu.pe")) {
-        usuario = {
-          nombres: "Jhamir Walverdir",
-          apellidos: "Garcia Herrera",
-          codigo_universitario: "0512021015",
-          dni: "72839401",
-          facultad: "Facultad de Ingeniería Industrial",
-          escuela: "Ingeniería Informática",
-          rol: esSuperusuario ? modoIngreso : "Estudiante"
-        };
-      }
 
       if (!usuario) {
         setMensaje({
           tipo: "error",
-          texto: "Usuario no encontrado. Verifica tu DNI, Código o Correo, o crea tu cuenta si eres nuevo."
+          texto: "Usuario no encontrado. Verifica tu DNI, Código o Correo, o registra tu cuenta si eres nuevo."
         });
         setCargando(false);
         return;
@@ -541,20 +513,6 @@ export default function IniciarSesion() {
               >
                 <LogIn className="w-4 h-4 text-blue-500" />
                 <span>Ya tengo una cuenta · Iniciar Sesión</span>
-              </button>
-            </div>
-
-            {/* Botón Demo Rápido */}
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  autocompletarDemo("estudiante");
-                  setVista("login");
-                }}
-                className="text-xs text-slate-400 font-bold hover:underline cursor-pointer"
-              >
-                ⚡ Usar cuenta demo rápida
               </button>
             </div>
           </div>

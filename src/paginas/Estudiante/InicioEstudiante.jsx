@@ -1,3 +1,22 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { useTema } from "../../contexto/ContextoTema";
+import {
+  Award,
+  BookOpen,
+  Calendar,
+  Layers,
+  Sparkles,
+  CheckCircle2,
+  Info,
+  ChevronRight,
+  GraduationCap,
+  Sliders,
+  UserCheck,
+  ArrowUpRight,
+  Clock,
+  BookMarked
+} from "lucide-react";
 import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -7,6 +26,7 @@ export default function InicioEstudiante() {
   const [cursosAprobados, setCursosAprobados] = useState([]);
   const [cursosInscritos, setCursosInscritos] = useState([]);
 
+  const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
   const planActual = obtenerPlanEstudiosActual();
   const nombreCarrera = obtenerNombreCarreraActual();
 
@@ -34,24 +54,14 @@ export default function InicioEstudiante() {
   const totalCursosPlan = planEstudiosCompleto.length;
 
   useEffect(() => {
-    let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
-    if (!aprobados || aprobados.length === 0) {
-      aprobados = [
-        "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
-        "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
-      ];
-      localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
-    }
+    const storageKeyAprobados = `cursosAprobados_${carreraKey}`;
+    let aprobados = JSON.parse(localStorage.getItem(storageKeyAprobados) || localStorage.getItem("cursosAprobados") || "[]");
     setCursosAprobados(aprobados);
 
-    let inscritos = JSON.parse(localStorage.getItem("cursosInscritos") || "null");
-    if (!inscritos || inscritos.length === 0) {
-      const matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "{}");
-      inscritos = matriculas["2026-II"]?.cursos || ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"];
-      localStorage.setItem("cursosInscritos", JSON.stringify(inscritos));
-    }
+    const matriculas = JSON.parse(localStorage.getItem(`matriculas_${carreraKey}`) || localStorage.getItem("matriculasPorSemestre") || "{}");
+    const inscritos = matriculas["2026-II"]?.cursos || JSON.parse(localStorage.getItem("cursosInscritos") || "[]");
     setCursosInscritos(inscritos);
-  }, []);
+  }, [carreraKey]);
 
   const creditosAprobados = planEstudiosCompleto
     .filter((c) => cursosAprobados.includes(c.id))

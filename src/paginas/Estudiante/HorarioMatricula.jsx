@@ -177,137 +177,9 @@ const paletaColoresNuevos = [
   }
 ];
 
+import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
+
 const semestresDisponibles = ["2026-II", "2027-I", "2027-II", "2028-I"];
-
-// Datos Demo por omisión en caso de no tener matrícula guardada
-const matriculaDemoEjemplo = {
-  "2026-II": {
-    cursos: ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"],
-    grupos: {
-      "SI2418": "grupo01",
-      "MA2333": "grupo04",
-      "ES2300": "grupo05",
-      "FI2411": "grupo08",
-      "SI2452": "grupo09"
-    }
-  }
-};
-
-const nombresCursosCatalogo = {
-  // Ciclo I
-  "ED1292": "Actividad Deportiva",
-  "SI1447": "Algoritmos",
-  "ED1331": "Comunicación",
-  "MA1470": "Geometría Analítica",
-  "SI1358": "Herramientas Ofimáticas para la Vida Universitaria",
-  "SI1216": "Introducción a la Ingeniería Informática",
-  "MA1408": "Matemática Básica",
-  "ED1297": "Metodología de los Estudios Superiores Universitarios",
-  // Ciclo II
-  "CB1324": "Biología y Educación Ambiental",
-  "MA1435": "Cálculo I",
-  "FI1363": "Concepción Física del Universo",
-  "SI1445": "Estructuras Discretas",
-  "CS1286": "Filosofía y Ética",
-  "SI1435": "Programación I",
-  "QU1363": "Química General",
-  // Ciclo III
-  "CA2337": "Administración",
-  "MA2441": "Cálculo II",
-  "EC2201": "Economía General",
-  "FI2410": "Física I",
-  "SI2422": "Programación II",
-  "CS2397": "Realidad Nacional y Regional",
-  "CS2258": "Sociología",
-  "ED2278": "Taller de Arte",
-  // Ciclo IV
-  "CA2101": "Actividad de Responsabilidad Social Universitaria",
-  "MA2333": "Álgebra Lineal",
-  "ES2300": "Estadística General",
-  "SI2418": "Estructura de Datos",
-  "FI2411": "Física II",
-  "SI2452": "Ingeniería de Procesos de Negocios",
-  "CO2201": "Introducción a la Contabilidad",
-  "CS2259": "Psicología General",
-  // Ciclo V
-  "SI3422": "Análisis y Diseño de Sistemas I",
-  "MA3412": "Cálculo III",
-  "FI3492": "Circuitos Eléctricos y Electrónicos",
-  "ED3286": "Discapacidad y Derechos Humanos",
-  "ED3283": "Inglés I",
-  "SI3421": "Modelado de Datos",
-  "SI3331": "Aplicaciones Avanzadas con Hojas de Cálculo",
-  "SI3334": "Introducción a los Entornos Operativos",
-  // Ciclo VI
-  "SI3423": "Análisis y Diseño de Sistemas II",
-  "SI3400": "Arquitectura de Computadores",
-  "SI3420": "Base de Datos",
-  "ED3287": "Defensa Nacional",
-  "ES3336": "Inferencia y Probabilidades",
-  "ED3284": "Inglés II",
-  "ED3285": "Taller de Redacción Científica",
-  "SI3337": "Análisis de Algoritmos",
-  "SI3336": "Gráficos por Computadoras",
-  "AA3303": "Logística Empresarial",
-  "SI3335": "Teoría de Compiladores",
-  // Ciclo VII
-  "IO4447": "Diseños de Investigación para Ingeniería",
-  "CA4221": "Emprendedurismo",
-  "IO4448": "Investigación de Operaciones",
-  "SI4386": "Programación Visual",
-  "SI4489": "Sistema de Administración de Base de Datos",
-  "SI4490": "Sistemas Operativos",
-  "SI4388": "Métodos de Acceso",
-  "IO4334": "Métodos Numéricos",
-  "SI4387": "Programación Multimedia",
-  "IO4332": "Simulación y Juegos",
-  // Ciclo VIII
-  "DP4331": "Derecho Informático",
-  "SI4488": "Ingeniería de Software",
-  "EM4461": "Microeconomía",
-  "SI4360": "Organización y Administración Informática",
-  "SI4491": "Redes",
-  "SI4465": "Sistemas de Información Gerencial",
-  // Ciclo IX
-  "SI5364": "Elaboración de Proyectos Informáticos",
-  "IO5365": "Metodología para el Proyecto de Investigación",
-  "SI5497": "Procesos de Desarrollo de Software",
-  "SI5496": "Seguridad de la Información",
-  "SI5441": "Sistemas de Control y Auditoría Informática",
-  "SI5365": "Tecnología y Desarrollo Web",
-  "SI5370": "Microcomputadoras",
-  "II5314": "Programación de Microbots",
-  "SI5369": "Tratamiento Digital de Imágenes y Audio",
-  // Ciclo X
-  "CO5397": "Contabilidad de Costos y Presupuestos",
-  "SI5367": "Desarrollo de la Investigación Informática",
-  "SI5411": "Gestión en Informática",
-  "SI5499": "Inteligencia de Negocios",
-  "SI5498": "Sistemas Orientados a Servicios",
-  "SI5368": "Tecnología y Desarrollo Móvil",
-  "SI5373": "Trabajo de Investigación",
-  "SI5361": "Introducción a la Inteligencia Artificial",
-  "II5345": "Planeamiento y Control de Producción",
-  "II5344": "Sistemas SCADA",
-  "SI5371": "Taller de Servidores"
-};
-
-const informacionGrupos = {
-  grupo01: { etiqueta: "Grupo 01", horario: "07:00 - 08:40", diasTexto: "Lunes, Martes (07:00-08:40) y Miércoles 1ra H (07:00-07:50)" },
-  grupo02: { etiqueta: "Grupo 02", horario: "07:00 - 08:40", diasTexto: "Miércoles 2da H (07:50-08:40), Jueves y Viernes (07:00-08:40)" },
-  grupo03: { etiqueta: "Grupo 03", horario: "08:50 - 10:30", diasTexto: "Lunes, Martes (08:50-10:30) y Miércoles 1ra H (08:50-09:40)" },
-  grupo04: { etiqueta: "Grupo 04", horario: "08:50 - 10:30", diasTexto: "Miércoles 2da H (09:40-10:30), Jueves y Viernes (08:50-10:30)" },
-  grupo05: { etiqueta: "Grupo 05", horario: "10:40 - 12:20", diasTexto: "Lunes, Martes (10:40-12:20) y Miércoles 1ra H (10:40-11:30)" },
-  grupo06: { etiqueta: "Grupo 06", horario: "10:40 - 12:20", diasTexto: "Miércoles 2da H (11:30-12:20), Jueves y Viernes (10:40-12:20)" },
-  grupo07: { etiqueta: "Grupo 07", horario: "01:50 - 03:30", diasTexto: "Lunes, Martes (01:50-03:30) y Miércoles 1ra H (01:50-02:40)" },
-  grupo08: { etiqueta: "Grupo 08", horario: "01:50 - 03:30", diasTexto: "Miércoles 2da H (02:40-03:30), Jueves y Viernes (01:50-03:30)" },
-  grupo09: { etiqueta: "Grupo 09", horario: "03:40 - 05:20", diasTexto: "Lunes, Martes (03:40-05:20) y Miércoles 1ra H (03:40-04:30)" },
-  grupo10: { etiqueta: "Grupo 10", horario: "03:40 - 05:20", diasTexto: "Miércoles 2da H (04:30-05:20), Jueves y Viernes (03:40-05:20)" },
-  grupo11: { etiqueta: "Grupo 11", horario: "05:30 - 07:10", diasTexto: "Lunes, Martes (05:30-07:10) y Miércoles 1ra H (05:30-06:20)" },
-  grupo12: { etiqueta: "Grupo 12", horario: "05:30 - 07:10", diasTexto: "Miércoles 2da H (06:20-07:10), Jueves y Viernes (05:30-07:10)" },
-  grupo13: { etiqueta: "Grupo 13", horario: "07:20 - 09:00", diasTexto: "Lunes, Martes (07:20-09:00) y Miércoles 1ra H (07:20-08:10)" },
-  grupo14: { etiqueta: "Grupo 14", horario: "07:20 - 09:00", diasTexto: "Miércoles 2da H (08:10-09:00), Jueves y Viernes (07:20-09:00)" }
-};
 
 export default function HorarioMatricula() {
   const { tema } = useTema();
@@ -319,8 +191,19 @@ export default function HorarioMatricula() {
   const [diaFiltroAgenda, setDiaFiltroAgenda] = useState("Lunes");
   const [esVistaCompacta, setEsVistaCompacta] = useState(false);
   const [ocultarHorasVacias, setOcultarHorasVacias] = useState(true);
-  const [modoDemoActivo, setModoDemoActivo] = useState(false);
   const [mensajeCopiado, setMensajeCopiado] = useState(false);
+
+  const planActual = obtenerPlanEstudiosActual();
+
+  const mapaNombresCursos = useMemo(() => {
+    const mapa = {};
+    planActual.forEach((sem) => {
+      sem.cursos.forEach((c) => {
+        mapa[c.id] = c.nombre;
+      });
+    });
+    return mapa;
+  }, [planActual]);
 
   // Días de la semana
   const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
@@ -330,22 +213,16 @@ export default function HorarioMatricula() {
   const diaHoyNombre = diaHoyIndex >= 1 && diaHoyIndex <= 5 ? diasSemana[diaHoyIndex - 1] : null;
 
   useEffect(() => {
-    let matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "null");
-    if (!matriculas || Object.keys(matriculas).length === 0) {
-      matriculas = matriculaDemoEjemplo;
-      localStorage.setItem("matriculasPorSemestre", JSON.stringify(matriculas));
-    }
+    const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
+    let matriculas = JSON.parse(localStorage.getItem(`matriculas_${carreraKey}`) || localStorage.getItem("matriculasPorSemestre") || "{}");
     setMatriculasPorSemestre(matriculas);
     const semestreConDatos = semestresDisponibles.find((s) => matriculas[s]?.cursos?.length > 0);
     if (semestreConDatos) setSemestreVista(semestreConDatos);
   }, []);
 
   const datosSemestreActual = useMemo(() => {
-    if (modoDemoActivo) {
-      return matriculaDemoEjemplo["2026-II"];
-    }
     return matriculasPorSemestre[semestreVista] || { cursos: [], grupos: {} };
-  }, [matriculasPorSemestre, semestreVista, modoDemoActivo]);
+  }, [matriculasPorSemestre, semestreVista]);
 
   // Mapa de Código de Grupo -> Datos del Curso
   const mapaGrupoActual = useMemo(() => {
@@ -357,7 +234,7 @@ export default function HorarioMatricula() {
         const estilo = paletaColoresNuevos[indice % paletaColoresNuevos.length];
         mapa[grupoAsignado] = {
           cursoId,
-          nombre: nombresCursosCatalogo[cursoId] || cursoId,
+          nombre: mapaNombresCursos[cursoId] || cursoId,
           grupo: grupoAsignado,
           infoGrupo: informacionGrupos[grupoAsignado],
           estilo
@@ -365,7 +242,7 @@ export default function HorarioMatricula() {
       }
     });
     return mapa;
-  }, [datosSemestreActual]);
+  }, [datosSemestreActual, mapaNombresCursos]);
 
   const tieneDatos = Object.keys(mapaGrupoActual).length > 0;
 

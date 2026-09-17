@@ -10,25 +10,6 @@ import {
 } from "lucide-react";
 import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
 
-const CURSOS_APROBADOS_DEFECTO = [
-  "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
-  "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
-];
-
-const MATRICULA_DEMO_DEFECTO = {
-  "2026-II": {
-    cursos: ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"],
-    grupos: {
-      "SI2418": "grupo01",
-      "MA2333": "grupo04",
-      "ES2300": "grupo05",
-      "FI2411": "grupo08",
-      "SI2452": "grupo09"
-    },
-    fechaGuardado: new Date().toISOString()
-  }
-};
-
 const NOMBRES_CICLO = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 const informacionGrupos = {
@@ -71,6 +52,7 @@ export default function Matricula() {
   const [notificacion, setNotificacion] = useState(null);
   const [filtroCiclo, setFiltroCiclo] = useState("todos");
 
+  const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
   const planActual = obtenerPlanEstudiosActual();
   const nombreCarrera = obtenerNombreCarreraActual();
 
@@ -87,21 +69,14 @@ export default function Matricula() {
   }, [planActual]);
 
   useEffect(() => {
-    let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
-    if (!aprobados || aprobados.length === 0) {
-      aprobados = CURSOS_APROBADOS_DEFECTO;
-      localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
-    }
+    const storageKeyAprobados = `cursosAprobados_${carreraKey}`;
+    const aprobados = JSON.parse(localStorage.getItem(storageKeyAprobados) || localStorage.getItem("cursosAprobados") || "[]");
     setCursosAprobados(aprobados);
 
-    let matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "null");
-    if (!matriculas || Object.keys(matriculas).length === 0) {
-      matriculas = MATRICULA_DEMO_DEFECTO;
-      localStorage.setItem("matriculasPorSemestre", JSON.stringify(matriculas));
-      localStorage.setItem("cursosInscritos", JSON.stringify(MATRICULA_DEMO_DEFECTO["2026-II"].cursos));
-    }
+    const storageKeyMatriculas = `matriculas_${carreraKey}`;
+    const matriculas = JSON.parse(localStorage.getItem(storageKeyMatriculas) || localStorage.getItem("matriculasPorSemestre") || "{}");
     setMatriculasPorSemestre(matriculas);
-  }, []);
+  }, [carreraKey]);
 
   useEffect(() => {
     const datosExistentes = matriculasPorSemestre[semestreSeleccionado];
@@ -169,7 +144,9 @@ export default function Matricula() {
       [semestreSeleccionado]: { cursos: borradorCursos, grupos: borradorGrupos, fechaGuardado: new Date().toISOString() }
     };
     setMatriculasPorSemestre(nuevasMatriculas);
+    localStorage.setItem(`matriculas_${carreraKey}`, JSON.stringify(nuevasMatriculas));
     localStorage.setItem("matriculasPorSemestre", JSON.stringify(nuevasMatriculas));
+    localStorage.setItem(`cursosInscritos_${carreraKey}`, JSON.stringify(borradorCursos));
     localStorage.setItem("cursosInscritos", JSON.stringify(borradorCursos));
     setNotificacion({ tipo: "success", texto: `¡Matrícula ${semestreSeleccionado} guardada con éxito! Tu horario se actualizó.` });
     setTimeout(() => setNotificacion(null), 4000);
