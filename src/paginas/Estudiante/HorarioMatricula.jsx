@@ -788,14 +788,20 @@ export default function HorarioMatricula() {
 
       {/* VISTA 1: GRILLA SEMANAL (CALENDAR GRID) */}
       {tieneDatos && modoVista === "grilla" && (
-        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-xl overflow-hidden p-1.5 sm:p-4 print-container`}>
-          <div className="w-full overflow-x-auto no-scrollbar">
-            <table className="w-full border-collapse table-fixed text-xs print-table">
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-xl overflow-hidden p-2.5 sm:p-4 print-container`}>
+          <div className="sm:hidden flex items-center justify-between text-[10px] text-slate-400 font-semibold mb-2 px-1 no-print">
+            <span className="flex items-center space-x-1">
+              <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+              <span>Desliza horizontalmente para navegar los días</span>
+            </span>
+          </div>
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse min-w-[650px] sm:min-w-full text-xs print-table">
               <thead>
                 <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[10px] sm:text-[11px] font-bold uppercase tracking-wider`}>
-                  <th className={`py-1.5 sm:py-2.5 px-1 sm:px-3 text-left w-[15%] sm:w-28 md:w-36 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <th className={`py-2 px-2 sm:px-3 text-left w-28 sm:w-36 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
                     <div className="flex items-center space-x-1 text-slate-400">
-                      <Clock className="w-3 h-3 text-blue-500" />
+                      <Clock className="w-3.5 h-3.5 text-blue-500" />
                       <span>Hora</span>
                     </div>
                   </th>
@@ -804,16 +810,18 @@ export default function HorarioMatricula() {
                     return (
                       <th
                         key={dia}
-                        className={`py-1.5 sm:py-2.5 px-0.5 sm:px-2 text-center w-[17%] border-r ${
+                        className={`py-2 px-2 text-center border-r ${
                           tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
                         } relative ${
                           esHoy ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-300 font-black" : ""
                         }`}
                       >
-                        <div className="flex items-center justify-center space-x-0.5">
-                          <span className="truncate">{dia}</span>
+                        <div className="flex items-center justify-center space-x-1">
+                          <span>{dia}</span>
                           {esHoy && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span className="px-1 py-0.2 rounded text-[8px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold border border-emerald-500/30">
+                              Hoy
+                            </span>
                           )}
                         </div>
                       </th>
