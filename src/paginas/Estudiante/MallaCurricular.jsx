@@ -382,36 +382,33 @@ export default function MallaCurricular() {
   }, [cicloActivo]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
 
-      {/* Banner Principal de Métricas Resumen */}
-      <div className="rounded-2xl liquid-glass-card glare-hover p-5 sm:p-6 md:p-8 space-y-6 transition-all">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>MALLA CURRICULAR 2018-1 · ING. INFORMÁTICA UNP</span>
+      {/* Banner Principal de Métricas Resumen (Compacto) */}
+      <div className="rounded-2xl liquid-glass-card glare-hover p-3.5 sm:p-4 md:p-5 space-y-3 sm:space-y-4 transition-all">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div className="space-y-0.5">
+            <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-[10px] sm:text-xs font-bold">
+              <Sparkles className="w-3 h-3" />
+              <span>PLAN DE ESTUDIOS 2018-1 · ING. INFORMÁTICA UNP</span>
             </div>
-            <h1 className={`text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            <h1 className={`text-base sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Avance Curricular por Ciclos
             </h1>
-            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-              Selecciona cualquier ciclo para gestionar sus asignaturas, verificar sus prerrequisitos o aprobar el ciclo completo de forma automática.
-            </p>
           </div>
 
           {/* Buscador Rápido de Cursos */}
-          <div className="relative w-full md:w-64 shrink-0">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-56 shrink-0">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar curso o código..."
-              className={`w-full pl-9 pr-4 py-2 rounded-xl text-xs font-medium border transition-all ${
+              className={`w-full pl-8 pr-4 py-1.5 rounded-xl text-xs font-medium border transition-all ${
                 tema === 'dark'
                   ? 'bg-[#090e1a] border-slate-800 text-white placeholder-slate-500 focus:border-blue-500'
-                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 shadow-xs'
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 shadow-2xs'
               }`}
             />
             {busqueda && (
@@ -419,65 +416,65 @@ export default function MallaCurricular() {
                 onClick={() => setBusqueda("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3 h-3" />
               </button>
             )}
           </div>
         </div>
 
-        {/* Tarjetas de Avance */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* Tarjetas de Avance - Fila Única Compacta (Celular y Escritorio) */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           
           {/* Cursos Aprobados */}
-          <div className={`p-3.5 sm:p-4 rounded-xl border ${
+          <div className={`p-2.5 sm:p-3 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
-          } space-y-2 liquid-btn`}>
-            <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-              <span>Cursos Aprobados</span>
-              <span className="bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded font-bold border border-blue-500/20 text-[9px]">{porcentajeObligatorios}%</span>
+          } flex flex-col justify-between liquid-btn`}>
+            <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-blue-500 uppercase tracking-wider truncate">
+              <span>Cursos</span>
+              <span className="bg-blue-500/10 text-blue-500 px-1 py-0.2 rounded font-bold border border-blue-500/20 text-[8px] sm:text-[9px]">{porcentajeObligatorios}%</span>
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan} Cursos</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <div className={`text-sm sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCursosAprobados} <span className={`text-[9px] sm:text-[11px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/{totalObligatoriosPlan}</span>
               </div>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1 sm:h-1.5 rounded-full overflow-hidden mt-1`}>
               <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }}></div>
             </div>
           </div>
 
           {/* Créditos Acumulados */}
-          <div className={`p-3.5 sm:p-4 rounded-xl border ${
+          <div className={`p-2.5 sm:p-3 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
-          } space-y-2 liquid-btn`}>
-            <div className="flex justify-between items-center text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-              <span>Créditos Acumulados</span>
-              <span className="bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded font-bold border border-emerald-500/20 text-[9px]">{porcentajeProgreso}%</span>
+          } flex flex-col justify-between liquid-btn`}>
+            <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-emerald-500 uppercase tracking-wider truncate">
+              <span>Créditos</span>
+              <span className="bg-emerald-500/10 text-emerald-500 px-1 py-0.2 rounded font-bold border border-emerald-500/20 text-[8px] sm:text-[9px]">{porcentajeProgreso}%</span>
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCreditosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalCreditosPlan} CR</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <div className={`text-sm sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCreditosAprobados} <span className={`text-[9px] sm:text-[11px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/{totalCreditosPlan}</span>
               </div>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1 sm:h-1.5 rounded-full overflow-hidden mt-1`}>
               <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
           {/* Avance Global */}
-          <div className={`p-3.5 sm:p-4 rounded-xl border ${
+          <div className={`p-2.5 sm:p-3 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
-          } space-y-2 liquid-btn`}>
-            <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
-              <span>Avance de Carrera</span>
-              <span className="text-purple-500 font-bold text-[9px]">{porcentajeProgreso}%</span>
+          } flex flex-col justify-between liquid-btn`}>
+            <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-purple-500 uppercase tracking-wider truncate">
+              <span>Avance</span>
+              <span className="text-purple-500 font-bold text-[8px] sm:text-[9px]">{porcentajeProgreso}%</span>
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {porcentajeProgreso}% <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Completado</span>
+            <div className="mt-1 flex items-baseline justify-between">
+              <div className={`text-sm sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {porcentajeProgreso}%
               </div>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1 sm:h-1.5 rounded-full overflow-hidden mt-1`}>
               <div className="bg-purple-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
@@ -487,36 +484,36 @@ export default function MallaCurricular() {
 
       {/* Alertas Toasts */}
       {mensajeError && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start space-x-3 text-rose-500 text-xs font-semibold animate-fadeIn shadow-xs">
-          <AlertCircle className="w-5 h-5 shrink-0 text-rose-500 mt-0.5" />
+        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start space-x-2.5 text-rose-500 text-xs font-semibold animate-fadeIn shadow-2xs">
+          <AlertCircle className="w-4 h-4 shrink-0 text-rose-500 mt-0.5" />
           <span className="leading-relaxed">{mensajeError}</span>
         </div>
       )}
 
       {mensajeExito && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start space-x-3 text-emerald-500 text-xs font-semibold animate-fadeIn shadow-xs">
-          <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500 mt-0.5" />
+        <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start space-x-2.5 text-emerald-500 text-xs font-semibold animate-fadeIn shadow-2xs">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500 mt-0.5" />
           <span className="leading-relaxed">{mensajeExito}</span>
         </div>
       )}
 
       {/* Pestañas de Selección de Ciclos (Ciclo I a X + Todos) */}
-      <div className="rounded-2xl liquid-glass-card p-3 sm:p-4 space-y-4">
+      <div className="rounded-2xl liquid-glass-card p-3 sm:p-3.5 space-y-3">
         
-        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800/80">
-          <span className={`text-xs font-extrabold uppercase tracking-wider ${
+        <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-800/80">
+          <span className={`text-[11px] sm:text-xs font-extrabold uppercase tracking-wider ${
             tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
           } flex items-center space-x-1.5`}>
-            <Layers className="w-4 h-4 text-blue-500" />
-            <span>Seleccionar Ciclo Académico:</span>
+            <Layers className="w-3.5 h-3.5 text-blue-500" />
+            <span>Ciclo Académico:</span>
           </span>
-          <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-            {cicloActivo === "todos" ? "Mostrando todos los ciclos" : `Visualizando Ciclo ${cicloActivo}`}
+          <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+            {cicloActivo === "todos" ? "Todos los ciclos" : `Ciclo ${cicloActivo}`}
           </span>
         </div>
 
         {/* Scroll Horizontal de Pestañas de Ciclo */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
           {planEstudios.map((sem) => {
             const esActivo = cicloActivo === sem.numeroCiclo;
             const aprobadosEnCiclo = sem.cursos.filter((c) => aprobados.includes(c.id)).length;
@@ -527,9 +524,9 @@ export default function MallaCurricular() {
                 key={sem.numeroCiclo}
                 type="button"
                 onClick={() => setCicloActivo(sem.numeroCiclo)}
-                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all shrink-0 flex items-center space-x-1.5 cursor-pointer liquid-btn ${
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold transition-all shrink-0 flex items-center space-x-1 cursor-pointer liquid-btn ${
                   esActivo
-                    ? "bg-blue-600 text-white shadow-md scale-102"
+                    ? "bg-blue-600 text-white shadow-xs scale-102"
                     : esCompleto
                     ? tema === 'dark'
                       ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
@@ -539,8 +536,8 @@ export default function MallaCurricular() {
                     : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 hover:text-slate-900"
                 }`}
               >
-                <span>{sem.ciclo}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                <span>{sem.ciclo.replace("Ciclo ", "C-")}</span>
+                <span className={`text-[9px] px-1 py-0.1 rounded-full font-bold ${
                   esActivo
                     ? "bg-white/20 text-white"
                     : esCompleto
@@ -556,23 +553,23 @@ export default function MallaCurricular() {
           <button
             type="button"
             onClick={() => setCicloActivo("todos")}
-            className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all shrink-0 flex items-center space-x-1 cursor-pointer liquid-btn ${
+            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold transition-all shrink-0 flex items-center space-x-1 cursor-pointer liquid-btn ${
               cicloActivo === "todos"
-                ? "bg-blue-600 text-white shadow-md scale-102"
+                ? "bg-blue-600 text-white shadow-xs scale-102"
                 : tema === 'dark'
                 ? "bg-[#090e1a]/80 text-slate-400 border border-slate-800 hover:text-white"
                 : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200"
             }`}
           >
-            <Filter className="w-3.5 h-3.5" />
-            <span>Ver Todos</span>
+            <Filter className="w-3 h-3" />
+            <span>Todos</span>
           </button>
         </div>
 
       </div>
 
-      {/* Lista de Cursos del Ciclo Activo (Vista Vertical) */}
-      <div className="space-y-6">
+      {/* Lista de Cursos del Ciclo Activo (Vista Vertical Compacta) */}
+      <div className="space-y-4">
         {ciclosAMostrar.map((semestre) => {
           const cursosFiltrados = semestre.cursos.filter((c) => {
             if (!busqueda) return true;
@@ -589,38 +586,38 @@ export default function MallaCurricular() {
           return (
             <div
               key={semestre.numeroCiclo}
-              className={`p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4 transition-all`}
+              className={`p-3.5 sm:p-5 rounded-2xl liquid-glass-card space-y-3 transition-all`}
             >
               {/* Cabecera del Ciclo con Botones de Acción */}
-              <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b ${
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b ${
                 tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
               }`}>
                 <div className="space-y-0.5">
                   <div className="flex items-center space-x-2">
-                    <h2 className={`text-lg font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                    <h2 className={`text-base sm:text-lg font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                       {semestre.ciclo}
                     </h2>
                     {esCicloCompleto && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1">
-                        <Check className="w-3 h-3" />
-                        <span>Ciclo Completo</span>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1">
+                        <Check className="w-2.5 h-2.5" />
+                        <span>Completo</span>
                       </span>
                     )}
                   </div>
-                  <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                    {semestre.cursos.length} Asignaturas · {creditosTotalesCiclo} Créditos Totales ({aprobadosCount}/{semestre.cursos.length} Aprobadas)
+                  <p className={`text-[11px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {semestre.cursos.length} Asignaturas · {creditosTotalesCiclo} CR ({aprobadosCount}/{semestre.cursos.length} Aprobados)
                   </p>
                 </div>
 
                 {/* Acciones para Marcar Ciclo Completo */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
                   <button
                     type="button"
                     onClick={() => marcarCicloCompleto(semestre.numeroCiclo)}
-                    className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-xs flex items-center space-x-1.5 cursor-pointer active:scale-95"
+                    className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-[11px] sm:text-xs font-bold transition-all shadow-2xs flex items-center space-x-1 cursor-pointer active:scale-95"
                     title="Aprobar asignaturas con prerrequisitos cumplidos en este ciclo"
                   >
-                    <CheckCheck className="w-4 h-4" />
+                    <CheckCheck className="w-3.5 h-3.5" />
                     <span>Marcar Ciclo Completo</span>
                   </button>
 
@@ -628,22 +625,22 @@ export default function MallaCurricular() {
                     <button
                       type="button"
                       onClick={() => desmarcarCicloCompleto(semestre.numeroCiclo)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center space-x-1 cursor-pointer active:scale-95 ${
+                      className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all border flex items-center space-x-1 cursor-pointer active:scale-95 ${
                         tema === 'dark'
                           ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
                           : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
                       }`}
                       title="Desmarcar todas las asignaturas de este ciclo"
                     >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                      <span>Desmarcar Ciclo</span>
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Desmarcar</span>
                     </button>
                   )}
                 </div>
               </div>
 
-              {/* Lista Vertical de Cursos */}
-              <div className="space-y-3">
+              {/* Lista Vertical de Cursos (Compacta) */}
+              <div className="space-y-2 sm:space-y-2.5">
                 {cursosFiltrados.map((curso) => {
                   const estado = obtenerEstadoCurso(curso);
                   const estaAprobado = estado === "aprobado";
@@ -653,7 +650,7 @@ export default function MallaCurricular() {
                     <div
                       key={curso.id}
                       onClick={() => manejarClickCurso(curso)}
-                      className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer liquid-btn hover-scale-pop ${
+                      className={`p-3 sm:p-3.5 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 cursor-pointer liquid-btn hover-scale-pop ${
                         estaAprobado
                           ? tema === 'dark'
                             ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-100 hover:border-emerald-500/50"
@@ -667,30 +664,30 @@ export default function MallaCurricular() {
                           : "bg-slate-100/70 border-slate-200 text-slate-500 hover:border-slate-300 opacity-75"
                       }`}
                     >
-                      <div className="flex items-start space-x-3 flex-1">
+                      <div className="flex items-start space-x-2.5 flex-1">
                         {/* Estado Icono */}
                         <div className="shrink-0 mt-0.5">
                           {estaAprobado && (
-                            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
-                              <CheckCircle2 className="w-5 h-5" />
+                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                              <CheckCircle2 className="w-4 h-4" />
                             </div>
                           )}
                           {estaDisponible && (
-                            <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
-                              <Unlock className="w-4 h-4" />
+                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                              <Unlock className="w-3.5 h-3.5" />
                             </div>
                           )}
                           {!estaAprobado && !estaDisponible && (
-                            <div className="w-8 h-8 rounded-xl bg-slate-500/10 text-slate-500 border border-slate-500/20 flex items-center justify-center">
-                              <Lock className="w-4 h-4" />
+                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-slate-500/10 text-slate-500 border border-slate-500/20 flex items-center justify-center">
+                              <Lock className="w-3.5 h-3.5" />
                             </div>
                           )}
                         </div>
 
                         {/* Nombre y Detalles */}
-                        <div className="space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
+                        <div className="space-y-0.5">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className={`px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-extrabold ${
                               estaAprobado
                                 ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                                 : estaDisponible
@@ -700,12 +697,12 @@ export default function MallaCurricular() {
                               {curso.id}
                             </span>
 
-                            <span className={`text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                              {curso.creditos} Créditos
+                            <span className={`text-[9px] sm:text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                              {curso.creditos} CR
                             </span>
                           </div>
 
-                          <h3 className={`text-sm sm:text-base font-bold ${
+                          <h3 className={`text-xs sm:text-sm font-bold ${
                             estaAprobado
                               ? tema === 'dark' ? 'text-emerald-300' : 'text-emerald-950'
                               : estaDisponible
@@ -717,15 +714,14 @@ export default function MallaCurricular() {
 
                           {/* Prerrequisitos */}
                           {curso.requisitos.length > 0 ? (
-                            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                              <span className="text-[10px] font-bold text-slate-500">Prerrequisitos:</span>
+                            <div className="flex flex-wrap items-center gap-1 pt-0.5">
+                              <span className="text-[9px] font-bold text-slate-500">Requisitos:</span>
                               {curso.requisitos.map((reqId) => {
                                 const reqAprobado = aprobados.includes(reqId);
-                                const nombreReq = mapaCursos[reqId]?.nombre || reqId;
                                 return (
                                   <span
                                     key={reqId}
-                                    className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[9px] font-bold ${
+                                    className={`inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded text-[8px] sm:text-[9px] font-bold ${
                                       reqAprobado
                                         ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                                         : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
@@ -738,30 +734,30 @@ export default function MallaCurricular() {
                               })}
                             </div>
                           ) : (
-                            <div className="text-[10px] font-semibold text-slate-500">
-                              Sin prerrequisitos (Libre matrícula)
+                            <div className="text-[9px] font-semibold text-slate-500">
+                              Libre matrícula
                             </div>
                           )}
                         </div>
                       </div>
 
                       {/* Botón de Acción Directa */}
-                      <div className="shrink-0 self-end sm:self-center pt-2 sm:pt-0">
+                      <div className="shrink-0 self-end sm:self-center">
                         {estaAprobado && (
-                          <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold inline-flex items-center space-x-1">
-                            <Check className="w-3.5 h-3.5" />
+                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1">
+                            <Check className="w-3 h-3" />
                             <span>Aprobado</span>
                           </span>
                         )}
                         {estaDisponible && (
-                          <span className="px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold inline-flex items-center space-x-1 hover:bg-blue-500 transition-colors shadow-xs">
-                            <Unlock className="w-3.5 h-3.5" />
+                          <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1 hover:bg-blue-500 transition-colors shadow-2xs">
+                            <Unlock className="w-3 h-3" />
                             <span>Aprobar</span>
                           </span>
                         )}
                         {!estaAprobado && !estaDisponible && (
-                          <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 text-xs font-bold inline-flex items-center space-x-1">
-                            <Lock className="w-3.5 h-3.5" />
+                          <span className="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1">
+                            <Lock className="w-3 h-3" />
                             <span>Bloqueado</span>
                           </span>
                         )}
