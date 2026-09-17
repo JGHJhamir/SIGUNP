@@ -62,8 +62,17 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
   
   /* Liquid Glass Panel Base */
-  html.dark .liquid-glass {
-    background: rgba(13, 20, 36, 0.76);
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    box-shadow: 
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
+      0 10px 30px -4px rgba(148, 163, 184, 0.2);
+  }
+  :where(.dark, .dark *) .liquid-glass, html.dark .liquid-glass {
+    background: rgba(13, 20, 36, 0.78);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -72,41 +81,9 @@ html.light ::-webkit-scrollbar-thumb:hover {
       0 12px 36px 0 rgba(0, 0, 0, 0.45);
   }
 
-  html.light .liquid-glass {
-    background: rgba(255, 255, 255, 0.82);
-    backdrop-filter: blur(20px) saturate(190%);
-    -webkit-backdrop-filter: blur(20px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.95);
-    box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-      0 10px 30px -4px rgba(148, 163, 184, 0.2);
-  }
-
   /* Liquid Glass Interactive Cards con Animación Spring y Glare */
-  html.dark .liquid-glass-card {
-    background: rgba(13, 20, 36, 0.76);
-    backdrop-filter: blur(20px) saturate(190%);
-    -webkit-backdrop-filter: blur(20px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.11);
-    box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.14),
-      0 6px 20px rgba(0, 0, 0, 0.35);
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  html.dark .liquid-glass-card:hover, html.dark .liquid-card-pop:hover {
-    border-color: rgba(59, 130, 246, 0.55);
-    box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.35),
-      0 20px 48px -10px rgba(0, 0, 0, 0.65),
-      0 0 30px rgba(59, 130, 246, 0.28);
-    transform: translateY(-6px) scale(1.025);
-  }
-
-  html.light .liquid-glass-card {
-    background: rgba(255, 255, 255, 0.88);
+  .liquid-glass-card {
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
     border: 1px solid rgba(226, 232, 240, 0.95);
@@ -118,7 +95,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
     overflow: hidden;
   }
 
-  html.light .liquid-glass-card:hover, html.light .liquid-card-pop:hover {
+  .liquid-glass-card:hover, .liquid-card-pop:hover {
     border-color: rgba(37, 99, 235, 0.5);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
@@ -127,18 +104,27 @@ html.light ::-webkit-scrollbar-thumb:hover {
     transform: translateY(-6px) scale(1.025);
   }
 
-  /* Liquid Glass Modal Dialog */
-  html.dark .liquid-glass-modal {
-    background: rgba(10, 16, 30, 0.9);
-    backdrop-filter: blur(32px) saturate(210%);
-    -webkit-backdrop-filter: blur(32px) saturate(210%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+  :where(.dark, .dark *) .liquid-glass-card, html.dark .liquid-glass-card {
+    background: rgba(13, 20, 36, 0.78);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.11);
     box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.28),
-      0 25px 60px -12px rgba(0, 0, 0, 0.85);
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.14),
+      0 6px 20px rgba(0, 0, 0, 0.35);
   }
 
-  html.light .liquid-glass-modal {
+  :where(.dark, .dark *) .liquid-glass-card:hover, html.dark .liquid-glass-card:hover, html.dark .liquid-card-pop:hover {
+    border-color: rgba(59, 130, 246, 0.55);
+    box-shadow: 
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.35),
+      0 20px 48px -10px rgba(0, 0, 0, 0.65),
+      0 0 30px rgba(59, 130, 246, 0.28);
+    transform: translateY(-6px) scale(1.025);
+  }
+
+  /* Liquid Glass Modal Dialog */
+  .liquid-glass-modal {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(32px) saturate(210%);
     -webkit-backdrop-filter: blur(32px) saturate(210%);
@@ -146,6 +132,16 @@ html.light ::-webkit-scrollbar-thumb:hover {
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
       0 25px 50px -12px rgba(148, 163, 184, 0.3);
+  }
+
+  :where(.dark, .dark *) .liquid-glass-modal, html.dark .liquid-glass-modal {
+    background: rgba(10, 16, 30, 0.9);
+    backdrop-filter: blur(32px) saturate(210%);
+    -webkit-backdrop-filter: blur(32px) saturate(210%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.28),
+      0 25px 60px -12px rgba(0, 0, 0, 0.85);
   }
 
   /* Micro-animación de Resplandor Specular (Shimmer Sweep) */
