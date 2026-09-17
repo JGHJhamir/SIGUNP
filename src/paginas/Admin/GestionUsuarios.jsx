@@ -18,7 +18,7 @@ import { supabase } from "../../lib/supabase";
 // Usuarios demo iniciales para rellenar la tabla
 const usuariosIniciales = [
   {
-    codigo_universitario: "0512021015",
+    codigo_universitario: "0512000001",
     nombres: "Administrador",
     apellidos: "Principal UNP",
     facultad: "Facultad de Ingeniería Industrial",

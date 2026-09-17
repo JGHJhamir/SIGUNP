@@ -26,7 +26,7 @@ export default function LayoutAdmin() {
   const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
 
   const nombreUsuario = localStorage.getItem("nombreEstudiante") || "Administrador UNP";
-  const codigoUsuario = localStorage.getItem("codigoUniversitario") || "0512021015";
+  const codigoUsuario = localStorage.getItem("codigoUniversitario") || "0512000001";
 
   const menuItems = [
     {

@@ -266,16 +266,43 @@ export default function PerfilEstudiante() {
           </div>
         </div>
 
-        <div className={`px-4 py-3.5 rounded-2xl ${
-          tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-slate-50/90 border-slate-200'
-        } border text-xs space-y-1.5 font-mono shrink-0 shadow-sm z-10 hover-pop-subtle`}>
-          <div className="flex items-center space-x-2 text-slate-400">
-            <Hash className="w-3.5 h-3.5 text-blue-500" />
-            <span>Código: <strong className={tema === 'dark' ? 'text-white' : 'text-slate-900'}>{codigoUni || "Sin registrar"}</strong></span>
+        <div className={`p-3.5 sm:p-4 rounded-2xl ${
+          tema === 'dark' ? 'bg-[#090e1a]/90 border-slate-700/80 shadow-2xl' : 'bg-white/95 border-slate-200 shadow-lg'
+        } border space-y-2.5 shrink-0 z-10 hover-pop-subtle min-w-[200px]`}>
+          <div className="flex items-center space-x-2.5 text-xs">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-sm">
+              <GraduationCap className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[9px] font-black text-emerald-500 uppercase tracking-wider">Código UNP</div>
+              <div className={`font-mono text-xs font-black truncate ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {codigoUni || "Sin registrar"}
+              </div>
+            </div>
           </div>
-          <div className="flex items-center space-x-2 text-slate-400">
-            <IdCard className="w-3.5 h-3.5 text-purple-500" />
-            <span>DNI: <strong className={tema === 'dark' ? 'text-white' : 'text-slate-900'}>{dni || "Sin registrar"}</strong></span>
+
+          <div className="flex items-center space-x-2.5 text-xs">
+            <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0 shadow-sm">
+              <IdCard className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[9px] font-black text-sky-500 uppercase tracking-wider">DNI</div>
+              <div className={`font-mono text-xs font-black truncate ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {dni || "Sin registrar"}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2.5 text-xs">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-sm">
+              <Mail className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[9px] font-black text-purple-500 uppercase tracking-wider">Correo</div>
+              <div className={`font-mono text-xs font-black truncate max-w-[150px] ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {email || "Sin registrar"}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -315,6 +342,7 @@ export default function PerfilEstudiante() {
                     type="text"
                     value={nombres}
                     onChange={(e) => setNombres(e.target.value)}
+                    placeholder="Ej. Juan Carlos"
                     className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                     } border text-xs font-semibold focus:outline-none focus:border-blue-500`}
@@ -331,6 +359,7 @@ export default function PerfilEstudiante() {
                     type="text"
                     value={apellidos}
                     onChange={(e) => setApellidos(e.target.value)}
+                    placeholder="Ej. Pérez Gómez"
                     className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
                     } border text-xs font-semibold focus:outline-none focus:border-blue-500`}
@@ -342,7 +371,7 @@ export default function PerfilEstudiante() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <IdCard className="w-3.5 h-3.5 text-blue-500" />
+                    <IdCard className="w-3.5 h-3.5 text-sky-400" />
                     <span>DNI (8 dígitos)</span>
                   </label>
                   <input
@@ -350,15 +379,16 @@ export default function PerfilEstudiante() {
                     value={dni}
                     onChange={(e) => setDni(e.target.value.replace(/\D/g, "").slice(0, 8))}
                     maxLength={8}
+                    placeholder="Ej. 70000000"
                     className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-mono font-semibold focus:outline-none focus:border-blue-500`}
+                    } border text-xs font-mono font-semibold focus:outline-none focus:border-sky-500`}
                   />
                 </div>
 
                 <div>
                   <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                    <Hash className="w-3.5 h-3.5 text-blue-500" />
+                    <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Código UNP (10 dígitos)</span>
                   </label>
                   <input
@@ -366,16 +396,17 @@ export default function PerfilEstudiante() {
                     value={codigoUni}
                     onChange={(e) => setCodigoUni(e.target.value.replace(/\D/g, "").slice(0, 10))}
                     maxLength={10}
+                    placeholder="Ej. 0512000000"
                     className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs font-mono font-semibold focus:outline-none focus:border-blue-500`}
+                    } border text-xs font-mono font-semibold focus:outline-none focus:border-emerald-500`}
                   />
                 </div>
               </div>
 
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
-                  <Mail className="w-3.5 h-3.5 text-blue-500" />
+                  <Mail className="w-3.5 h-3.5 text-purple-400" />
                   <span>Correo Electrónico</span>
                 </label>
                 <input
@@ -385,7 +416,7 @@ export default function PerfilEstudiante() {
                   placeholder="estudiante@unp.edu.pe"
                   className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                  } border text-xs font-semibold focus:outline-none focus:border-blue-500`}
+                  } border text-xs font-semibold focus:outline-none focus:border-purple-500`}
                 />
               </div>
 

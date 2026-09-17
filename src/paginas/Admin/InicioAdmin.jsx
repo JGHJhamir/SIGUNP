@@ -99,7 +99,7 @@ export default function InicioAdmin() {
     {
       id: 1,
       evento: "Registro de estudiante verificado en Supabase",
-      detalle: "Administrador Principal UNP (0512021015) ingresó con rol Administrador",
+      detalle: "Administrador Principal UNP (0512000001) ingresó con rol Administrador",
       tiempo: "Hace 2 minutos",
       tipo: "success"
     },

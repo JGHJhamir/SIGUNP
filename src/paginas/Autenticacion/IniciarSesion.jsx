@@ -708,9 +708,9 @@ export default function IniciarSesion() {
             {/* Selector de Método de Registro */}
             <div className="grid grid-cols-3 gap-2">
               {[
-                { id: "dni", etiqueta: "DNI", icono: IdCard },
-                { id: "codigo", etiqueta: "Código UNP", icono: Hash },
-                { id: "email", etiqueta: "Correo", icono: Mail }
+                { id: "dni", etiqueta: "DNI", icono: IdCard, colorGlow: "from-sky-500/20 to-blue-600/20", colorBorder: "border-sky-500", colorText: "text-sky-400", colorIcon: "text-sky-400" },
+                { id: "codigo", etiqueta: "Código UNP", icono: Hash, colorGlow: "from-emerald-500/20 to-teal-600/20", colorBorder: "border-emerald-500", colorText: "text-emerald-400", colorIcon: "text-emerald-400" },
+                { id: "email", etiqueta: "Correo", icono: Mail, colorGlow: "from-purple-500/20 to-indigo-600/20", colorBorder: "border-purple-500", colorText: "text-purple-400", colorIcon: "text-purple-400" }
               ].map((m) => {
                 const IconoComp = m.icono;
                 const estaSeleccionado = metodoRegistroPref === m.id;
@@ -719,14 +719,17 @@ export default function IniciarSesion() {
                     key={m.id}
                     type="button"
                     onClick={() => setMetodoRegistroPref(m.id)}
-                    className={`py-3 px-2 rounded-2xl border text-xs font-extrabold transition-all flex flex-col items-center justify-center space-y-1 cursor-pointer ${
+                    className={`py-3.5 px-3 rounded-2xl border text-xs font-extrabold transition-all flex flex-col items-center justify-center space-y-1.5 cursor-pointer relative overflow-hidden ${
                       estaSeleccionado
-                        ? "bg-purple-600/20 border-purple-500 text-purple-300 shadow-md"
-                        : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-white"
+                        ? `bg-gradient-to-br ${m.colorGlow} ${m.colorBorder} ${m.colorText} shadow-lg scale-102`
+                        : "bg-slate-950/40 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
                     }`}
                   >
-                    <IconoComp className={`w-4 h-4 ${estaSeleccionado ? 'text-purple-400' : 'text-slate-500'}`} />
+                    <IconoComp className={`w-5 h-5 ${estaSeleccionado ? m.colorIcon : 'text-slate-500'}`} />
                     <span>{m.etiqueta}</span>
+                    {estaSeleccionado && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse absolute top-2 right-2"></span>
+                    )}
                   </button>
                 );
               })}
@@ -735,8 +738,8 @@ export default function IniciarSesion() {
             {/* Campo dinámico según selección */}
             {metodoRegistroPref === "dni" && (
               <div>
-                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <IdCard className="w-3.5 h-3.5 text-purple-500" />
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
+                  <IdCard className="w-4 h-4 text-sky-400" />
                   <span>Número de DNI (8 dígitos)</span>
                 </label>
                 <input
@@ -744,10 +747,10 @@ export default function IniciarSesion() {
                   value={dni}
                   onChange={(e) => setDni(e.target.value.replace(/\D/g, "").slice(0, 8))}
                   maxLength={8}
-                  placeholder="72839401"
+                  placeholder="Ej. 70000000"
                   className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                  } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                  } border text-xs font-mono font-semibold focus:outline-none focus:border-sky-500`}
                   required
                 />
               </div>
@@ -755,8 +758,8 @@ export default function IniciarSesion() {
 
             {metodoRegistroPref === "codigo" && (
               <div>
-                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <Hash className="w-3.5 h-3.5 text-purple-500" />
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
+                  <Hash className="w-4 h-4 text-emerald-400" />
                   <span>Código Universitario (10 dígitos)</span>
                 </label>
                 <input
@@ -764,10 +767,10 @@ export default function IniciarSesion() {
                   value={codigoUni}
                   onChange={(e) => setCodigoUni(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   maxLength={10}
-                  placeholder="0512021015"
+                  placeholder="Ej. 0512000000"
                   className={`w-full px-4 py-3 rounded-2xl ${
                     tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                  } border text-xs font-mono font-semibold focus:outline-none focus:border-purple-500`}
+                  } border text-xs font-mono font-semibold focus:outline-none focus:border-emerald-500`}
                   required
                 />
               </div>
@@ -775,8 +778,8 @@ export default function IniciarSesion() {
 
             {metodoRegistroPref === "email" && (
               <div>
-                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <Mail className="w-3.5 h-3.5 text-purple-500" />
+                <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1.5 flex items-center space-x-1.5`}>
+                  <Mail className="w-4 h-4 text-purple-400" />
                   <span>Correo Electrónico</span>
                 </label>
                 <input
