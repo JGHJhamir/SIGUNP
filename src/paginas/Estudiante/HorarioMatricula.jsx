@@ -470,6 +470,66 @@ export default function HorarioMatricula() {
     );
   };
 
+  // Renderizador de Celda de Miércoles con Subdivisión Vertical Elegante
+  const renderizarCeldaMiercoles = (fila) => {
+    const g1 = fila.diaMiercolesPrimeraHora;
+    const g2 = fila.diaMiercolesSegundaHora;
+    const datos1 = mapaGrupoActual[g1];
+    const datos2 = mapaGrupoActual[g2];
+
+    if (!datos1 && !datos2) {
+      return (
+        <div className="min-h-[56px] flex items-center justify-center text-[11px] text-slate-700/60 font-mono select-none">
+          —
+        </div>
+      );
+    }
+
+    if (datos1 && datos2 && datos1.cursoId === datos2.cursoId) {
+      return renderizarCeldaGrilla(g1, "Miércoles", fila.rangoHorario);
+    }
+
+    if (datos1 && !datos2) {
+      return (
+        <div className="space-y-1">
+          <div className="text-[8px] font-black text-blue-400 dark:text-blue-300 tracking-wider flex items-center justify-between px-1 uppercase">
+            <span>1ª Hr ({fila.primeraHoraPedagogica.split(" - ")[0]})</span>
+          </div>
+          {renderizarCeldaGrilla(g1, "Miércoles", fila.primeraHoraPedagogica)}
+        </div>
+      );
+    }
+
+    if (!datos1 && datos2) {
+      return (
+        <div className="space-y-1">
+          <div className="text-[8px] font-black text-sky-400 dark:text-sky-300 tracking-wider flex items-center justify-between px-1 uppercase">
+            <span>2ª Hr ({fila.segundaHoraPedagogica.split(" - ")[0]})</span>
+          </div>
+          {renderizarCeldaGrilla(g2, "Miércoles", fila.segundaHoraPedagogica)}
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-1.5 p-1 rounded-2xl bg-slate-950/40 border border-slate-800/80">
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-blue-400 dark:text-blue-300 tracking-wider flex items-center justify-between px-1 uppercase">
+            <span>1ª Hr ({fila.primeraHoraPedagogica.split(" - ")[0]})</span>
+          </div>
+          {renderizarCeldaGrilla(g1, "Miércoles", fila.primeraHoraPedagogica)}
+        </div>
+        <div className="border-t border-dashed border-slate-800/80 my-0.5"></div>
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-sky-400 dark:text-sky-300 tracking-wider flex items-center justify-between px-1 uppercase">
+            <span>2ª Hr ({fila.segundaHoraPedagogica.split(" - ")[0]})</span>
+          </div>
+          {renderizarCeldaGrilla(g2, "Miércoles", fila.segundaHoraPedagogica)}
+        </div>
+      </div>
+    );
+  };
+
   // Construcción de Lista para Vista Agenda Timeline
   const bloquesPorDiaAgenda = useMemo(() => {
     const mapaAgenda = { Lunes: [], Martes: [], Miércoles: [], Jueves: [], Viernes: [] };
@@ -814,7 +874,6 @@ export default function HorarioMatricula() {
                         className={`py-4 px-3 text-center border-r border-slate-800/80 relative ${
                           esHoy ? "bg-emerald-500/10 text-emerald-300 font-black" : ""
                         }`}
-                        colSpan={dia === "Miércoles" ? 2 : 1}
                       >
                         <div className="flex items-center justify-center space-x-1.5">
                           <span>{dia}</span>
@@ -827,15 +886,6 @@ export default function HorarioMatricula() {
                       </th>
                     );
                   })}
-                </tr>
-                <tr className="border-b border-slate-800/80 text-[9px] text-slate-500 bg-slate-950/40">
-                  <th className="border-r border-slate-800"></th>
-                  <th></th>
-                  <th></th>
-                  <th className="py-1.5 text-center font-bold border-r border-dashed border-slate-800/80 text-blue-400">1ra Hora</th>
-                  <th className="py-1.5 text-center font-bold text-sky-400">2da Hora</th>
-                  <th></th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -854,7 +904,7 @@ export default function HorarioMatricula() {
                           <Clock className="w-3.5 h-3.5 opacity-60" />
                           <span>{fila.unicaHora}</span>
                         </td>
-                        <td colSpan={6} className="text-center font-extrabold tracking-widest uppercase py-2">
+                        <td colSpan={5} className="text-center font-extrabold tracking-widest uppercase py-2">
                           {fila.tipoFila === "almuerzo" ? (
                             <span className="inline-flex items-center space-x-2 text-sky-300 bg-sky-500/10 px-4 py-1 rounded-full border border-sky-500/20 shadow-sm">
                               <Utensils className="w-4 h-4" />
@@ -879,8 +929,7 @@ export default function HorarioMatricula() {
                       </td>
                       <td className="p-2">{renderizarCeldaGrilla(fila.diaLunes, "Lunes", fila.rangoHorario)}</td>
                       <td className="p-2">{renderizarCeldaGrilla(fila.diaMartes, "Martes", fila.rangoHorario)}</td>
-                      <td className="p-2 border-r border-dashed border-slate-800/80">{renderizarCeldaGrilla(fila.diaMiercolesPrimeraHora, "Miércoles", fila.primeraHoraPedagogica)}</td>
-                      <td className="p-2">{renderizarCeldaGrilla(fila.diaMiercolesSegundaHora, "Miércoles", fila.segundaHoraPedagogica)}</td>
+                      <td className="p-2">{renderizarCeldaMiercoles(fila)}</td>
                       <td className="p-2">{renderizarCeldaGrilla(fila.diaJueves, "Jueves", fila.rangoHorario)}</td>
                       <td className="p-2">{renderizarCeldaGrilla(fila.diaViernes, "Viernes", fila.rangoHorario)}</td>
                     </tr>
