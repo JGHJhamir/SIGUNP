@@ -318,6 +318,7 @@ export default function HorarioMatricula() {
   const [cursoDetalleModal, setCursoDetalleModal] = useState(null);
   const [diaFiltroAgenda, setDiaFiltroAgenda] = useState("Lunes");
   const [esVistaCompacta, setEsVistaCompacta] = useState(false);
+  const [ocultarHorasVacias, setOcultarHorasVacias] = useState(true);
   const [modoDemoActivo, setModoDemoActivo] = useState(false);
   const [mensajeCopiado, setMensajeCopiado] = useState(false);
 
@@ -367,6 +368,53 @@ export default function HorarioMatricula() {
   }, [datosSemestreActual]);
 
   const tieneDatos = Object.keys(mapaGrupoActual).length > 0;
+
+  // Filtrado automático de bloques sin clases (ocultar horas vacías temprano/tarde)
+  const estructuraHorarioFiltrada = useMemo(() => {
+    if (!ocultarHorasVacias || !tieneDatos) {
+      return estructuraHorarioClases;
+    }
+
+    const indicesOcupados = [];
+    estructuraHorarioClases.forEach((fila, idx) => {
+      if (fila.tipoFila === "clase") {
+        const tieneClase =
+          mapaGrupoActual[fila.diaLunes] ||
+          mapaGrupoActual[fila.diaMartes] ||
+          mapaGrupoActual[fila.diaMiercolesPrimeraHora] ||
+          mapaGrupoActual[fila.diaMiercolesSegundaHora] ||
+          mapaGrupoActual[fila.diaJueves] ||
+          mapaGrupoActual[fila.diaViernes];
+        if (tieneClase) {
+          indicesOcupados.push(idx);
+        }
+      }
+    });
+
+    if (indicesOcupados.length === 0) return estructuraHorarioClases;
+
+    const primerIndice = Math.min(...indicesOcupados);
+    const ultimoIndice = Math.max(...indicesOcupados);
+
+    return estructuraHorarioClases.slice(primerIndice, ultimoIndice + 1);
+  }, [ocultarHorasVacias, mapaGrupoActual, tieneDatos]);
+
+  // Cálculo del rango de horas mostrado
+  const rangoHorarioTexto = useMemo(() => {
+    if (!estructuraHorarioFiltrada || estructuraHorarioFiltrada.length === 0) return "07:00 - 21:00";
+    const primeraFila = estructuraHorarioFiltrada[0];
+    const ultimaFila = estructuraHorarioFiltrada[estructuraHorarioFiltrada.length - 1];
+
+    const horaInicio = primeraFila.rangoHorario
+      ? primeraFila.rangoHorario.split(" - ")[0]
+      : primeraFila.unicaHora?.split(" - ")[0]?.replace(" a.m.", "")?.replace(" p.m.", "") || "07:00";
+
+    const horaFin = ultimaFila.rangoHorario
+      ? ultimaFila.rangoHorario.split(" - ")[1]
+      : ultimaFila.unicaHora?.split(" - ")[1]?.replace(" a.m.", "")?.replace(" p.m.", "") || "21:00";
+
+    return `${horaInicio} - ${horaFin}`;
+  }, [estructuraHorarioFiltrada]);
 
   // Cálculo de Estadísticas del Horario
   const estadisticasHorario = useMemo(() => {
@@ -482,7 +530,7 @@ export default function HorarioMatricula() {
   const bloquesPorDiaAgenda = useMemo(() => {
     const mapaAgenda = { Lunes: [], Martes: [], Miércoles: [], Jueves: [], Viernes: [] };
 
-    estructuraHorarioClases.forEach((fila) => {
+    estructuraHorarioFiltrada.forEach((fila) => {
       if (fila.tipoFila === "clase") {
         if (mapaGrupoActual[fila.diaLunes]) {
           mapaAgenda.Lunes.push({ hora: fila.rangoHorario, curso: mapaGrupoActual[fila.diaLunes] });
@@ -514,7 +562,7 @@ export default function HorarioMatricula() {
     });
 
     return mapaAgenda;
-  }, [mapaGrupoActual]);
+  }, [mapaGrupoActual, estructuraHorarioFiltrada]);
 
   return (
     <div className="space-y-6">
@@ -670,7 +718,7 @@ export default function HorarioMatricula() {
                 <Calendar className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-sm font-black text-amber-300 leading-none">07:00 - 21:00</div>
+                <div className="text-sm font-black text-amber-300 leading-none">{rangoHorarioTexto}</div>
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Rango Horario</div>
               </div>
             </div>
@@ -717,9 +765,23 @@ export default function HorarioMatricula() {
             </button>
           </div>
 
-          {/* Opciones de la grilla (Compacto / Tip) */}
+          {/* Opciones de la grilla (Ocultar Vacías / Compacto / Tip) */}
           {modoVista === "grilla" && (
-            <div className="flex items-center space-x-4 text-xs">
+            <div className="flex flex-wrap items-center gap-2.5 text-xs">
+              <button
+                type="button"
+                onClick={() => setOcultarHorasVacias(!ocultarHorasVacias)}
+                className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                  ocultarHorasVacias
+                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-300"
+                    : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white" : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
+                }`}
+                title="Oculta automáticamente las horas vacías sin clases para optimizar espacio"
+              >
+                <Zap className="w-3.5 h-3.5 text-emerald-500" />
+                <span>{ocultarHorasVacias ? "Ocultar Horas Vacías: ON" : "Mostrar Todo (07:00 - 21:00)"}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setEsVistaCompacta(!esVistaCompacta)}
@@ -732,11 +794,6 @@ export default function HorarioMatricula() {
                 <Sliders className="w-3.5 h-3.5" />
                 <span>{esVistaCompacta ? "Vista Detallada" : "Vista Compacta"}</span>
               </button>
-
-              <span className="text-[11px] text-slate-400 hidden md:inline-flex items-center space-x-1 font-semibold">
-                <Info className="w-3.5 h-3.5 text-blue-400" />
-                <span>Pasa el cursor sobre un curso para resaltarlo en toda la semana</span>
-              </span>
             </div>
           )}
 
@@ -839,7 +896,7 @@ export default function HorarioMatricula() {
                 </tr>
               </thead>
               <tbody>
-                {estructuraHorarioClases.map((fila) => {
+                {estructuraHorarioFiltrada.map((fila) => {
                   if (fila.tipoFila === "recreo" || fila.tipoFila === "almuerzo") {
                     const esAlmuerzo = fila.tipoFila === "almuerzo";
                     return (
