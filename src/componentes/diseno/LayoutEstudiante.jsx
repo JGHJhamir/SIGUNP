@@ -221,15 +221,18 @@ export default function LayoutEstudiante() {
         </div>
       </aside>
 
-      {/* Header en Móvil */}
-      <header className={`md:hidden w-full liquid-glass border-b px-3.5 py-2.5 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
-        <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 p-0.5 border border-slate-700 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
+      {/* Header en Móvil - Liquid Glass Estilo iPhone */}
+      <header className={`md:hidden w-full iphone-glass-header px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 p-0.5 border border-slate-700/80 flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop">
             <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>
-            <span className={`text-xs font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight block leading-none`}>SIGUNP</span>
-            <span className="text-[10px] text-blue-500 font-bold block mt-0.5">{itemActivo.etiqueta}</span>
+            <div className="flex items-center space-x-1.5">
+              <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight leading-none`}>SIGUNP</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle"></span>
+            </div>
+            <span className="text-[10px] text-blue-500 dark:text-blue-400 font-bold block mt-0.5 tracking-wide">{itemActivo.etiqueta}</span>
           </div>
         </div>
 
@@ -237,7 +240,7 @@ export default function LayoutEstudiante() {
           <Link
             to="/estudiante/perfil"
             title="Mi Perfil"
-            className="p-1.5 rounded-lg text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer liquid-btn"
+            className="p-2 rounded-xl text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 active:scale-90 border border-blue-500/20 transition-all cursor-pointer hover-pop"
           >
             <User className="w-4 h-4" />
           </Link>
@@ -245,8 +248,8 @@ export default function LayoutEstudiante() {
           <button
             type="button"
             onClick={alternarTema}
-            className={`p-1.5 rounded-lg border transition-all cursor-pointer liquid-btn ${
-              tema === 'dark' ? "bg-slate-800/80 border-slate-700 text-amber-400" : "bg-slate-100 border-slate-200 text-indigo-600"
+            className={`p-2 rounded-xl border transition-all cursor-pointer hover-pop active:scale-90 ${
+              tema === 'dark' ? "bg-slate-800/80 border-slate-700 text-amber-400 shadow-sm" : "bg-white border-slate-200 text-indigo-600 shadow-sm"
             }`}
             title="Alternar Modo Claro / Oscuro"
           >
@@ -257,7 +260,7 @@ export default function LayoutEstudiante() {
             type="button"
             onClick={manejarReconfigurar}
             title="Reconfigurar Malla"
-            className="p-1.5 rounded-lg text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 transition-all cursor-pointer liquid-btn"
+            className="p-2 rounded-xl text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 active:scale-90 border border-amber-500/20 transition-all cursor-pointer hover-pop"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -266,7 +269,7 @@ export default function LayoutEstudiante() {
             type="button"
             onClick={manejarCerrarSesion}
             title="Cerrar Sesión"
-            className="p-1.5 rounded-lg text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 transition-all cursor-pointer liquid-btn"
+            className="p-2 rounded-xl text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 active:scale-90 border border-rose-500/20 transition-all cursor-pointer hover-pop"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -274,7 +277,7 @@ export default function LayoutEstudiante() {
       </header>
 
       {/* Contenido Principal */}
-      <main className={`flex-1 flex flex-col min-w-0 pb-20 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-[#080c14]' : 'bg-slate-50'} relative z-10 transition-colors`}>
+      <main className={`flex-1 flex flex-col min-w-0 pb-28 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-[#080c14]' : 'bg-slate-50'} relative z-10 transition-colors`}>
         {/* Top App Bar Header Desktop */}
         <header className="hidden md:flex items-center justify-between px-8 py-3.5 liquid-glass border-b sticky top-0 z-20 transition-colors">
           <div className="flex items-center space-x-2 text-xs">
@@ -290,8 +293,8 @@ export default function LayoutEstudiante() {
             <Link
               to="/estudiante/perfil"
               title="Ver y Editar Mi Perfil"
-              className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer liquid-btn ${
-                tema === 'dark' ? 'bg-slate-800/60 border-slate-700 text-slate-200 hover:bg-slate-800' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 shadow-sm'
+              className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer hover-pop ${
+                tema === 'dark' ? 'bg-slate-800/60 border-slate-700 text-slate-200 hover:bg-slate-800 hover:border-blue-500/40' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 shadow-sm hover:border-blue-500/40'
               }`}
             >
               <User className="w-3.5 h-3.5 text-blue-500" />
@@ -301,7 +304,7 @@ export default function LayoutEstudiante() {
             <button
               type="button"
               onClick={alternarTema}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 liquid-btn ${
+              className={`px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 hover-pop ${
                 tema === 'dark'
                   ? "bg-slate-800/60 border-slate-700 text-amber-300 hover:bg-slate-800"
                   : "bg-white border-slate-200 text-amber-600 hover:bg-slate-100 shadow-sm"
@@ -320,7 +323,7 @@ export default function LayoutEstudiante() {
               )}
             </button>
 
-            <div className="px-3 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold flex items-center space-x-1.5">
+            <div className="px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold flex items-center space-x-1.5 shadow-sm">
               <span>Universidad Nacional de Piura</span>
             </div>
           </div>
@@ -331,29 +334,35 @@ export default function LayoutEstudiante() {
         </div>
       </main>
 
-      {/* Bottom Bar Móvil */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 liquid-glass border-t flex items-center justify-around py-1.5 z-50 px-1 shadow-lg transition-colors">
-        {menuItems.map((item) => {
-          const estaActivo = localizacion.pathname === item.ruta;
-          return (
-            <Link
-              key={item.ruta}
-              to={item.ruta}
-              className={`flex flex-col items-center justify-center py-1 px-1 rounded-lg transition-all flex-1 min-w-0 liquid-btn ${
-                estaActivo
-                  ? "text-blue-500 dark:text-blue-400 font-bold"
-                  : tema === 'dark'
-                  ? "text-slate-400 hover:text-slate-200"
-                  : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <div className={`shrink-0 ${estaActivo ? "text-blue-500 dark:text-blue-400" : ""}`}>{item.icono}</div>
-              <span className="text-[10px] font-extrabold mt-0.5 tracking-tight truncate w-full text-center">
-                {item.etiquetaCorta}
-              </span>
-            </Link>
-          );
-        })}
+      {/* Floating Bottom Dock Móvil - Liquid Glass Estilo iPhone / iOS 18 */}
+      <nav className="md:hidden fixed bottom-3 left-3 right-3 iphone-glass-dock rounded-[26px] p-2 z-50 flex flex-col items-center justify-between shadow-2xl transition-all">
+        <div className="w-full flex items-center justify-around space-x-1">
+          {menuItems.map((item) => {
+            const estaActivo = localizacion.pathname === item.ruta;
+            return (
+              <Link
+                key={item.ruta}
+                to={item.ruta}
+                className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl iphone-tab-item flex-1 min-w-0 ${
+                  estaActivo
+                    ? "iphone-active-pill text-blue-500 dark:text-blue-400 font-extrabold"
+                    : tema === 'dark'
+                    ? "text-slate-400 hover:text-slate-200"
+                    : "text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                <div className={`shrink-0 transition-transform duration-200 ${estaActivo ? "scale-110 text-blue-500 dark:text-blue-400" : "scale-100"}`}>
+                  {item.icono}
+                </div>
+                <span className="text-[10px] font-bold mt-1 tracking-tight truncate w-full text-center">
+                  {item.etiquetaCorta}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+        {/* iPhone Home Bar Line */}
+        <div className="iphone-home-bar" />
       </nav>
 
     </div>

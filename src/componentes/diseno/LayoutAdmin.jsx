@@ -182,31 +182,34 @@ export default function LayoutAdmin() {
         </div>
       </aside>
 
-      {/* Menú Móvil (Hamburguesa) */}
-      <div className={`md:hidden flex items-center justify-between p-4 border-b ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200'} relative z-40`}>
+      {/* Menú Móvil (Hamburguesa) - Liquid Glass Estilo iPhone */}
+      <div className={`md:hidden flex items-center justify-between p-4 iphone-glass-header relative z-40`}>
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-lg bg-slate-900 p-0.5 border border-purple-500/30 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 p-0.5 border border-purple-500/40 flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop">
             <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>
-            <span className={`font-bold text-xs ${tema === 'dark' ? 'text-white' : 'text-slate-900'} block`}>
-              SIGUNP Admin
-            </span>
-            <span className="text-[10px] text-slate-400 block font-medium">Univ. Nac. de Piura</span>
+            <div className="flex items-center space-x-1.5">
+              <span className={`font-black text-xs ${tema === 'dark' ? 'text-white' : 'text-slate-900'} leading-none`}>
+                SIGUNP Admin
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse-subtle"></span>
+            </div>
+            <span className="text-[10px] text-purple-500 dark:text-purple-400 block font-bold mt-0.5 tracking-wide">Univ. Nac. de Piura</span>
           </div>
         </div>
         <div className="flex items-center space-x-2">
           <button
             onClick={alternarTema}
-            className={`p-2 rounded-lg border ${tema === 'dark' ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-200 text-slate-700'}`}
+            className={`p-2 rounded-xl border hover-pop active:scale-90 transition-all ${tema === 'dark' ? 'bg-slate-800/80 border-slate-700 text-amber-400 shadow-sm' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}
           >
             {tema === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setMenuMovilAbierto(!menuMovilAbierto)}
-            className={`p-2 rounded-lg border ${tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-700'}`}
+            className={`p-2 rounded-xl border hover-pop active:scale-90 transition-all ${tema === 'dark' ? 'bg-slate-800/80 border-slate-700 text-slate-200 shadow-sm' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}
           >
-            {menuMovilAbierto ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {menuMovilAbierto ? <X className="w-5 h-5 text-purple-400" /> : <Menu className="w-5 h-5 text-purple-400" />}
           </button>
         </div>
       </div>
