@@ -423,12 +423,12 @@ export default function HorarioMatricula() {
   };
 
   // Renderizador de Celdas de la Grilla
-  const renderizarCeldaGrilla = (codigoGrupo, diaNombre, horaEspecifica) => {
+  const renderizarCeldaGrilla = (codigoGrupo, diaNombre, horaEspecifica, esSubHora = false) => {
     const datos = mapaGrupoActual[codigoGrupo];
 
     if (!datos) {
       return (
-        <div className="min-h-[56px] flex items-center justify-center text-[11px] text-slate-700/60 font-mono select-none group-hover:text-slate-600 transition-colors">
+        <div className={`h-full ${esSubHora ? 'min-h-[46px]' : 'min-h-[96px]'} flex items-center justify-center text-[11px] text-slate-700/60 dark:text-slate-600 font-mono select-none`}>
           —
         </div>
       );
@@ -443,11 +443,13 @@ export default function HorarioMatricula() {
         onClick={() => setCursoDetalleModal({ ...datos, horaActualModal: horarioMostrar })}
         onMouseEnter={() => setCursoResaltado(datos.cursoId)}
         onMouseLeave={() => setCursoResaltado(null)}
-        className={`p-2.5 rounded-2xl border min-h-[58px] flex flex-col justify-center text-center cursor-pointer transition-all duration-200 relative group overflow-hidden ${
+        className={`p-2 rounded-2xl border h-full ${
+          esSubHora ? 'min-h-[46px]' : 'min-h-[96px]'
+        } flex flex-col justify-center text-center cursor-pointer transition-all duration-200 relative group overflow-hidden ${
           datos.estilo.card
         } ${esDestacado ? datos.estilo.glow : ""} ${esOpaco ? "opacity-35 scale-[0.98] blur-[0.3px]" : ""}`}
       >
-        <div className="flex items-center justify-between space-x-1 mb-1">
+        <div className="flex items-center justify-between space-x-1 mb-0.5">
           <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border backdrop-blur-md ${datos.estilo.badge}`}>
             {datos.cursoId}
           </span>
@@ -460,72 +462,12 @@ export default function HorarioMatricula() {
           {datos.nombre}
         </div>
 
-        {!esVistaCompacta && (
+        {!esVistaCompacta && !esSubHora && (
           <div className="text-[9px] opacity-75 font-mono mt-1 flex items-center justify-center space-x-1">
             <Clock className="w-2.5 h-2.5 opacity-70" />
             <span>{horarioMostrar}</span>
           </div>
         )}
-      </div>
-    );
-  };
-
-  // Renderizador de Celda de Miércoles con Subdivisión Vertical Elegante
-  const renderizarCeldaMiercoles = (fila) => {
-    const g1 = fila.diaMiercolesPrimeraHora;
-    const g2 = fila.diaMiercolesSegundaHora;
-    const datos1 = mapaGrupoActual[g1];
-    const datos2 = mapaGrupoActual[g2];
-
-    if (!datos1 && !datos2) {
-      return (
-        <div className="min-h-[56px] flex items-center justify-center text-[11px] text-slate-700/60 font-mono select-none">
-          —
-        </div>
-      );
-    }
-
-    if (datos1 && datos2 && datos1.cursoId === datos2.cursoId) {
-      return renderizarCeldaGrilla(g1, "Miércoles", fila.rangoHorario);
-    }
-
-    if (datos1 && !datos2) {
-      return (
-        <div className="space-y-1">
-          <div className="text-[8px] font-black text-blue-400 dark:text-blue-300 tracking-wider flex items-center justify-between px-1 uppercase">
-            <span>1ª Hr ({fila.primeraHoraPedagogica.split(" - ")[0]})</span>
-          </div>
-          {renderizarCeldaGrilla(g1, "Miércoles", fila.primeraHoraPedagogica)}
-        </div>
-      );
-    }
-
-    if (!datos1 && datos2) {
-      return (
-        <div className="space-y-1">
-          <div className="text-[8px] font-black text-sky-400 dark:text-sky-300 tracking-wider flex items-center justify-between px-1 uppercase">
-            <span>2ª Hr ({fila.segundaHoraPedagogica.split(" - ")[0]})</span>
-          </div>
-          {renderizarCeldaGrilla(g2, "Miércoles", fila.segundaHoraPedagogica)}
-        </div>
-      );
-    }
-
-    return (
-      <div className="space-y-1.5 p-1 rounded-2xl bg-slate-950/40 border border-slate-800/80">
-        <div className="space-y-0.5">
-          <div className="text-[8px] font-black text-blue-400 dark:text-blue-300 tracking-wider flex items-center justify-between px-1 uppercase">
-            <span>1ª Hr ({fila.primeraHoraPedagogica.split(" - ")[0]})</span>
-          </div>
-          {renderizarCeldaGrilla(g1, "Miércoles", fila.primeraHoraPedagogica)}
-        </div>
-        <div className="border-t border-dashed border-slate-800/80 my-0.5"></div>
-        <div className="space-y-0.5">
-          <div className="text-[8px] font-black text-sky-400 dark:text-sky-300 tracking-wider flex items-center justify-between px-1 uppercase">
-            <span>2ª Hr ({fila.segundaHoraPedagogica.split(" - ")[0]})</span>
-          </div>
-          {renderizarCeldaGrilla(g2, "Miércoles", fila.segundaHoraPedagogica)}
-        </div>
       </div>
     );
   };
@@ -922,17 +864,27 @@ export default function HorarioMatricula() {
                   }
 
                   return (
-                    <tr key={fila.identificadorFila} className="border-b border-slate-800/60 hover:bg-slate-800/20 transition-colors">
-                      <td className="py-3 px-4 border-r border-slate-800 align-middle">
-                        <div className="text-[11px] font-black text-slate-200">{fila.primeraHoraPedagogica}</div>
-                        <div className="text-[10px] text-slate-400 mt-0.5 font-mono font-semibold">{fila.segundaHoraPedagogica}</div>
-                      </td>
-                      <td className="p-2">{renderizarCeldaGrilla(fila.diaLunes, "Lunes", fila.rangoHorario)}</td>
-                      <td className="p-2">{renderizarCeldaGrilla(fila.diaMartes, "Martes", fila.rangoHorario)}</td>
-                      <td className="p-2">{renderizarCeldaMiercoles(fila)}</td>
-                      <td className="p-2">{renderizarCeldaGrilla(fila.diaJueves, "Jueves", fila.rangoHorario)}</td>
-                      <td className="p-2">{renderizarCeldaGrilla(fila.diaViernes, "Viernes", fila.rangoHorario)}</td>
-                    </tr>
+                    <React.Fragment key={fila.identificadorFila}>
+                      {/* 1ra Hora del Bloque (e.g. 7:00-7:50) */}
+                      <tr className="border-b border-slate-800/30 hover:bg-slate-800/20 transition-colors">
+                        <td className="py-2 px-3 border-r border-slate-800 align-middle">
+                          <div className="text-[11px] font-black text-slate-200">{fila.primeraHoraPedagogica}</div>
+                        </td>
+                        <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaLunes, "Lunes", fila.rangoHorario, false)}</td>
+                        <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaMartes, "Martes", fila.rangoHorario, false)}</td>
+                        <td rowSpan={1} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaMiercolesPrimeraHora, "Miércoles", fila.primeraHoraPedagogica, true)}</td>
+                        <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaJueves, "Jueves", fila.rangoHorario, false)}</td>
+                        <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaViernes, "Viernes", fila.rangoHorario, false)}</td>
+                      </tr>
+
+                      {/* 2da Hora del Bloque (e.g. 7:50-8:40) */}
+                      <tr className="border-b border-slate-800/80 hover:bg-slate-800/20 transition-colors">
+                        <td className="py-2 px-3 border-r border-slate-800 align-middle">
+                          <div className="text-[10px] text-slate-400 font-mono font-semibold">{fila.segundaHoraPedagogica}</div>
+                        </td>
+                        <td rowSpan={1} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaMiercolesSegundaHora, "Miércoles", fila.segundaHoraPedagogica, true)}</td>
+                      </tr>
+                    </React.Fragment>
                   );
                 })}
               </tbody>
