@@ -564,24 +564,6 @@ export default function MallaCurricular() {
     }
   };
 
-  const ordenarCursos = (cursos) => {
-    const obligatorios = cursos.filter((c) => c.tipo === "O");
-    const electivos = cursos.filter((c) => c.tipo === "E");
-
-    const comparador = (a, b) => {
-      if (criterioOrden === "alfabetico") {
-        return a.nombre.localeCompare(b.nombre, "es");
-      } else {
-        if (b.creditos !== a.creditos) {
-          return b.creditos - a.creditos;
-        }
-        return a.nombre.localeCompare(b.nombre, "es");
-      }
-    };
-
-    return [...[...obligatorios].sort(comparador), ...[...electivos].sort(comparador)];
-  };
-
   const totalObligatoriosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.filter((c) => c.tipo === "O").length, 0);
   const totalElectivosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.filter((c) => c.tipo === "E").length, 0);
   const creditosElectivosAprobados = planEstudios.reduce((acc, sem) => {
@@ -919,25 +901,12 @@ export default function MallaCurricular() {
                         {/* 8 Columnas de la Matriz UNP */}
                         <div className="flex-1 grid grid-cols-8 gap-3">
                           {[1, 2, 3, 4, 5, 6, 7, 8].map((colIndex) => {
-                            let cursosEnColumna = semestre.cursos.filter((c) => {
+                            const cursosEnColumna = semestre.cursos.filter((c) => {
                               const pos = MATRIZ_POSICION_UNP[c.id];
                               if (pos) return pos.col === colIndex;
                               const idx = semestre.cursos.indexOf(c);
                               return (idx % 8) + 1 === colIndex;
                             });
-
-                            if (filtroLineaGrafo !== "todas") {
-                              const codigosLinea = LINEAS_ACADEMICAS[filtroLineaGrafo]?.cursos || [];
-                              cursosEnColumna = cursosEnColumna.filter((c) => codigosLinea.includes(c.id));
-                            }
-
-                            if (filtroEstadoQuick === "disponibles") {
-                              cursosEnColumna = cursosEnColumna.filter((c) => obtenerEstadoCurso(c) === "disponible");
-                            } else if (filtroEstadoQuick === "aprobados") {
-                              cursosEnColumna = cursosEnColumna.filter((c) => obtenerEstadoCurso(c) === "aprobado");
-                            } else if (filtroEstadoQuick === "llave") {
-                              cursosEnColumna = cursosEnColumna.filter((c) => (sucesoresMap[c.id] || []).length >= 3);
-                            }
 
                             if (cursosEnColumna.length === 0) {
                               return (
