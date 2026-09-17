@@ -217,7 +217,7 @@ const LINEAS_ACADEMICAS = {
   }
 };
 
-// Mapeo exacto de Posición por Columnas del Diagrama Oficial UNP
+// Mapeo exacto de Posición por Columnas del Diagrama Oficial UNP (Cursos Obligatorios)
 const MATRIZ_POSICION_UNP = {
   // Ciclo I
   "SI1358": { col: 1 }, "ED1331": { col: 2 }, "MA1470": { col: 3 }, "MA1408": { col: 4 },
@@ -232,27 +232,23 @@ const MATRIZ_POSICION_UNP = {
   "ES2300": { col: 1 }, "CA2101": { col: 2 }, "MA2333": { col: 3 }, "FI2411": { col: 4 },
   "SI2418": { col: 5 }, "SI2452": { col: 6 }, "CO2201": { col: 7 }, "CS2259": { col: 8 },
   // Ciclo V
-  "SI3331": { col: 1 }, "SI3334": { col: 2 }, "ED3286": { col: 3 }, "FI3492": { col: 4 },
-  "SI3421": { col: 5 }, "SI3422": { col: 6 }, "MA3412": { col: 7 }, "ED3283": { col: 8 },
+  "ED3286": { col: 2 }, "FI3492": { col: 3 }, "SI3421": { col: 4 }, "SI3422": { col: 5 },
+  "MA3412": { col: 6 }, "ED3283": { col: 7 },
   // Ciclo VI
   "ES3336": { col: 1 }, "ED3285": { col: 2 }, "ED3287": { col: 3 }, "SI3400": { col: 4 },
-  "SI3420": { col: 5 }, "SI3423": { col: 6 }, "AA3303": { col: 7 }, "ED3284": { col: 8 },
-  "SI3337": { col: 1 }, "SI3336": { col: 2 }, "SI3335": { col: 8 },
+  "SI3420": { col: 5 }, "SI3423": { col: 6 }, "ED3284": { col: 7 },
   // Ciclo VII
   "IO4448": { col: 1 }, "IO4447": { col: 2 }, "CA4221": { col: 3 }, "SI4490": { col: 4 },
-  "SI4489": { col: 5 }, "SI4386": { col: 6 }, "IO4332": { col: 7 }, "IO4334": { col: 8 },
-  "SI4388": { col: 1 }, "SI4387": { col: 3 },
+  "SI4489": { col: 5 }, "SI4386": { col: 6 },
   // Ciclo VIII
   "DP4331": { col: 3 }, "SI4491": { col: 4 }, "SI4488": { col: 5 }, "SI4360": { col: 6 },
   "SI4465": { col: 7 }, "EM4461": { col: 8 },
   // Ciclo IX
   "IO5365": { col: 2 }, "SI5441": { col: 3 }, "SI5496": { col: 4 }, "SI5365": { col: 5 },
-  "SI5364": { col: 6 }, "SI5497": { col: 7 }, "SI5370": { col: 1 }, "II5314": { col: 8 },
-  "SI5369": { col: 1 },
+  "SI5364": { col: 6 }, "SI5497": { col: 7 },
   // Ciclo X
-  "SI5367": { col: 2 }, "II5345": { col: 3 }, "SI5498": { col: 4 }, "SI5368": { col: 5 },
-  "SI5411": { col: 6 }, "SI5499": { col: 7 }, "CO5397": { col: 8 }, "SI5373": { col: 2 },
-  "SI5361": { col: 1 }, "II5344": { col: 4 }, "SI5371": { col: 5 }
+  "SI5367": { col: 2 }, "SI5373": { col: 3 }, "SI5498": { col: 4 }, "SI5368": { col: 5 },
+  "SI5411": { col: 6 }, "SI5499": { col: 7 }, "CO5397": { col: 8 }
 };
 
 export default function MallaCurricular() {
