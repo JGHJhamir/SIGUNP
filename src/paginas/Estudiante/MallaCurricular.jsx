@@ -260,6 +260,14 @@ export default function MallaCurricular() {
   const nodeRefs = useRef({});
   const [rutasConexionSVG, setRutasConexionSVG] = useState([]);
 
+  // Mobile Cycle Scroll helper for quick canvas navigation
+  const scrollToCicloColumna = (numeroCiclo) => {
+    if (grafoContainerRef.current) {
+      const targetX = (numeroCiclo - 1) * 256;
+      grafoContainerRef.current.scrollTo({ left: targetX, behavior: "smooth" });
+    }
+  };
+
   // Flat array of all courses across 10 cycles
   const todosLosCursos = useMemo(() => {
     return planEstudios.flatMap((sem) => sem.cursos.map((c) => ({ ...c, cicloNombre: sem.ciclo, numeroCiclo: sem.numeroCiclo })));
@@ -552,20 +560,20 @@ export default function MallaCurricular() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="w-full sm:w-auto shrink-0">
             {/* Conmutador de Modo Vista: Acordeón vs Grafo de Cadenas */}
-            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border`}>
+            <div className={`grid grid-cols-2 w-full sm:w-auto ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border`}>
               <button
                 type="button"
                 onClick={() => setModoVista("acordeon")}
-                className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 cursor-pointer ${
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                   modoVista === "acordeon"
                     ? "bg-blue-600 text-white shadow-sm"
                     : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <Grid className="w-4 h-4" />
-                <span>Lista por Ciclos</span>
+                <Grid className="w-4 h-4 shrink-0" />
+                <span className="truncate">Acordeón</span>
               </button>
 
               <button
@@ -574,35 +582,34 @@ export default function MallaCurricular() {
                   setModoVista("grafo");
                   setTimeout(actualizarConexionesGrafo, 200);
                 }}
-                className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 cursor-pointer ${
+                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                   modoVista === "grafo"
                     ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg shadow-purple-600/20"
                     : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <Network className="w-4 h-4 text-purple-300 animate-pulse-subtle" />
-                <span>Grafo de Cadenas 🌿</span>
+                <Network className="w-4 h-4 shrink-0 text-purple-300 animate-pulse-subtle" />
+                <span className="truncate">Grafo 🌿</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Breakdown Metric Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           
           {/* Cursos Obligatorios */}
-          <div className={`p-4 rounded-xl border ${
+          <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-              <span>Cursos Obligatorios</span>
-              <span className="bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded font-bold border border-blue-500/20">{porcentajeObligatorios}%</span>
+              <span>Obligatorios</span>
+              <span className="bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded font-bold border border-blue-500/20 text-[9px]">{porcentajeObligatorios}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalObligatoriosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalObligatoriosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
               </div>
-              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Obligatorios</span>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }}></div>
@@ -610,20 +617,17 @@ export default function MallaCurricular() {
           </div>
 
           {/* Cursos Electivos */}
-          <div className={`p-4 rounded-xl border ${
+          <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
-              <span className="flex items-center space-x-1">
-                <span>Créditos Electivos</span>
-              </span>
-              <span className="bg-purple-500/10 text-purple-500 px-2 py-0.5 rounded font-bold border border-purple-500/20">{porcentajeElectivos}%</span>
+              <span>Electivos</span>
+              <span className="bg-purple-500/10 text-purple-500 px-1.5 py-0.5 rounded font-bold border border-purple-500/20 text-[9px]">{porcentajeElectivos}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {creditosElectivosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {creditosElectivosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR</span>
               </div>
-              <span className="text-[10px] font-medium text-purple-500">{creditosElectivosAprobados / 3} electivos</span>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-purple-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeElectivos}%` }}></div>
@@ -631,18 +635,17 @@ export default function MallaCurricular() {
           </div>
 
           {/* Créditos Acumulados */}
-          <div className={`p-4 rounded-xl border ${
+          <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-              <span>Créditos Totales</span>
-              <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded font-bold border border-emerald-500/20">{porcentajeProgreso}%</span>
+              <span>Créditos</span>
+              <span className="bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded font-bold border border-emerald-500/20 text-[9px]">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCreditosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCreditosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
               </div>
-              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Aprobados</span>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
@@ -650,18 +653,17 @@ export default function MallaCurricular() {
           </div>
 
           {/* Avance Global */}
-          <div className={`p-4 rounded-xl border ${
+          <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-sky-500 uppercase tracking-wider">
-              <span>Progreso Global</span>
-              <span className="text-sky-500 font-bold">{porcentajeProgreso}%</span>
+              <span>Progreso</span>
+              <span className="text-sky-500 font-bold text-[9px]">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
-              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCursosAprobados} <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan + totalElectivosPlan}</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan + totalElectivosPlan}</span>
               </div>
-              <span className={`text-[10px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Total Cursos</span>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
@@ -680,7 +682,7 @@ export default function MallaCurricular() {
       )}
 
       {/* Toolbar & Controles con Filtros de Estado */}
-      <div className="rounded-2xl liquid-glass-card p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 transition-all">
+      <div className="rounded-2xl liquid-glass-card p-3.5 sm:p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 transition-all">
         
         {/* Search Input */}
         <div className="relative w-full md:w-80">
@@ -699,10 +701,10 @@ export default function MallaCurricular() {
         </div>
 
         {/* Dynamic Quick Status Filters */}
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+        <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto no-scrollbar py-1">
           <div className={`flex ${
             tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'
-          } p-1 rounded-xl border overflow-x-auto no-scrollbar`}>
+          } p-1 rounded-xl border shrink-0`}>
             {[
               { id: "todos", etiqueta: "Todos" },
               { id: "disponibles", etiqueta: "🔓 Disponibles hoy" },
@@ -725,15 +727,15 @@ export default function MallaCurricular() {
           </div>
 
           {modoVista === "acordeon" ? (
-            <>
+            <div className="flex items-center space-x-1.5 shrink-0">
               <button
                 type="button"
                 onClick={expandirTodos}
-                className={`px-3.5 py-2 ${
+                className={`px-3 py-1.5 ${
                   tema === 'dark'
                     ? 'bg-[#090e1a]/80 text-slate-300 hover:bg-slate-800 border-white/10'
                     : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200/90 shadow-sm'
-                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer hover-scale-pop`}
+                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer`}
               >
                 <FolderOpen className="w-3.5 h-3.5 text-blue-500" />
                 <span>Expandir</span>
@@ -742,18 +744,18 @@ export default function MallaCurricular() {
               <button
                 type="button"
                 onClick={colapsarTodos}
-                className={`px-3.5 py-2 ${
+                className={`px-3 py-1.5 ${
                   tema === 'dark'
                     ? 'bg-[#090e1a]/80 text-slate-300 hover:bg-slate-800 border-white/10'
                     : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200/90 shadow-sm'
-                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer hover-scale-pop`}
+                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer`}
               >
                 <FolderClosed className="w-3.5 h-3.5 text-slate-400" />
                 <span>Colapsar</span>
               </button>
-            </>
+            </div>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setEscalaGrafo((prev) => Math.min(1.4, prev + 0.1))}
@@ -775,9 +777,9 @@ export default function MallaCurricular() {
               <button
                 type="button"
                 onClick={() => setEscalaGrafo(0.95)}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer"
               >
-                Reset Zoom
+                Reset
               </button>
 
               <button
@@ -793,30 +795,30 @@ export default function MallaCurricular() {
         </div>
       </div>
 
-      {/* Legend Header */}
-      <div className={`flex flex-wrap items-center gap-4 px-2 text-[11px] font-extrabold ${
+      {/* Legend Header Swipeable on Mobile */}
+      <div className={`flex items-center gap-3 px-2 overflow-x-auto no-scrollbar text-[10px] sm:text-[11px] font-extrabold ${
         tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
-      } uppercase tracking-wider`}>
-        <div className="flex items-center space-x-2">
+      } uppercase tracking-wider whitespace-nowrap py-1`}>
+        <div className="flex items-center space-x-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
           <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Aprobado</span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
           <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Disponible</span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
           <span className={tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}>Bloqueado</span>
         </div>
         <span className={tema === 'dark' ? 'text-slate-700' : 'text-slate-300'}>|</span>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></div>
-          <span className="text-cyan-400 font-bold">⬅️ Requisitos de Origen</span>
+          <span className="text-cyan-400 font-bold">⬅️ Requisitos</span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></div>
-          <span className="text-purple-400 font-bold">➡️ Cursos que Desbloquea</span>
+          <span className="text-purple-400 font-bold">➡️ Cursos Futuros</span>
         </div>
       </div>
 
@@ -1054,35 +1056,38 @@ export default function MallaCurricular() {
 
       {/* ── VISTA 2: GRAFO INTERACTIVO DE CADENAS Y ARBOL DE CONEXIONES SVG ── */}
       {modoVista === "grafo" && (
-        <div className={`space-y-5 animate-fadeIn ${
-          esEscalaPantallaCompleta ? "fixed inset-4 z-50 overflow-auto bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl" : ""
+        <div className={`space-y-4 animate-fadeIn ${
+          esEscalaPantallaCompleta ? "fixed inset-2 sm:inset-4 z-50 overflow-auto bg-slate-950 p-4 sm:p-6 rounded-3xl border border-slate-800 shadow-2xl" : ""
         }`}>
 
-          {/* Selector de Línea Académica de Especialidad */}
-          <div className="rounded-2xl liquid-glass-card p-4 space-y-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <span className="text-xs font-black text-slate-200 uppercase tracking-wider block">
-                Filtrar por Línea de Especialidad / Cadena de Conocimiento
-              </span>
-              <span className="text-[11px] text-slate-400 block mt-0.5">
-                Las líneas SVG conectan los cursos requeridos con sus sucesores a través de los 10 ciclos.
-              </span>
+          {/* Selector de Línea Académica de Especialidad y Navegación Móvil */}
+          <div className="rounded-2xl liquid-glass-card p-3.5 sm:p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-black text-slate-200 uppercase tracking-wider block">
+                  Filtrar por Línea de Especialidad
+                </span>
+                <span className="text-[11px] text-slate-400 block mt-0.5">
+                  Las líneas SVG conectan los cursos requeridos con sus sucesores. Toca cualquier curso para ver su árbol.
+                </span>
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            {/* Specialty Line Filters */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
               <button
                 type="button"
                 onClick={() => {
                   setFiltroLineaGrafo("todas");
                   setTimeout(actualizarConexionesGrafo, 100);
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer shrink-0 ${
                   filtroLineaGrafo === "todas"
                     ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/20"
                     : "bg-slate-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
                 }`}
               >
-                🌐 Todas las Cadenas (10 Ciclos)
+                🌐 Todas (10 Ciclos)
               </button>
 
               {Object.values(LINEAS_ACADEMICAS).map((linea) => {
@@ -1095,17 +1100,37 @@ export default function MallaCurricular() {
                       setFiltroLineaGrafo(linea.id);
                       setTimeout(actualizarConexionesGrafo, 100);
                     }}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer flex items-center space-x-1.5 ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer flex items-center space-x-1 shrink-0 ${
                       esActiva
                         ? `bg-gradient-to-r ${linea.color} text-white border-transparent shadow-lg`
                         : "bg-slate-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
                     }`}
                   >
                     <span>{linea.icono}</span>
-                    <span>{linea.nombre}</span>
+                    <span>{linea.nombre.replace("Línea de ", "")}</span>
                   </button>
                 );
               })}
+            </div>
+
+            {/* Mobile Touch Quick Cycle Jump Bar */}
+            <div className="pt-2 border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <span className="text-[10px] font-mono font-black text-slate-400 uppercase shrink-0 mr-1">Ir a:</span>
+              {planEstudios.map((s) => (
+                <button
+                  key={s.numeroCiclo}
+                  type="button"
+                  onClick={() => scrollToCicloColumna(s.numeroCiclo)}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-mono font-bold text-blue-400 hover:text-white shrink-0 active:scale-95 transition-all cursor-pointer"
+                >
+                  {s.ciclo}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex sm:hidden items-center justify-between px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400">
+              <span>📱 Desliza horizontalmente para explorar los 10 ciclos</span>
+              <span className="font-mono text-purple-400">Zoom {(escalaGrafo * 100).toFixed(0)}%</span>
             </div>
           </div>
 
@@ -1284,22 +1309,25 @@ export default function MallaCurricular() {
       {/* ── INSPECTOR SLIDE DRAWER / SIDE SHEET UNCLUTTERED UX ── */}
       {cursoModalCadena && (
         <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/75 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-xl h-full liquid-glass-modal border-l border-slate-800 p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto flex flex-col justify-between">
+          <div className="w-full sm:max-w-xl h-full liquid-glass-modal border-l border-slate-800 p-4 sm:p-6 md:p-8 space-y-5 shadow-2xl relative overflow-y-auto flex flex-col justify-between">
             
-            <div className="space-y-6">
+            {/* Top Drag Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-slate-700/80 rounded-full mx-auto my-0.5 shrink-0 sm:hidden"></div>
+
+            <div className="space-y-5">
               {/* Header Drawer */}
-              <div className="flex items-start justify-between border-b border-slate-800 pb-4">
-                <div className="space-y-1">
-                  <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
-                    <Network className="w-3.5 h-3.5 text-purple-400" />
-                    <span>INSPECTOR DE CADENA DE CONOCIMIENTO</span>
+              <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+                <div className="space-y-1 min-w-0 pr-2">
+                  <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-bold">
+                    <Network className="w-3 h-3 text-purple-400 shrink-0" />
+                    <span>INSPECTOR DE CADENA</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-black text-white flex items-center space-x-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-black text-white leading-tight">
                     <span>{cursoModalCadena.nombre}</span>
-                    <span className="text-sm font-mono text-slate-400 font-bold">({cursoModalCadena.id})</span>
+                    <span className="text-xs font-mono text-slate-400 font-bold block sm:inline sm:ml-2">({cursoModalCadena.id})</span>
                   </h2>
-                  <p className="text-xs text-slate-400">
-                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos Lectivos · {cursoModalCadena.tipo === "E" ? "Asignatura Electiva" : "Asignatura Obligatoria"}
+                  <p className="text-[11px] text-slate-400">
+                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos · {cursoModalCadena.tipo === "E" ? "Asignatura Electiva" : "Asignatura Obligatoria"}
                   </p>
                 </div>
 
@@ -1313,11 +1341,11 @@ export default function MallaCurricular() {
               </div>
 
               {/* Botón Acción Rápida de Aprobación */}
-              <div className="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 flex items-center justify-between gap-4">
-                <div>
-                  <div className="text-xs font-black text-white">Estado de la Asignatura</div>
-                  <div className="text-[11px] text-slate-400">
-                    {aprobados.includes(cursoModalCadena.id) ? "Asignatura superada exitosamente." : "Habilitada para ser cursada en tu plan de estudios."}
+              <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-xs font-black text-white">Estado de Asignatura</div>
+                  <div className="text-[10px] text-slate-400 truncate">
+                    {aprobados.includes(cursoModalCadena.id) ? "Asignatura superada exitosamente." : "Habilitada para ser cursada."}
                   </div>
                 </div>
 
@@ -1327,13 +1355,13 @@ export default function MallaCurricular() {
                     manejarClickCurso(cursoModalCadena);
                     setTimeout(actualizarConexionesGrafo, 100);
                   }}
-                  className={`px-4 py-2.5 rounded-xl font-extrabold text-xs transition-all flex items-center space-x-2 cursor-pointer shrink-0 shadow-lg ${
+                  className={`px-3.5 py-2 rounded-xl font-extrabold text-xs transition-all flex items-center space-x-1.5 cursor-pointer shrink-0 shadow-lg ${
                     aprobados.includes(cursoModalCadena.id)
                       ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
                       : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
                   }`}
                 >
-                  <span>{aprobados.includes(cursoModalCadena.id) ? "Desmarcar Aprobado" : "Marcar Aprobado ✓"}</span>
+                  <span>{aprobados.includes(cursoModalCadena.id) ? "Desmarcar" : "Aprobar ✓"}</span>
                 </button>
               </div>
 
@@ -1354,19 +1382,19 @@ export default function MallaCurricular() {
                       const reqCurso = mapaCursos[reqId];
                       const estaAprobado = aprobados.includes(reqId);
                       return (
-                        <div key={reqId} className={`p-3 rounded-xl border text-xs flex items-center justify-between ${
+                        <div key={reqId} className={`p-2.5 sm:p-3 rounded-xl border text-xs flex items-center justify-between ${
                           estaAprobado ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300" : "bg-rose-950/40 border-rose-500/40 text-rose-300"
                         }`}>
-                          <div>
-                            <div className="font-extrabold text-xs">{reqCurso?.nombre || reqId}</div>
+                          <div className="min-w-0 pr-2">
+                            <div className="font-extrabold text-xs truncate">{reqCurso?.nombre || reqId}</div>
                             <div className="text-[10px] font-mono opacity-80">{reqId} · Ciclo {reqCurso?.cicloNombre || "I"}</div>
                           </div>
                           {estaAprobado ? (
-                            <span className="text-[10px] font-black bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">
+                            <span className="text-[10px] font-black bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30 shrink-0">
                               ✓ Aprobado
                             </span>
                           ) : (
-                            <span className="text-[10px] font-black bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30">
+                            <span className="text-[10px] font-black bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30 shrink-0">
                               🔒 Faltante
                             </span>
                           )}
@@ -1412,11 +1440,11 @@ export default function MallaCurricular() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800">
+            <div className="pt-3 border-t border-slate-800">
               <button
                 type="button"
                 onClick={() => setCursoModalCadena(null)}
-                className="w-full py-3 rounded-2xl font-black text-xs bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+                className="w-full py-2.5 rounded-xl font-black text-xs bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
               >
                 Cerrar Inspector
               </button>
