@@ -566,15 +566,48 @@ export default function HorarioMatricula() {
 
   return (
     <div className="space-y-6">
-      {/* CSS optimizado para Impresión */}
+      {/* CSS optimizado para Impresión limpia de sólo el horario */}
       <style>{`
         @media print {
-          body { background: white !important; color: black !important; }
-          .no-print { display: none !important; }
-          .print-only { display: block !important; }
-          .print-container { background: white !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
-          .print-table { border-collapse: collapse !important; width: 100% !important; }
-          .print-table th, .print-table td { border: 1px solid #cbd5e1 !important; color: #0f172a !important; padding: 6px !important; }
+          @page {
+            size: A4 landscape;
+            margin: 8mm;
+          }
+          body * {
+            visibility: hidden !important;
+          }
+          .no-print {
+            display: none !important;
+          }
+          .print-container, .print-container * {
+            visibility: visible !important;
+          }
+          .print-container {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            color: black !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          .print-table {
+            border-collapse: collapse !important;
+            width: 100% !important;
+            table-layout: fixed !important;
+          }
+          .print-table th, .print-table td {
+            border: 1px solid #475569 !important;
+            color: #0f172a !important;
+            background: white !important;
+            padding: 4px !important;
+          }
+          .print-container div {
+            box-shadow: none !important;
+          }
         }
       `}</style>
 
@@ -789,6 +822,20 @@ export default function HorarioMatricula() {
       {/* VISTA 1: GRILLA SEMANAL (CALENDAR GRID) */}
       {tieneDatos && modoVista === "grilla" && (
         <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-xl overflow-hidden p-2.5 sm:p-4 print-container`}>
+          {/* Encabezado Oficial exclusivo para Impresión / PDF */}
+          <div className="hidden print:block mb-3 border-b-2 border-slate-900 pb-2 text-slate-900">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-base font-black uppercase tracking-wider">UNIVERSIDAD NACIONAL DE PIURA</h1>
+                <h2 className="text-xs font-bold text-slate-700">HORARIO OFICIAL DE CLASES — SEMESTRE ACADÉMICO {semestreVista}</h2>
+              </div>
+              <div className="text-right text-[10px] font-mono text-slate-600">
+                <p>Generado: {new Date().toLocaleDateString('es-PE')}</p>
+                <p>Asignaturas: {estadisticasHorario.totalCursos} | Carga Lectiva: ~{estadisticasHorario.totalHorasLectivas} hrs/sem</p>
+              </div>
+            </div>
+          </div>
+
           <div className="sm:hidden flex items-center justify-between text-[10px] text-slate-400 font-semibold mb-2 px-1 no-print">
             <span className="flex items-center space-x-1">
               <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
