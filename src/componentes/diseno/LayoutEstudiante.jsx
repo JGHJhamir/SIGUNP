@@ -152,24 +152,26 @@ export default function LayoutEstudiante() {
               <Link
                 key={item.ruta}
                 to={item.ruta}
-                className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 cursor-pointer liquid-btn ${
+                className={`group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-semibold transition-all duration-300 cursor-pointer hover-expand-item ${
                   estaActivo
-                    ? "liquid-btn-primary text-white font-bold shadow-lg shadow-blue-500/25"
+                    ? "liquid-btn-primary text-white font-black shadow-xl shadow-blue-500/30 scale-[1.03] border-blue-400/50"
                     : tema === 'dark'
-                    ? "text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/10 border border-transparent"
-                    : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900 hover:border-slate-200 border border-transparent"
+                    ? "text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/15 border border-transparent shadow-sm"
+                    : "text-slate-700 hover:bg-white/90 hover:text-slate-900 hover:border-slate-300 border border-transparent shadow-sm"
                 }`}
               >
-                <div className="flex items-center space-x-3">
-                  <span className={`${estaActivo ? "text-white" : "text-slate-400 group-hover:text-blue-500"} transition-colors`}>
+                <div className="flex items-center space-x-3.5">
+                  <span className={`${estaActivo ? "text-white scale-110" : "text-slate-400 group-hover:text-blue-500 group-hover:scale-125"} transition-all duration-300`}>
                     {item.icono}
                   </span>
-                  <span>{item.etiqueta}</span>
+                  <span className="tracking-tight">{item.etiqueta}</span>
                 </div>
 
-                {estaActivo && (
-                  <ChevronRight className="w-3.5 h-3.5 text-white/80" />
-                )}
+                <ChevronRight className={`w-3.5 h-3.5 transition-all duration-300 ${
+                  estaActivo
+                    ? "text-white opacity-100 translate-x-0.5"
+                    : "text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-blue-500"
+                }`} />
               </Link>
             );
           })}
