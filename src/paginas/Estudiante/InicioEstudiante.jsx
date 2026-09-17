@@ -268,30 +268,28 @@ export default function InicioEstudiante() {
         </div>
       </div>
 
-      {/* Tarjetas de Métricas Resumen (KPIs) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* Tarjetas de Métricas Resumen (KPIs) - Fila Compacta */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         
         {/* Créditos Aprobados */}
-        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Créditos Aprobados</span>
-              <div className="flex items-baseline space-x-1.5">
-                <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 205 CR</span>
-              </div>
-            </div>
-            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-xs`}>
-              <Award className="w-4 h-4 sm:w-5 sm:h-5" />
+        <div className="p-3.5 sm:p-4 rounded-xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+          <div className="flex justify-between items-center">
+            <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider`}>Créditos Aprobados</span>
+            <div className={`w-7 h-7 rounded-lg ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shrink-0`}>
+              <Award className="w-3.5 h-3.5" />
             </div>
           </div>
 
-          <div className="mt-4 space-y-1.5">
-            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-              <span>Avance de Carrera</span>
-              <span className="text-blue-500 font-bold">{porcentajeProgreso}%</span>
+          <div className="mt-2 space-y-1.5">
+            <div className="flex items-baseline justify-between">
+              <div className="flex items-baseline space-x-1">
+                <span className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
+                <span className={`text-[11px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 205 CR</span>
+              </div>
+              <span className="text-blue-500 font-bold text-xs">{porcentajeProgreso}%</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-2 rounded-full overflow-hidden`}>
+
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div
                 className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${porcentajeProgreso}%` }}
@@ -300,73 +298,46 @@ export default function InicioEstudiante() {
           </div>
         </div>
 
-        {/* Cursos Obligatorios */}
-        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Cursos Aprobados</span>
-              <div className="flex items-baseline space-x-1.5">
-                <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 63 asignaturas</span>
-              </div>
-            </div>
-            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} border flex items-center justify-center shadow-xs`}>
-              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
+        {/* Cursos Aprobados */}
+        <div className="p-3.5 sm:p-4 rounded-xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+          <div className="flex justify-between items-center">
+            <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider`}>Cursos Aprobados</span>
+            <div className={`w-7 h-7 rounded-lg ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} border flex items-center justify-center shrink-0`}>
+              <BookOpen className="w-3.5 h-3.5" />
             </div>
           </div>
 
-          <div className="mt-4 space-y-1.5">
-            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-              <span>Avance Obligatorio</span>
-              <span className="text-emerald-500 font-bold">{porcentajeObligatorios}%</span>
+          <div className="mt-2 space-y-1.5">
+            <div className="flex items-baseline justify-between">
+              <div className="flex items-baseline space-x-1">
+                <span className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
+                <span className={`text-[11px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 63 cursos</span>
+              </div>
+              <span className="text-emerald-500 font-bold text-xs">{porcentajeObligatorios}%</span>
             </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-2 rounded-full overflow-hidden`}>
+
+            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }} />
             </div>
           </div>
         </div>
 
         {/* Ciclo Estimado */}
-        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Ciclo Estimado</span>
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>{nombreCiclo}</div>
-            </div>
-            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-purple-50 text-purple-600 border-purple-200'} border flex items-center justify-center shadow-xs`}>
-              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
+        <div className="p-3.5 sm:p-4 rounded-xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+          <div className="flex justify-between items-center">
+            <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider`}>Ciclo Estimado</span>
+            <div className={`w-7 h-7 rounded-lg ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-purple-50 text-purple-600 border-purple-200'} border flex items-center justify-center shrink-0`}>
+              <Layers className="w-3.5 h-3.5" />
             </div>
           </div>
 
-          <div className={`mt-4 pt-2.5 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
-            <span>Semestre Actual</span>
+          <div className="mt-2 flex items-center justify-between">
+            <span className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{nombreCiclo}</span>
             <span className={`font-bold text-[10px] px-2 py-0.5 rounded-full ${
               tema === 'dark'
                 ? 'text-purple-400 bg-purple-500/10 border border-purple-500/20'
                 : 'text-purple-700 bg-purple-50 border border-purple-200'
-            }`}>En curso</span>
-          </div>
-        </div>
-
-        {/* Estado Académico */}
-        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Condición Estudiante</span>
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>Alumno Regular</div>
-            </div>
-            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-amber-50 text-amber-600 border-amber-200'} border flex items-center justify-center shadow-xs`}>
-              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
-          </div>
-
-          <div className={`mt-4 pt-2.5 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
-            <span>Sin sanciones</span>
-            <span className={`font-bold text-[10px] px-2 py-0.5 rounded-full ${
-              tema === 'dark'
-                ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20'
-                : 'text-amber-700 bg-amber-50 border border-amber-200'
-            }`}>Habilitado</span>
+            }`}>Semestre 2026-I</span>
           </div>
         </div>
 
