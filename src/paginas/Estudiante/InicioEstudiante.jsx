@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTema } from "../../contexto/ContextoTema";
 import {
-  Bell,
   Award,
   BookOpen,
   Calendar,
   Layers,
   Sparkles,
   CheckCircle2,
-  AlertTriangle,
   Info,
   ChevronRight,
   GraduationCap,
   Sliders,
-  FileText,
-  CheckCheck
+  UserCheck,
+  ArrowUpRight,
+  Clock,
+  BookMarked
 } from "lucide-react";
 
 const planEstudiosCompleto = [
@@ -107,14 +107,63 @@ const planEstudiosCompleto = [
   { id: "SI5371", creditos: 3, ciclo: 10 }
 ];
 
+const NOMBRES_CURSOS = {
+  "ED1292": "Actividades Culturales y Deportivas I",
+  "SI1447": "Algoritmos y Programación",
+  "ED1331": "Expresión Oral y Escrita",
+  "MA1470": "Matemática Básica I",
+  "SI1358": "Metodología de la Investigación Científica",
+  "SI1216": "Introducción a la Ingeniería de Sistemas e Informática",
+  "MA1408": "Cálculo I",
+  "ED1297": "Métodos de Estudio",
+  "CB1324": "Biología General",
+  "MA1435": "Cálculo II",
+  "FI1363": "Física I",
+  "SI1445": "Programación Orientada a Objetos",
+  "CS1286": "Filosofía",
+  "SI1435": "Matemática Discreta",
+  "QU1363": "Química General",
+  "CA2337": "Ecología y Protección del Medio Ambiente",
+  "MA2441": "Álgebra Lineal",
+  "EC2201": "Realidad Nacional",
+  "FI2410": "Física General",
+  "SI2422": "Teoría de Sistemas",
+  "CS2397": "Realidad Nacional y Regional",
+  "CS2258": "Sociología",
+  "ED2278": "Taller de Arte",
+  "CA2101": "Actividad de Responsabilidad Social Universitaria",
+  "MA2333": "Álgebra Lineal",
+  "ES2300": "Estadística General",
+  "SI2418": "Estructura de Datos",
+  "FI2411": "Física II",
+  "SI2452": "Ingeniería de Procesos de Negocios",
+  "CO2201": "Introducción a la Contabilidad",
+  "CS2259": "Psicología General",
+  "SI3422": "Análisis y Diseño de Sistemas I",
+  "MA3412": "Cálculo III",
+  "FI3492": "Circuitos Eléctricos y Electrónicos",
+  "ED3286": "Discapacidad y Derechos Humanos",
+  "ED3283": "Inglés I",
+  "SI3421": "Modelado de Datos",
+  "SI3331": "Aplicaciones Avanzadas con Hojas de Cálculo",
+  "SI3334": "Introducción a los Entornos Operativos",
+  "SI3423": "Análisis y Diseño de Sistemas II",
+  "SI3400": "Arquitectura de Computadores",
+  "SI3420": "Base de Datos",
+  "ED3287": "Defensa Nacional",
+  "ES3336": "Inferencia y Probabilidades",
+  "ED3284": "Inglés II",
+  "ED3285": "Taller de Redacción Científica",
+  "SI3337": "Análisis de Algoritmos",
+  "SI3336": "Gráficos por Computadoras"
+};
+
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 export default function InicioEstudiante() {
   const { tema } = useTema();
   const [cursosAprobados, setCursosAprobados] = useState([]);
   const [cursosInscritos, setCursosInscritos] = useState([]);
-  const [filtroNotif, setFiltroNotif] = useState("todas");
-  const [notifLeidas, setNotifLeidas] = useState({});
 
   useEffect(() => {
     let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
@@ -144,7 +193,6 @@ export default function InicioEstudiante() {
   const totalObligatoriosAprobados = cursosAprobados.length;
   const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / 63) * 100);
 
-  // El ciclo estimado se determina por el menor ciclo que contiene al menos un curso obligatorio pendiente
   const calcularCicloEstimado = () => {
     if (cursosAprobados.length === 0) return "Ciclo I";
     for (let c = 1; c <= 10; c++) {
@@ -162,58 +210,22 @@ export default function InicioEstudiante() {
   };
 
   const nombreCiclo = calcularCicloEstimado();
-
-  const cantidadInscritos = cursosInscritos.length;
   const porcentajeProgreso = Math.min(100, Math.round((creditosAprobados / 205) * 100));
 
-  const notificaciones = [
-    {
-      id: 1,
-      titulo: "Cronograma OCRE: Matrícula Regular 2026-I",
-      mensaje: "La Oficina Central de Registro y Estadística (OCRE - UNP) comunica la publicación de horarios y prioridades según promedio ponderado acumulado.",
-      tipo: "urgente",
-      categoria: "urgentes",
-      fecha: "Hace 2 horas"
-    },
-    {
-      id: 2,
-      titulo: "Jornada Académica - Escuela Profesional de Informática",
-      mensaje: "Conferencia presencial sobre Sistemas Distribuidos y Arquitectura Software en el Auditorio Central de la Facultad de Ingeniería Industrial.",
-      tipo: "info",
-      categoria: "eventos",
-      fecha: "Ayer"
-    },
-    {
-      id: 3,
-      titulo: "Consolidación de Créditos Plan 2018-1",
-      mensaje: "Se ha verificado la asignación de créditos obligatorios. Puedes consultar tu avance en el módulo Malla Curricular.",
-      tipo: "sistema",
-      categoria: "sistema",
-      fecha: "Hace 1 día"
-    }
-  ];
-
-  const notificacionesFiltradas = notificaciones.filter(n => {
-    if (filtroNotif === "todas") return true;
-    return n.categoria === filtroNotif;
-  });
-
-  const marcarTodasLeidas = () => {
-    const mapa = {};
-    notificaciones.forEach(n => mapa[n.id] = true);
-    setNotifLeidas(mapa);
-  };
+  const nombreEstudiante = localStorage.getItem("nombreEstudiante")
+    ? localStorage.getItem("nombreEstudiante").split(" ")[0]
+    : "Estudiante";
 
   return (
     <div className="space-y-6">
 
-      {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl liquid-glass-card glare-hover hover-scale-pop p-4 sm:p-6 md:p-8 transition-all">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-5">
-          <div className="flex items-center space-x-3.5">
-            <div className="shrink-0 hidden sm:flex items-center justify-center">
-              <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl ${
-                tema === 'dark' ? 'bg-[#090e1a]/90 border-white/10' : 'bg-white border-slate-200/90 shadow-md'
+      {/* Hero Banner Principal */}
+      <div className="relative overflow-hidden rounded-2xl liquid-glass-card glare-hover hover-scale-pop p-5 sm:p-6 md:p-8 transition-all">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-3.5 sm:space-x-4">
+            <div className="shrink-0 flex items-center justify-center">
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${
+                tema === 'dark' ? 'bg-[#090e1a]/90 border-white/10' : 'bg-white border-slate-200 shadow-md'
               } border p-0.5 flex items-center justify-center overflow-hidden shadow-sm hover-scale-pop`}>
                 <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
@@ -221,55 +233,56 @@ export default function InicioEstudiante() {
 
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <span className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold ${
+                <span className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold ${
                   tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
-                } border shadow-sm`}>
+                } border shadow-xs`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse-subtle"></span>
-                  <span>SISTEMA INTEGRAL ACADÉMICO</span>
+                  <span>PORTAL ACADÉMICO</span>
                 </span>
-                <span className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium ${
+                <span className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-medium ${
                   tema === 'dark' ? 'bg-slate-500/10 text-slate-400 border-slate-500/20' : 'bg-slate-100 text-slate-600 border-slate-200'
                 } border`}>
                   <Info className="w-3 h-3 text-blue-500 shrink-0" />
-                  <span>Universidad Nacional de Piura (OCRE - UNP)</span>
+                  <span>Escuela Profesional de Ingeniería Informática</span>
                 </span>
               </div>
-              <h1 className={`text-lg sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                ¡Bienvenido(a), {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").split(" ")[0] : "Estudiante"}!
+
+              <h1 className={`text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                ¡Hola, {nombreEstudiante}! 👋
               </h1>
               <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} max-w-xl`}>
-                Escuela Profesional de Ingeniería Informática · Plan Curricular 2018-1.
+                Plan Curricular 2018-1 · Universidad Nacional de Piura (OCRE)
               </p>
             </div>
           </div>
 
           <div className={`flex items-center space-x-3 ${
-            tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-white/90 border-slate-200/90 shadow-md'
-          } border px-3.5 py-2.5 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start shadow-sm hover-scale-pop`}>
-            <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-white/90 border-slate-200 shadow-sm'
+          } border px-4 py-2.5 rounded-xl shrink-0 w-full sm:w-auto justify-between sm:justify-start hover-scale-pop`}>
+            <Calendar className="w-5 h-5 text-blue-500 shrink-0" />
             <div>
-              <div className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Lectivo</div>
+              <div className={`text-[9px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Activo</div>
               <div className={`text-xs sm:text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-I</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Resumen Académico Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+      {/* Tarjetas de Métricas Resumen (KPIs) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
         {/* Créditos Aprobados */}
-        <div className="p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Créditos Aprobados</span>
-              <div className="flex items-baseline space-x-2">
-                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
+              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Créditos Aprobados</span>
+              <div className="flex items-baseline space-x-1.5">
+                <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
                 <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 205 CR</span>
               </div>
             </div>
-            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
-              <Award className="w-5 h-5" />
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-xs`}>
+              <Award className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
 
@@ -288,199 +301,262 @@ export default function InicioEstudiante() {
         </div>
 
         {/* Cursos Obligatorios */}
-        <div className="p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Cursos Obligatorios</span>
-              <div className="flex items-baseline space-x-2">
-                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 63 completados</span>
+              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Cursos Aprobados</span>
+              <div className="flex items-baseline space-x-1.5">
+                <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 63 asignaturas</span>
               </div>
             </div>
-            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
-              <BookOpen className="w-5 h-5" />
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} border flex items-center justify-center shadow-xs`}>
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
 
           <div className="mt-4 space-y-1.5">
             <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-              <span>Progreso Obligatorio</span>
-              <span className="text-blue-500 font-bold">{porcentajeObligatorios}%</span>
+              <span>Avance Obligatorio</span>
+              <span className="text-emerald-500 font-bold">{porcentajeObligatorios}%</span>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-2 rounded-full overflow-hidden`}>
-              <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }} />
+              <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }} />
             </div>
           </div>
         </div>
 
         {/* Ciclo Estimado */}
-        <div className="p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Ciclo Estimado</span>
-              <div className={`text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>{nombreCiclo}</div>
+              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Ciclo Estimado</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>{nombreCiclo}</div>
             </div>
-            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} border flex items-center justify-center shadow-sm`}>
-              <Layers className="w-5 h-5" />
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-purple-50 text-purple-600 border-purple-200'} border flex items-center justify-center shadow-xs`}>
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
 
-          <div className={`mt-4 pt-3 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
-            <span>Según Malla Curricular</span>
-            <span className={`font-bold text-[10px] px-2 py-0.5 rounded ${
+          <div className={`mt-4 pt-2.5 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
+            <span>Semestre Actual</span>
+            <span className={`font-bold text-[10px] px-2 py-0.5 rounded-full ${
               tema === 'dark'
-                ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'
-                : 'text-emerald-700 bg-emerald-50 border border-emerald-200'
-            }`}>Actualizado</span>
+                ? 'text-purple-400 bg-purple-500/10 border border-purple-500/20'
+                : 'text-purple-700 bg-purple-50 border border-purple-200'
+            }`}>En curso</span>
+          </div>
+        </div>
+
+        {/* Estado Académico */}
+        <div className="p-4 sm:p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
+          <div className="flex justify-between items-start">
+            <div className="space-y-1">
+              <span className={`text-[10px] sm:text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Condición Estudiante</span>
+              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1`}>Alumno Regular</div>
+            </div>
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${tema === 'dark' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-amber-50 text-amber-600 border-amber-200'} border flex items-center justify-center shadow-xs`}>
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+          </div>
+
+          <div className={`mt-4 pt-2.5 border-t ${tema === 'dark' ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'} flex items-center justify-between text-xs font-medium`}>
+            <span>Sin sanciones</span>
+            <span className={`font-bold text-[10px] px-2 py-0.5 rounded-full ${
+              tema === 'dark'
+                ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20'
+                : 'text-amber-700 bg-amber-50 border border-amber-200'
+            }`}>Habilitado</span>
           </div>
         </div>
 
       </div>
 
+      {/* Grid Principal: Cursos Matriculados + Accesos Rápidos */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Bandeja de Notificaciones */}
+        {/* Columna Izquierda (2/3): Cursos Matriculados en el Semestre */}
         <div className="lg:col-span-2 space-y-4">
-          
           <div className="p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4">
             
-            <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b ${
+            <div className={`flex items-center justify-between border-b ${
               tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
             } pb-4`}>
               <div className="flex items-center space-x-2.5">
-                <Bell className={`w-5 h-5 ${tema === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} />
-                <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
-                  Bandeja de Notificaciones
-                </h2>
+                <div className="p-2 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                  <BookMarked className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className={`text-base sm:text-lg font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+                    Asignaturas del Semestre Activo
+                  </h2>
+                  <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    Cursos registrados para el semestre 2026-I ({cursosInscritos.length} asignaturas)
+                  </p>
+                </div>
               </div>
 
-              <button
-                type="button"
-                onClick={marcarTodasLeidas}
-                className={`text-xs ${tema === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} font-bold transition-colors cursor-pointer text-left flex items-center space-x-1 liquid-btn`}
+              <Link
+                to="/estudiante/horario"
+                className={`hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  tema === 'dark'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30'
+                    : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'
+                }`}
               >
-                <CheckCheck className="w-4 h-4" />
-                <span>Marcar todas como leídas</span>
-              </button>
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Ver Horario Semanal</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            {/* Filtros de Notificaciones */}
-            <div className="flex space-x-2 overflow-x-auto pb-1">
-              {[
-                { id: "todas", etiqueta: "Todas" },
-                { id: "urgentes", etiqueta: "Urgentes" },
-                { id: "eventos", etiqueta: "Eventos" },
-                { id: "sistema", etiqueta: "Sistema" }
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setFiltroNotif(f.id)}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer liquid-btn ${
-                    filtroNotif === f.id
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : tema === 'dark'
-                      ? "bg-[#090e1a]/80 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-slate-800"
-                      : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200"
-                  }`}
-                >
-                  {f.etiqueta}
-                </button>
-              ))}
-            </div>
+            {/* Lista de Cursos Inscritos */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {cursosInscritos.map((codigoCurso) => {
+                const infoCurso = planEstudiosCompleto.find((c) => c.id === codigoCurso) || { creditos: 4, ciclo: 4 };
+                const nombreCurso = NOMBRES_CURSOS[codigoCurso] || codigoCurso;
 
-            {/* Lista de Notificaciones */}
-            <div className="space-y-2.5">
-              {notificacionesFiltradas.map((notif) => {
-                const estaLeida = !!notifLeidas[notif.id];
                 return (
                   <div
-                    key={notif.id}
-                    className={`p-4 rounded-xl border transition-all flex items-start space-x-3.5 liquid-btn ${
-                      estaLeida
-                        ? tema === 'dark'
-                          ? "bg-[#090e1a]/40 border-slate-800/40 text-slate-400 opacity-60"
-                          : "bg-slate-100/70 border-slate-200 text-slate-500 opacity-60"
-                        : tema === 'dark'
-                          ? "bg-[#090e1a]/80 border-slate-800/80 text-white hover:border-slate-700"
-                          : "bg-slate-50/90 border-slate-200 text-slate-900 hover:border-slate-300"
+                    key={codigoCurso}
+                    className={`p-4 rounded-xl border transition-all flex flex-col justify-between space-y-3 liquid-btn hover-scale-pop ${
+                      tema === 'dark'
+                        ? 'bg-[#090e1a]/80 border-slate-800/80 text-white hover:border-blue-500/40'
+                        : 'bg-slate-50/90 border-slate-200 text-slate-900 hover:border-blue-500/40 shadow-xs'
                     }`}
                   >
-                    <div className="shrink-0 mt-0.5">
-                      {notif.tipo === "urgente" && <AlertTriangle className="w-4 h-4 text-rose-500" />}
-                      {notif.tipo === "info" && <Info className="w-4 h-4 text-blue-500" />}
-                      {notif.tipo === "sistema" && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+                    <div className="flex items-start justify-between gap-2">
+                      <span className={`px-2.5 py-0.5 rounded text-[11px] font-extrabold tracking-wide ${
+                        tema === 'dark'
+                          ? 'bg-blue-500/15 text-blue-400 border border-blue-500/25'
+                          : 'bg-blue-100 text-blue-800 border border-blue-200'
+                      }`}>
+                        {codigoCurso}
+                      </span>
+                      <span className={`inline-flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        tema === 'dark'
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      }`}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Matriculado</span>
+                      </span>
                     </div>
 
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-800'}`}>
-                          {notif.titulo}
-                        </h3>
-                        <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{notif.fecha}</span>
+                    <div className="space-y-1">
+                      <h3 className={`text-xs sm:text-sm font-bold line-clamp-2 leading-snug ${
+                        tema === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                      }`}>
+                        {nombreCurso}
+                      </h3>
+                      <div className={`flex items-center space-x-3 text-[11px] ${
+                        tema === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`}>
+                        <span className="flex items-center space-x-1">
+                          <BookOpen className="w-3 h-3 text-blue-500 shrink-0" />
+                          <span>{infoCurso.creditos} Créditos</span>
+                        </span>
+                        <span>•</span>
+                        <span>Ciclo {NOMBRES_CICLO[(infoCurso.ciclo || 4) - 1]}</span>
                       </div>
-                      <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} leading-relaxed`}>
-                        {notif.mensaje}
-                      </p>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-          </div>
+            {/* Acceso directo a Horario en vista móvil */}
+            <div className="pt-2 sm:hidden">
+              <Link
+                to="/estudiante/horario"
+                className="w-full flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-sm active:scale-98 transition-all"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Ver Mi Horario Completo</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
 
+          </div>
         </div>
 
-        {/* Accesos Rápidos */}
+        {/* Columna Derecha (1/3): Accesos Rápidos Hub */}
         <div className="space-y-4">
           <div className="p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4">
             
-            <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight pb-2 border-b ${
+            <h2 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight pb-3 border-b ${
               tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
             }`}>
               Accesos Rápidos
             </h2>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
+              
+              {/* Horario */}
               <Link
                 to="/estudiante/horario"
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all group liquid-btn ${
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop ${
                   tema === 'dark'
                     ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-blue-500/40'
-                    : 'bg-slate-50/80 border-slate-200 hover:border-blue-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-blue-500/40 shadow-xs'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                  <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20 group-hover:scale-105 transition-transform">
                     <Calendar className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-blue-500 transition-colors`}>
-                      Mi Horario
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-blue-500 transition-colors`}>
+                      Mi Horario Semanal
                     </div>
                     <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Ver clases semanales
+                      Clases, horas y aulas
                     </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
               </Link>
 
+              {/* Pre-Matrícula */}
               <Link
-                to="/estudiante/malla"
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                to="/estudiante/matricula"
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop ${
                   tema === 'dark'
-                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
-                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                    ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-amber-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-amber-500/40 shadow-xs'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 group-hover:scale-105 transition-transform">
+                    <GraduationCap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-amber-500 transition-colors`}>
+                      Pre-Matrícula OCRE
+                    </div>
+                    <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Selección e inscripción
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
+              </Link>
+
+              {/* Malla Curricular */}
+              <Link
+                to="/estudiante/malla"
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop ${
+                  tema === 'dark'
+                    ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-emerald-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-emerald-500/40 shadow-xs'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 group-hover:scale-105 transition-transform">
                     <BookOpen className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-emerald-500 transition-colors`}>
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-emerald-500 transition-colors`}>
                       Malla Curricular
                     </div>
                     <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -488,56 +564,59 @@ export default function InicioEstudiante() {
                     </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all" />
               </Link>
 
+              {/* Simulador */}
               <Link
                 to="/estudiante/simulador"
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop ${
                   tema === 'dark'
-                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
-                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                    ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-purple-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-purple-500/40 shadow-xs'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20">
+                  <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 border border-purple-500/20 group-hover:scale-105 transition-transform">
                     <Sliders className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-purple-500 transition-colors`}>
-                      Simulador
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-purple-500 transition-colors`}>
+                      Simulador de Semestres
                     </div>
                     <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Planificar futuros ciclos
+                      Planificar futuros cursos
                     </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-purple-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all" />
               </Link>
 
+              {/* Perfil */}
               <Link
-                to="/estudiante/matricula"
-                className={`flex items-center justify-between p-3 rounded-xl border transition-all group ${
+                to="/estudiante/perfil"
+                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop ${
                   tema === 'dark'
-                    ? 'bg-[#090e1a] border-slate-800 hover:border-slate-700'
-                    : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                    ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-sky-500/40'
+                    : 'bg-slate-50/80 border-slate-200 hover:border-sky-500/40 shadow-xs'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                    <GraduationCap className="w-4 h-4" />
+                  <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-500 border border-sky-500/20 group-hover:scale-105 transition-transform">
+                    <UserCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} group-hover:text-amber-500 transition-colors`}>
-                      Pre-Matrícula
+                    <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-sky-500 transition-colors`}>
+                      Mi Perfil Académico
                     </div>
                     <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Inscripción y horarios
+                      Datos del alumno e historial
                     </div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 transition-colors" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-sky-500 group-hover:translate-x-0.5 transition-all" />
               </Link>
+
             </div>
 
           </div>
@@ -548,4 +627,3 @@ export default function InicioEstudiante() {
     </div>
   );
 }
-
