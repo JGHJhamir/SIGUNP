@@ -476,7 +476,7 @@ export default function HorarioMatricula() {
 
     if (!datos) {
       return (
-        <div className={`h-full ${esSubHora ? 'min-h-[42px]' : 'min-h-[88px]'} flex items-center justify-center text-[11px] ${
+        <div className={`h-full ${esSubHora ? 'min-h-[38px] sm:min-h-[42px]' : 'min-h-[74px] sm:min-h-[88px]'} flex items-center justify-center text-[10px] sm:text-[11px] ${
           tema === 'dark' ? 'text-slate-600' : 'text-slate-300'
         } font-mono select-none`}>
           —
@@ -493,32 +493,32 @@ export default function HorarioMatricula() {
         onClick={() => setCursoDetalleModal({ ...datos, horaActualModal: horarioMostrar })}
         onMouseEnter={() => setCursoResaltado(datos.cursoId)}
         onMouseLeave={() => setCursoResaltado(null)}
-        className={`p-1.5 sm:p-2 rounded-xl border h-full ${
-          esSubHora ? 'min-h-[42px]' : 'min-h-[88px]'
+        className={`p-1 sm:p-2 rounded-xl border h-full ${
+          esSubHora ? 'min-h-[38px] sm:min-h-[42px]' : 'min-h-[74px] sm:min-h-[88px]'
         } flex flex-col justify-center text-center cursor-pointer transition-all duration-200 relative group overflow-hidden ${
           datos.estilo.card
         } ${esDestacado ? datos.estilo.glow : ""} ${esOpaco ? "opacity-30 scale-[0.98] blur-[0.3px]" : ""}`}
       >
-        <div className="flex items-center justify-between space-x-1 mb-0.5">
-          <span className={`text-[9px] px-1.5 py-0.5 rounded-md border ${datos.estilo.badge}`}>
+        <div className="flex items-center justify-between space-x-0.5 sm:space-x-1 mb-0.5">
+          <span className={`text-[8px] sm:text-[9px] px-1 sm:px-1.5 py-0.5 rounded border ${datos.estilo.badge}`}>
             {datos.cursoId}
           </span>
-          <span className={`text-[9px] font-extrabold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} group-hover:opacity-100 transition-colors`}>
+          <span className={`text-[8px] sm:text-[9px] font-extrabold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} group-hover:opacity-100 transition-colors`}>
             {datos.infoGrupo.etiqueta}
           </span>
         </div>
 
-        <div className={`text-[11px] font-extrabold tracking-tight leading-tight line-clamp-2 ${
+        <div className={`text-[10px] sm:text-[11px] font-extrabold tracking-tight leading-tight line-clamp-2 ${
           esDestacado ? (tema === 'dark' ? "text-white" : "text-slate-950") : ""
         }`}>
           {datos.nombre}
         </div>
 
         {!esVistaCompacta && !esSubHora && (
-          <div className={`text-[9px] font-mono mt-1 flex items-center justify-center space-x-1 ${
+          <div className={`text-[8px] sm:text-[9px] font-mono mt-0.5 sm:mt-1 flex items-center justify-center space-x-1 ${
             tema === 'dark' ? 'text-slate-300/80' : 'text-slate-700/80'
           }`}>
-            <Clock className="w-2.5 h-2.5 opacity-75" />
+            <Clock className="w-2.5 h-2.5 opacity-75 hidden sm:inline-block" />
             <span>{horarioMostrar}</span>
           </div>
         )}
@@ -856,19 +856,24 @@ export default function HorarioMatricula() {
 
       {/* VISTA 1: GRILLA SEMANAL (CALENDAR GRID) */}
       {tieneDatos && modoVista === "grilla" && (
-        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl overflow-hidden p-3.5 sm:p-6 print-container`}>
-          <div className="md:hidden flex items-center space-x-1.5 text-[10px] text-slate-400 font-medium mb-3 no-print">
-            <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-            <span>Desliza horizontalmente para navegar la grilla de días</span>
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl overflow-hidden p-2.5 sm:p-6 print-container`}>
+          <div className="md:hidden flex items-center justify-between space-x-1.5 text-[10px] text-slate-400 font-semibold mb-2.5 px-1 no-print">
+            <span className="flex items-center space-x-1">
+              <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+              <span>Desliza lateralmente para ver los días</span>
+            </span>
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20 text-[9px]">
+              📱 Vista Móvil Optimizada
+            </span>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse min-w-[960px] text-xs print-table">
+          <div className="overflow-x-auto no-scrollbar">
+            <table className="w-full border-collapse min-w-[620px] md:min-w-[900px] text-xs print-table">
               <thead>
-                <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[11px] font-bold uppercase tracking-wider`}>
-                  <th className={`py-3.5 px-4 text-left w-44 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
-                    <div className="flex items-center space-x-2 text-slate-400">
-                      <Clock className="w-4 h-4 text-blue-500" />
-                      <span>Bloque Horario</span>
+                <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[10px] sm:text-[11px] font-bold uppercase tracking-wider`}>
+                  <th className={`py-2.5 sm:py-3.5 px-2 sm:px-4 text-left w-28 sm:w-36 md:w-44 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                    <div className="flex items-center space-x-1.5 text-slate-400">
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                      <span>Hora</span>
                     </div>
                   </th>
                   {diasSemana.map((dia) => {
@@ -876,16 +881,16 @@ export default function HorarioMatricula() {
                     return (
                       <th
                         key={dia}
-                        className={`py-3 px-3 text-center border-r ${
+                        className={`py-2.5 sm:py-3 px-1.5 sm:px-3 text-center border-r ${
                           tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
                         } relative ${
                           esHoy ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-300 font-black" : ""
                         }`}
                       >
-                        <div className="flex items-center justify-center space-x-1.5">
+                        <div className="flex items-center justify-center space-x-1">
                           <span>{dia}</span>
                           {esHoy && (
-                            <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold border border-emerald-500/30">
+                            <span className="px-1 py-0.2 rounded text-[7px] sm:text-[8px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold border border-emerald-500/30">
                               Hoy
                             </span>
                           )}
