@@ -234,6 +234,44 @@ const LINEAS_ACADEMICAS = {
   }
 };
 
+// Mapeo exacto de Posición por Columnas del Diagrama Oficial UNP
+const MATRIZ_POSICION_UNP = {
+  // Ciclo I
+  "SI1358": { col: 1 }, "ED1331": { col: 2 }, "MA1470": { col: 3 }, "MA1408": { col: 4 },
+  "SI1447": { col: 5 }, "SI1216": { col: 6 }, "ED1292": { col: 7 }, "ED1297": { col: 8 },
+  // Ciclo II
+  "CS1286": { col: 2 }, "FI1363": { col: 3 }, "MA1435": { col: 4 }, "SI1445": { col: 5 },
+  "SI1435": { col: 6 }, "QU1363": { col: 7 }, "CB1324": { col: 8 },
+  // Ciclo III
+  "ED2278": { col: 1 }, "CS2258": { col: 2 }, "CS2397": { col: 3 }, "FI2410": { col: 4 },
+  "MA2441": { col: 5 }, "CA2337": { col: 6 }, "SI2422": { col: 7 }, "EC2201": { col: 8 },
+  // Ciclo IV
+  "ES2300": { col: 1 }, "CA2101": { col: 2 }, "MA2333": { col: 3 }, "FI2411": { col: 4 },
+  "SI2418": { col: 5 }, "SI2452": { col: 6 }, "CO2201": { col: 7 }, "CS2259": { col: 8 },
+  // Ciclo V
+  "SI3331": { col: 1 }, "SI3334": { col: 2 }, "ED3286": { col: 3 }, "FI3492": { col: 4 },
+  "SI3421": { col: 5 }, "SI3422": { col: 6 }, "MA3412": { col: 7 }, "ED3283": { col: 8 },
+  // Ciclo VI
+  "ES3336": { col: 1 }, "ED3285": { col: 2 }, "ED3287": { col: 3 }, "SI3400": { col: 4 },
+  "SI3420": { col: 5 }, "SI3423": { col: 6 }, "AA3303": { col: 7 }, "ED3284": { col: 8 },
+  "SI3337": { col: 1 }, "SI3336": { col: 2 }, "SI3335": { col: 8 },
+  // Ciclo VII
+  "IO4448": { col: 1 }, "IO4447": { col: 2 }, "CA4221": { col: 3 }, "SI4490": { col: 4 },
+  "SI4489": { col: 5 }, "SI4386": { col: 6 }, "IO4332": { col: 7 }, "IO4334": { col: 8 },
+  "SI4388": { col: 1 }, "SI4387": { col: 3 },
+  // Ciclo VIII
+  "DP4331": { col: 3 }, "SI4491": { col: 4 }, "SI4488": { col: 5 }, "SI4360": { col: 6 },
+  "SI4465": { col: 7 }, "EM4461": { col: 8 },
+  // Ciclo IX
+  "IO5365": { col: 2 }, "SI5441": { col: 3 }, "SI5496": { col: 4 }, "SI5365": { col: 5 },
+  "SI5364": { col: 6 }, "SI5497": { col: 7 }, "SI5370": { col: 1 }, "II5314": { col: 8 },
+  "SI5369": { col: 1 },
+  // Ciclo X
+  "SI5367": { col: 2 }, "II5345": { col: 3 }, "SI5498": { col: 4 }, "SI5368": { col: 5 },
+  "SI5411": { col: 6 }, "SI5499": { col: 7 }, "CO5397": { col: 8 }, "SI5373": { col: 2 },
+  "SI5361": { col: 1 }, "II5344": { col: 4 }, "SI5371": { col: 5 }
+};
+
 export default function MallaCurricular() {
   const { tema } = useTema();
   const [aprobados, setAprobados] = useState([]);
@@ -241,6 +279,7 @@ export default function MallaCurricular() {
   const [busqueda, setBusqueda] = useState("");
   const [criterioOrden, setCriterioOrden] = useState("alfabetico");
   const [modoVista, setModoVista] = useState("acordeon"); // "acordeon" | "grafo"
+  const [disposicionGrafo, setDisposicionGrafo] = useState("matriz"); // "matriz" | "columnas"
   const [filtroEstadoQuick, setFiltroEstadoQuick] = useState("todos"); // "todos" | "disponibles" | "llave" | "aprobados"
   
   // Estado para la inspección interactiva de cadenas
@@ -248,7 +287,7 @@ export default function MallaCurricular() {
   const [cursoModalCadena, setCursoModalCadena] = useState(null);
   const [filtroLineaGrafo, setFiltroLineaGrafo] = useState("todas");
   const [esEscalaPantallaCompleta, setEsEscalaPantallaCompleta] = useState(false);
-  const [escalaGrafo, setEscalaGrafo] = useState(0.95);
+  const [escalaGrafo, setEscalaGrafo] = useState(0.85);
 
   const [ciclosExpandidos, setCiclosExpandidos] = useState({
     "Ciclo I": true,
@@ -1143,16 +1182,51 @@ export default function MallaCurricular() {
           esEscalaPantallaCompleta ? "fixed inset-2 sm:inset-4 z-50 overflow-auto bg-slate-950 p-4 sm:p-6 rounded-3xl border border-slate-800 shadow-2xl" : ""
         }`}>
 
-          {/* Selector de Línea Académica de Especialidad y Navegación Móvil */}
+          {/* Selector de Disposición y Línea Académica de Especialidad */}
           <div className="rounded-2xl liquid-glass-card p-3.5 sm:p-4 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
               <div>
                 <span className="text-xs font-black text-slate-200 uppercase tracking-wider block">
-                  Filtrar por Línea de Especialidad
+                  Disposición del Plan de Estudios UNP
                 </span>
                 <span className="text-[11px] text-slate-400 block mt-0.5">
-                  Las líneas SVG conectan los cursos requeridos con sus sucesores. Toca cualquier curso para ver su árbol.
+                  Visualiza los 10 ciclos organizados en filas de cascada académica exactamente como el mapa oficial.
                 </span>
+              </div>
+
+              {/* Conmutador de Disposición: Matriz UNP vs Columnas */}
+              <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border shrink-0`}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDisposicionGrafo("matriz");
+                    setTimeout(actualizarConexionesGrafo, 150);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                    disposicionGrafo === "matriz"
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Layers3 className="w-3.5 h-3.5" />
+                  <span>Matriz UNP (Filas I-X)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDisposicionGrafo("columnas");
+                    setTimeout(actualizarConexionesGrafo, 150);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer flex items-center space-x-1.5 ${
+                    disposicionGrafo === "columnas"
+                      ? "bg-purple-600 text-white shadow-sm"
+                      : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Grid className="w-3.5 h-3.5" />
+                  <span>Columnas</span>
+                </button>
               </div>
             </div>
 
@@ -1170,7 +1244,7 @@ export default function MallaCurricular() {
                     : "bg-slate-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
                 }`}
               >
-                🌐 Todas (10 Ciclos)
+                🌐 Todas las Cadenas
               </button>
 
               {Object.values(LINEAS_ACADEMICAS).map((linea) => {
@@ -1198,7 +1272,7 @@ export default function MallaCurricular() {
 
             {/* Mobile Touch Quick Cycle Jump Bar */}
             <div className="pt-2 border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              <span className="text-[10px] font-mono font-black text-slate-400 uppercase shrink-0 mr-1">Ir a:</span>
+              <span className="text-[10px] font-mono font-black text-slate-400 uppercase shrink-0 mr-1">Ir a Fila:</span>
               {planEstudios.map((s) => (
                 <button
                   key={s.numeroCiclo}
@@ -1210,11 +1284,6 @@ export default function MallaCurricular() {
                 </button>
               ))}
             </div>
-
-            <div className="flex sm:hidden items-center justify-between px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400">
-              <span>📱 Desliza horizontalmente para explorar los 10 ciclos</span>
-              <span className="font-mono text-purple-400">Zoom {(escalaGrafo * 100).toFixed(0)}%</span>
-            </div>
           </div>
 
           {/* Visualizador de Canvas DAG con Capa SVG Conectora */}
@@ -1225,17 +1294,17 @@ export default function MallaCurricular() {
             onMouseMove={manejarMouseMoveCanvas}
             onMouseUp={finalizarArrastre}
             onMouseLeave={finalizarArrastre}
-            className={`rounded-3xl liquid-glass-card p-4 sm:p-6 overflow-auto relative min-h-[580px] max-h-[75vh] border border-slate-800 shadow-2xl select-none ${
+            className={`rounded-3xl liquid-glass-card p-4 sm:p-6 overflow-auto relative min-h-[620px] max-h-[78vh] border border-slate-800 shadow-2xl select-none ${
               estaArrastrando ? "cursor-grabbing" : "cursor-grab"
             }`}
             style={{ touchAction: "pan-x pan-y", WebkitOverflowScrolling: "touch" }}
           >
             <div
               className="relative transition-transform duration-200 origin-top-left"
-              style={{ transform: `scale(${escalaGrafo})`, width: "max-content", minWidth: "2400px" }}
+              style={{ transform: `scale(${escalaGrafo})`, width: "max-content", minWidth: disposicionGrafo === "matriz" ? "2100px" : "2400px" }}
             >
               {/* Capa SVG Translucida de Conexión de Grafos entre Nodos */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ minWidth: "2400px", minHeight: "1200px" }}>
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ minWidth: disposicionGrafo === "matriz" ? "2100px" : "2400px", minHeight: "1600px" }}>
                 <defs>
                   <linearGradient id="neonCyanPurple" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#22d3ee" />
@@ -1284,112 +1353,133 @@ export default function MallaCurricular() {
                 })}
               </svg>
 
-              {/* Columnas de los 10 Ciclos Académicos */}
-              <div className="flex space-x-8 min-w-[2400px] relative z-20 pb-12 pt-2">
-                {planEstudios.map((semestre) => {
-                  let cursosCiclo = semestre.cursos;
-                  
-                  if (filtroLineaGrafo !== "todas") {
-                    const codigosLinea = LINEAS_ACADEMICAS[filtroLineaGrafo]?.cursos || [];
-                    cursosCiclo = cursosCiclo.filter((c) => codigosLinea.includes(c.id));
-                  }
-
-                  if (filtroEstadoQuick === "disponibles") {
-                    cursosCiclo = cursosCiclo.filter((c) => obtenerEstadoCurso(c) === "disponible");
-                  } else if (filtroEstadoQuick === "aprobados") {
-                    cursosCiclo = cursosCiclo.filter((c) => obtenerEstadoCurso(c) === "aprobado");
-                  } else if (filtroEstadoQuick === "llave") {
-                    cursosCiclo = cursosCiclo.filter((c) => (sucesoresMap[c.id] || []).length >= 3);
-                  }
-
-                  return (
-                    <div key={semestre.ciclo} data-ciclo-columna={semestre.numeroCiclo} className="w-56 shrink-0 space-y-4">
-                      {/* Header de Columna de Ciclo */}
-                      <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-3.5 text-center shadow-xl backdrop-blur-xl">
-                        <div className="text-xs font-black text-white uppercase tracking-wider">{semestre.ciclo}</div>
-                        <div className="text-[10px] text-slate-400 font-bold mt-1">
-                          {semestre.cursos.filter((c) => aprobados.includes(c.id)).length}/{semestre.cursos.length} Aprobados
+              {/* ── DISPOSICIÓN 1: MATRIZ OFICIAL UNP (FILAS = CICLOS I AL X) ── */}
+              {disposicionGrafo === "matriz" ? (
+                <div className="min-w-[2100px] relative z-20 pb-12 pt-2 space-y-4">
+                  {planEstudios.map((semestre) => {
+                    const aprobadosCiclo = semestre.cursos.filter((c) => aprobados.includes(c.id)).length;
+                    
+                    return (
+                      <div
+                        key={semestre.ciclo}
+                        data-ciclo-columna={semestre.numeroCiclo}
+                        className="flex items-stretch space-x-4 min-w-[2100px]"
+                      >
+                        {/* Indicador de Fila de Ciclo en Margen Izquierdo */}
+                        <div className="w-24 shrink-0 bg-slate-950/95 border border-slate-800 rounded-2xl p-3 flex flex-col justify-center items-center text-center shadow-lg backdrop-blur-xl">
+                          <span className="text-sm font-black text-white font-mono uppercase">{semestre.ciclo.replace("Ciclo ", "Ciclo\n")}</span>
+                          <span className="text-[10px] text-blue-400 font-extrabold mt-1">
+                            {aprobadosCiclo}/{semestre.cursos.length}
+                          </span>
                         </div>
-                      </div>
 
-                      {/* Lista de Nodos del Ciclo */}
-                      <div className="space-y-3">
-                        {cursosCiclo.length === 0 ? (
-                          <div className="p-4 rounded-2xl border border-dashed border-slate-800/80 text-center text-[10px] text-slate-500">
-                            Sin cursos en este filtro
-                          </div>
-                        ) : (
-                          cursosCiclo.map((curso) => {
-                            const estado = obtenerEstadoCurso(curso);
-                            const esHovered = cursoHovered === curso.id;
-                            const esAntecesores = setAntecesoresActivos.has(curso.id);
-                            const esSucesores = setSucesoresActivos.has(curso.id);
-                            const cantidadSucesores = (sucesoresMap[curso.id] || []).length;
-                            const estaOpaco = cursoHovered && !esHovered && !esAntecesores && !esSucesores;
+                        {/* 8 Columnas de la Matriz UNP */}
+                        <div className="flex-1 grid grid-cols-8 gap-3">
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((colIndex) => {
+                            let cursosEnColumna = semestre.cursos.filter((c) => {
+                              const pos = MATRIZ_POSICION_UNP[c.id];
+                              if (pos) return pos.col === colIndex;
+                              const idx = semestre.cursos.indexOf(c);
+                              return (idx % 8) + 1 === colIndex;
+                            });
 
-                            let nodeStyle = "";
-                            if (esHovered) {
-                              nodeStyle = "bg-blue-600/40 border-blue-400 ring-4 ring-blue-500/50 scale-[1.05] shadow-2xl shadow-blue-500/40 z-30";
-                            } else if (esAntecesores) {
-                              nodeStyle = "bg-cyan-950/90 border-cyan-400 ring-2 ring-cyan-400/80 scale-[1.02] shadow-xl shadow-cyan-500/30 z-20";
-                            } else if (esSucesores) {
-                              nodeStyle = "bg-purple-950/90 border-purple-400 ring-2 ring-purple-400/80 scale-[1.02] shadow-xl shadow-purple-500/30 z-20";
-                            } else if (estado === "aprobado") {
-                              nodeStyle = "bg-emerald-950/60 border-emerald-500/50 text-emerald-200 hover:border-emerald-400";
-                            } else if (estado === "disponible") {
-                              nodeStyle = "bg-blue-950/50 border-blue-500/50 text-blue-200 hover:border-blue-400";
-                            } else {
-                              nodeStyle = "bg-slate-950/80 border-slate-800 text-slate-400 opacity-60 hover:opacity-100";
+                            if (filtroLineaGrafo !== "todas") {
+                              const codigosLinea = LINEAS_ACADEMICAS[filtroLineaGrafo]?.cursos || [];
+                              cursosEnColumna = cursosEnColumna.filter((c) => codigosLinea.includes(c.id));
+                            }
+
+                            if (filtroEstadoQuick === "disponibles") {
+                              cursosEnColumna = cursosEnColumna.filter((c) => obtenerEstadoCurso(c) === "disponible");
+                            } else if (filtroEstadoQuick === "aprobados") {
+                              cursosEnColumna = cursosEnColumna.filter((c) => obtenerEstadoCurso(c) === "aprobado");
+                            } else if (filtroEstadoQuick === "llave") {
+                              cursosEnColumna = cursosEnColumna.filter((c) => (sucesoresMap[c.id] || []).length >= 3);
+                            }
+
+                            if (cursosEnColumna.length === 0) {
+                              return (
+                                <div key={colIndex} className="p-3 rounded-2xl border border-dashed border-slate-800/40 opacity-20 min-h-[105px] flex items-center justify-center">
+                                  <span className="text-[9px] text-slate-600 font-mono">—</span>
+                                </div>
+                              );
                             }
 
                             return (
-                              <div
-                                key={curso.id}
-                                ref={(el) => (nodeRefs.current[curso.id] = el)}
-                                onMouseEnter={() => setCursoHovered(curso.id)}
-                                onMouseLeave={() => setCursoHovered(null)}
-                                onClick={() => setCursoModalCadena(curso)}
-                                className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 relative group overflow-hidden ${nodeStyle} ${
-                                  estaOpaco ? "opacity-25 scale-[0.97] blur-[0.2px]" : ""
-                                }`}
-                              >
-                                <div className="flex items-center justify-between mb-1.5">
-                                  <span className="text-[10px] font-mono font-black text-slate-200">
-                                    {curso.id}
-                                  </span>
-                                  <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
-                                    estado === "aprobado"
-                                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                                      : estado === "disponible"
-                                      ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
-                                      : "bg-slate-800 text-slate-400 border-slate-700"
-                                  }`}>
-                                    {estado === "aprobado" ? "✓ Aprobado" : estado === "disponible" ? "🔓 Habilitado" : "🔒 Bloqueado"}
-                                  </span>
-                                </div>
+                              <div key={colIndex} className="space-y-2">
+                                {cursosEnColumna.map((curso) => {
+                                  const estado = obtenerEstadoCurso(curso);
+                                  const esHovered = cursoHovered === curso.id;
+                                  const esAntecesores = setAntecesoresActivos.has(curso.id);
+                                  const esSucesores = setSucesoresActivos.has(curso.id);
+                                  const cantidadSucesores = (sucesoresMap[curso.id] || []).length;
+                                  const estaOpaco = cursoHovered && !esHovered && !esAntecesores && !esSucesores;
 
-                                <div className="text-xs font-black text-white leading-snug line-clamp-2">
-                                  {curso.nombre}
-                                </div>
+                                  let nodeStyle = "";
+                                  if (esHovered) {
+                                    nodeStyle = "bg-blue-600/40 border-blue-400 ring-4 ring-blue-500/50 scale-[1.04] shadow-2xl shadow-blue-500/40 z-30";
+                                  } else if (esAntecesores) {
+                                    nodeStyle = "bg-cyan-950/90 border-cyan-400 ring-2 ring-cyan-400/80 scale-[1.02] shadow-xl shadow-cyan-500/30 z-20";
+                                  } else if (esSucesores) {
+                                    nodeStyle = "bg-purple-950/90 border-purple-400 ring-2 ring-purple-400/80 scale-[1.02] shadow-xl shadow-purple-500/30 z-20";
+                                  } else if (estado === "aprobado") {
+                                    nodeStyle = "bg-emerald-950/60 border-emerald-500/50 text-emerald-200 hover:border-emerald-400";
+                                  } else if (estado === "disponible") {
+                                    nodeStyle = "bg-blue-950/50 border-blue-500/50 text-blue-200 hover:border-blue-400";
+                                  } else {
+                                    nodeStyle = "bg-slate-950/80 border-slate-800 text-slate-400 opacity-60 hover:opacity-100";
+                                  }
 
-                                <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-                                  <span>{curso.creditos} CR</span>
-                                  {cantidadSucesores > 0 && (
-                                    <span className="text-purple-300 font-bold flex items-center space-x-1 bg-purple-500/20 px-1.5 py-0.5 rounded border border-purple-500/30">
-                                      <GitBranch className="w-2.5 h-2.5 text-purple-400" />
-                                      <span>Abre {cantidadSucesores}</span>
-                                    </span>
-                                  )}
-                                </div>
+                                  return (
+                                    <div
+                                      key={curso.id}
+                                      ref={(el) => (nodeRefs.current[curso.id] = el)}
+                                      onMouseEnter={() => setCursoHovered(curso.id)}
+                                      onMouseLeave={() => setCursoHovered(null)}
+                                      onClick={() => setCursoModalCadena(curso)}
+                                      className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 relative group overflow-hidden min-h-[105px] flex flex-col justify-between ${nodeStyle} ${
+                                        estaOpaco ? "opacity-25 scale-[0.97] blur-[0.2px]" : ""
+                                      }`}
+                                    >
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="text-[10px] font-mono font-black text-slate-200">
+                                          {curso.id}
+                                        </span>
+                                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-md border ${
+                                          estado === "aprobado"
+                                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                                            : estado === "disponible"
+                                            ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
+                                            : "bg-slate-800 text-slate-400 border-slate-700"
+                                        }`}>
+                                          {estado === "aprobado" ? "✓ Aprobado" : estado === "disponible" ? "🔓 Habilitado" : "🔒 Bloqueado"}
+                                        </span>
+                                      </div>
+
+                                      <div className="text-xs font-black text-white leading-snug line-clamp-2 my-1">
+                                        {curso.nombre}
+                                      </div>
+
+                                      <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
+                                        <span>{curso.creditos} CR</span>
+                                        {cantidadSucesores > 0 && (
+                                          <span className="text-purple-300 font-bold flex items-center space-x-1 bg-purple-500/20 px-1 py-0.5 rounded border border-purple-500/30">
+                                            <GitBranch className="w-2.5 h-2.5 text-purple-400" />
+                                            <span>Abre {cantidadSucesores}</span>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             );
-                          })
-                        )}
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
           </div>
 
