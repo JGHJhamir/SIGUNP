@@ -256,25 +256,25 @@ export default function Matricula() {
   return (
     <div className="space-y-6 pb-12">
 
-      {/* Header */}
-      <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-6 shadow-xl backdrop-blur-2xl space-y-4">
+      {/* Header Liquid Glass */}
+      <div className="liquid-glass-card p-5 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-2 shadow-sm">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold mb-2 shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
               <span>PROCESO DE MATRÍCULA ACADÉMICA</span>
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">Inscripción de Asignaturas</h1>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h1 className={`text-2xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>Inscripción de Asignaturas</h1>
+            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-0.5`}>
               Selecciona tus cursos ofertados y asigna los horarios correspondientes.
             </p>
           </div>
 
           {semestresGuardados.length > 0 && (
             <div className="flex items-center space-x-1.5 flex-wrap gap-1">
-              <span className="text-[10px] text-slate-400 font-extrabold uppercase">Guardados:</span>
+              <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-extrabold uppercase`}>Guardados:</span>
               {semestresGuardados.map((s) => (
-                <span key={s} className="text-[10px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                <span key={s} className="text-[10px] font-black bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
                   ✓ {s}
                 </span>
               ))}
@@ -284,7 +284,7 @@ export default function Matricula() {
 
         {/* Selector de Semestre */}
         <div className="pt-2">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-2">Selecciona Semestre Académico</span>
+          <span className={`text-[10px] font-black ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider block mb-2`}>Selecciona Semestre Académico</span>
           <div className="flex overflow-x-auto no-scrollbar gap-2 max-w-full pb-1">
             {semestresDisponibles.map((sem) => {
               const guardado = !!matriculasPorSemestre[sem];
@@ -294,14 +294,16 @@ export default function Matricula() {
                   key={sem}
                   type="button"
                   onClick={() => setSemestreSeleccionado(sem)}
-                  className={`px-4 py-2 rounded-2xl text-xs font-extrabold border transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-2xl text-xs font-extrabold border transition-all cursor-pointer liquid-btn ${
                     esActivo
-                      ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-600/20"
-                      : "bg-slate-950/80 text-slate-400 border-slate-800 hover:text-slate-200 hover:bg-slate-800/40"
+                      ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-500/30 scale-102"
+                      : tema === 'dark'
+                      ? "bg-[#090e1a]/80 text-slate-400 border-slate-800 hover:text-slate-200"
+                      : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 hover:text-slate-900"
                   }`}
                 >
                   {sem}
-                  {guardado && <span className="ml-1.5 text-[10px] text-emerald-400 font-black">✓</span>}
+                  {guardado && <span className="ml-1.5 text-[10px] text-emerald-500 dark:text-emerald-400 font-black">✓</span>}
                 </button>
               );
             })}
@@ -310,27 +312,31 @@ export default function Matricula() {
 
         {/* Borrador Stats Pills */}
         <div className="grid grid-cols-3 gap-3 pt-2">
-          <div className="bg-slate-950/80 rounded-2xl p-3.5 text-center border border-slate-800 shadow-inner">
-            <div className="text-2xl font-black text-white">{borradorCursos.length}</div>
-            <div className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Asignaturas</div>
+          <div className={`rounded-2xl p-3.5 text-center border ${
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <div className={`text-2xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{borradorCursos.length}</div>
+            <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-extrabold uppercase tracking-wider mt-0.5`}>Asignaturas</div>
           </div>
           
-          <div className="bg-slate-950/80 rounded-2xl p-3.5 text-center border border-slate-800 shadow-inner">
-            <div className="text-2xl font-black text-blue-400">{creditosBorrador}</div>
-            <div className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Créditos Elegidos</div>
+          <div className={`rounded-2xl p-3.5 text-center border ${
+            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+          }`}>
+            <div className="text-2xl font-black text-blue-500 dark:text-blue-400">{creditosBorrador}</div>
+            <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-extrabold uppercase tracking-wider mt-0.5`}>Créditos Elegidos</div>
           </div>
 
-          <div className={`rounded-2xl p-3.5 text-center border transition-all shadow-inner ${
+          <div className={`rounded-2xl p-3.5 text-center border transition-all ${
             estaCompleto ? "bg-emerald-500/10 border-emerald-500/30"
             : borradorCursos.length > 0 ? "bg-amber-500/10 border-amber-500/30"
-            : "bg-slate-950/80 border-slate-800"
+            : tema === 'dark' ? "bg-[#090e1a]/80 border-slate-800" : "bg-slate-50 border-slate-200"
           }`}>
             <div className={`text-2xl font-black ${
-              estaCompleto ? "text-emerald-400" : borradorCursos.length > 0 ? "text-amber-400" : "text-slate-500"
+              estaCompleto ? "text-emerald-500 dark:text-emerald-400" : borradorCursos.length > 0 ? "text-amber-500 dark:text-amber-400" : tema === 'dark' ? "text-slate-500" : "text-slate-400"
             }`}>
               {cursosConGrupo.length}/{borradorCursos.length}
             </div>
-            <div className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Grupos Asignados</div>
+            <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-extrabold uppercase tracking-wider mt-0.5`}>Grupos Asignados</div>
           </div>
         </div>
       </div>
@@ -339,8 +345,8 @@ export default function Matricula() {
       {notificacion && (
         <div className={`p-4 rounded-2xl flex items-center space-x-3 text-xs font-semibold animate-fadeIn shadow-lg ${
           notificacion.tipo === "success"
-            ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"
-            : "bg-rose-500/10 border border-rose-500/30 text-rose-400"
+            ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 dark:text-emerald-400"
+            : "bg-rose-500/10 border border-rose-500/30 text-rose-500 dark:text-rose-400"
         }`}>
           {notificacion.tipo === "success" ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
           <span>{notificacion.texto}</span>
@@ -350,12 +356,12 @@ export default function Matricula() {
       {/* Conflicts Banner */}
       {conflictos.length > 0 && (
         <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl space-y-2 animate-fadeIn shadow-lg">
-          <h3 className="text-xs font-black text-rose-400 flex items-center space-x-1.5">
+          <h3 className="text-xs font-black text-rose-500 dark:text-rose-400 flex items-center space-x-1.5">
             <AlertTriangle className="w-4 h-4" />
             <span>Conflicto de Horario Detectado</span>
           </h3>
           {conflictos.map((c, idx) => (
-            <p key={idx} className="text-xs text-rose-300">
+            <p key={idx} className="text-xs text-rose-600 dark:text-rose-300">
               {informacionGrupos[c.grupo]?.etiqueta} ({informacionGrupos[c.grupo]?.horario}):
               &nbsp;<strong>{obtenerNombreCurso(c.cursoA)}</strong> y <strong>{obtenerNombreCurso(c.cursoB)}</strong> coinciden en la misma hora.
             </p>
@@ -364,14 +370,16 @@ export default function Matricula() {
       )}
 
       {/* Paso 1: Seleccionar Cursos */}
-      <div className="bg-slate-900/80 border border-slate-800/90 rounded-3xl shadow-xl p-6 backdrop-blur-2xl space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+      <div className="liquid-glass-card p-5 sm:p-6 space-y-5">
+        <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b ${
+          tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        }`}>
           <div>
-            <h2 className="text-sm font-black text-white flex items-center space-x-2">
-              <span className="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-xs">1</span>
+            <h2 className={`text-sm font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} flex items-center space-x-2`}>
+              <span className="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-500 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center text-xs">1</span>
               <span>Selecciona Cursos Habilitados ({semestreSeleccionado})</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-0.5`}>
               Cursos con todos los prerrequisitos cumplidos según tu Malla.
             </p>
           </div>
@@ -381,10 +389,12 @@ export default function Matricula() {
             <button
               type="button"
               onClick={() => setFiltroCiclo("todos")}
-              className={`px-3 py-1 rounded-xl text-[10px] font-black border transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-xl text-[10px] font-black border transition-all cursor-pointer liquid-btn ${
                 filtroCiclo === "todos"
-                  ? "bg-blue-600 text-white border-blue-500"
-                  : "bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200"
+                  ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                  : tema === 'dark'
+                  ? "bg-[#090e1a] text-slate-400 border-slate-800 hover:text-slate-200"
+                  : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
               }`}
             >
               Todos
@@ -394,10 +404,12 @@ export default function Matricula() {
                 key={ciclo}
                 type="button"
                 onClick={() => setFiltroCiclo(String(ciclo))}
-                className={`px-3 py-1 rounded-xl text-[10px] font-black border transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-xl text-[10px] font-black border transition-all cursor-pointer liquid-btn ${
                   filtroCiclo === String(ciclo)
-                    ? "bg-blue-600 text-white border-blue-500"
-                    : "bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200"
+                    ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                    : tema === 'dark'
+                    ? "bg-[#090e1a] text-slate-400 border-slate-800 hover:text-slate-200"
+                    : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
                 }`}
               >
                 Ciclo {NOMBRES_CICLO[ciclo]}
@@ -428,7 +440,7 @@ export default function Matricula() {
                         : "bg-blue-50 border-blue-400 text-blue-900 shadow-md shadow-blue-500/5"
                       : tema === 'dark'
                         ? "bg-[#090e1a]/80 border-white/10 text-slate-200 hover:bg-slate-800/40"
-                        : "bg-white border-slate-200 text-slate-900 hover:bg-slate-50"
+                        : "bg-slate-50/90 border-slate-200 text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   <div className={`w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 border transition-all ${
@@ -436,7 +448,7 @@ export default function Matricula() {
                       ? "bg-blue-500 border-blue-400 text-white"
                       : tema === 'dark'
                         ? "bg-slate-900 border-slate-700"
-                        : "bg-slate-100 border-slate-300"
+                        : "bg-white border-slate-300"
                   }`}>
                     {estaInscrito && <Check className="w-3 h-3 font-bold" />}
                   </div>
@@ -468,13 +480,13 @@ export default function Matricula() {
 
       {/* Paso 2: Elegir Grupos */}
       {borradorCursos.length > 0 && (
-        <div className="bg-slate-900/80 border border-slate-800/90 rounded-3xl shadow-xl p-6 backdrop-blur-2xl space-y-5">
-          <div className="border-b border-slate-800/80 pb-4">
-            <h2 className="text-sm font-black text-white flex items-center space-x-2">
-              <span className="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-xs">2</span>
+        <div className="liquid-glass-card p-5 sm:p-6 space-y-5">
+          <div className={`pb-4 border-b ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+            <h2 className={`text-sm font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} flex items-center space-x-2`}>
+              <span className="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-500 dark:text-blue-400 border border-blue-500/30 flex items-center justify-center text-xs">2</span>
               <span>Asignación de Grupos y Horarios</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-0.5`}>
               Haz clic en cada grupo disponible para definir tu horario de clases.
             </p>
           </div>
@@ -497,7 +509,7 @@ export default function Matricula() {
                         <span>·</span>
                         <span>{datosCurso?.creditos} CR</span>
                         <span>·</span>
-                        <span className="bg-slate-950/60 px-2 py-0.5 rounded font-black">
+                        <span className="bg-slate-950/60 text-white px-2 py-0.5 rounded font-black">
                           Ciclo {NOMBRES_CICLO[datosCurso?.ciclo]}
                         </span>
                       </div>
@@ -534,8 +546,12 @@ export default function Matricula() {
                             estaElegido
                               ? `${colorCurso} shadow-md ring-2 ring-blue-500/40`
                               : ocupadoPorOtro
-                              ? "bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed opacity-40"
-                              : "bg-slate-950/80 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 text-slate-300"
+                              ? tema === 'dark'
+                                ? "bg-slate-950/40 border-slate-800 text-slate-600 cursor-not-allowed opacity-40"
+                                : "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed opacity-40"
+                              : tema === 'dark'
+                              ? "bg-[#090e1a]/80 border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 text-slate-300"
+                              : "bg-slate-50 border-slate-200 hover:border-blue-500/50 hover:bg-slate-100 text-slate-700"
                           }`}
                         >
                           <div className="font-black">{infoGrupo.etiqueta}</div>
