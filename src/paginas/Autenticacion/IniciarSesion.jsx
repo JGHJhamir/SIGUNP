@@ -481,7 +481,9 @@ export default function IniciarSesion() {
                 <strong>Aviso Importante:</strong> Esta plataforma <strong>no es un sitio web oficial de la Universidad Nacional de Piura (UNP)</strong>. Es un proyecto académico creado por <strong>JIAR</strong> para brindar un simulador de mallas curriculares y gestión de créditos.
               </p>
 
-              <label className="flex items-start space-x-2.5 cursor-pointer text-[11px] font-bold text-sky-400 dark:text-sky-300 pt-2 border-t border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 select-none">
+              <label className={`flex items-start space-x-2.5 cursor-pointer text-[11px] font-bold ${
+                tema === 'dark' ? 'text-sky-300 border-white/10' : 'text-sky-800 border-slate-200'
+              } pt-2 border-t select-none`}>
                 <input
                   type="checkbox"
                   checked={aceptaTerminos}

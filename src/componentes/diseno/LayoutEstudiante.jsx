@@ -99,7 +99,7 @@ export default function LayoutEstudiante() {
         {/* Header del Sidebar */}
         <div className={`p-5 border-b ${tema === 'dark' ? 'border-white/10' : 'border-slate-200/80'} space-y-4`}>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 p-0.5 border border-blue-500/30 flex items-center justify-center shadow-lg shrink-0 overflow-hidden hover-pop">
+            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-slate-950 border-blue-500/40' : 'bg-white border-blue-500/30'} p-0.5 border flex items-center justify-center shadow-lg shrink-0 overflow-hidden hover-pop`}>
               <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
             </div>
             <div>
@@ -233,7 +233,7 @@ export default function LayoutEstudiante() {
       {/* Header en Móvil - Liquid Glass Estilo iPhone */}
       <header className={`md:hidden w-full iphone-glass-header px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-slate-900 p-0.5 border border-blue-500/30 flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop">
+          <div className={`w-9 h-9 rounded-xl ${tema === 'dark' ? 'bg-slate-950 border-blue-500/40' : 'bg-white border-blue-500/30'} p-0.5 border flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop`}>
             <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
           <div>

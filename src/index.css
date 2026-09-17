@@ -17,12 +17,12 @@
   }
   
   html.dark body {
-    background-color: #060911;
+    background: linear-gradient(135deg, #050810 0%, #080d1a 50%, #0b1122 100%);
     color: #f1f5f9;
   }
 
   html.light body {
-    background-color: #f6f8fc;
+    background: linear-gradient(135deg, #f0f4fd 0%, #f8fafc 50%, #eef2ff 100%);
     color: #0f172a;
   }
   
@@ -63,7 +63,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
   
   /* Liquid Glass Panel Base */
   html.dark .liquid-glass {
-    background: rgba(13, 20, 36, 0.72);
+    background: rgba(13, 20, 36, 0.76);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -73,21 +73,21 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   html.light .liquid-glass {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.95);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-      0 10px 30px -4px rgba(148, 163, 184, 0.16);
+      0 10px 30px -4px rgba(148, 163, 184, 0.2);
   }
 
   /* Liquid Glass Interactive Cards con Animación Spring y Glare */
   html.dark .liquid-glass-card {
-    background: rgba(13, 20, 36, 0.72);
+    background: rgba(13, 20, 36, 0.76);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.11);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 0.14),
       0 6px 20px rgba(0, 0, 0, 0.35);
@@ -97,59 +97,59 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   html.dark .liquid-glass-card:hover, html.dark .liquid-card-pop:hover {
-    border-color: rgba(59, 130, 246, 0.5);
+    border-color: rgba(59, 130, 246, 0.55);
     box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.3),
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.35),
       0 20px 48px -10px rgba(0, 0, 0, 0.65),
-      0 0 30px rgba(59, 130, 246, 0.25);
+      0 0 30px rgba(59, 130, 246, 0.28);
     transform: translateY(-6px) scale(1.025);
   }
 
   html.light .liquid-glass-card {
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(20px) saturate(190%);
     -webkit-backdrop-filter: blur(20px) saturate(190%);
     border: 1px solid rgba(226, 232, 240, 0.95);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-      0 4px 16px rgba(148, 163, 184, 0.1);
+      0 6px 20px rgba(148, 163, 184, 0.12);
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
   }
 
   html.light .liquid-glass-card:hover, html.light .liquid-card-pop:hover {
-    border-color: rgba(37, 99, 235, 0.45);
+    border-color: rgba(37, 99, 235, 0.5);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-      0 20px 40px -8px rgba(37, 99, 235, 0.18),
-      0 0 24px rgba(59, 130, 246, 0.12);
+      0 20px 40px -8px rgba(37, 99, 235, 0.2),
+      0 0 25px rgba(59, 130, 246, 0.15);
     transform: translateY(-6px) scale(1.025);
   }
 
   /* Liquid Glass Modal Dialog */
   html.dark .liquid-glass-modal {
-    background: rgba(10, 16, 30, 0.88);
+    background: rgba(10, 16, 30, 0.9);
     backdrop-filter: blur(32px) saturate(210%);
     -webkit-backdrop-filter: blur(32px) saturate(210%);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 
-      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.25),
-      0 25px 60px -12px rgba(0, 0, 0, 0.8);
+      inset 0 1.5px 0 0 rgba(255, 255, 255, 0.28),
+      0 25px 60px -12px rgba(0, 0, 0, 0.85);
   }
 
   html.light .liquid-glass-modal {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(32px) saturate(210%);
     -webkit-backdrop-filter: blur(32px) saturate(210%);
     border: 1px solid rgba(255, 255, 255, 1);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1),
-      0 25px 50px -12px rgba(148, 163, 184, 0.25);
+      0 25px 50px -12px rgba(148, 163, 184, 0.3);
   }
 
   /* Micro-animación de Resplandor Specular (Shimmer Sweep) */
-  .glare-hover::before {
+  html.dark .glare-hover::before {
     content: '';
     position: absolute;
     top: 0;
@@ -160,6 +160,24 @@ html.light ::-webkit-scrollbar-thumb:hover {
       90deg,
       transparent,
       rgba(255, 255, 255, 0.14),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.75s ease-in-out;
+    pointer-events: none;
+  }
+
+  html.light .glare-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.5),
       transparent
     );
     transform: skewX(-20deg);
@@ -214,19 +232,19 @@ html.light ::-webkit-scrollbar-thumb:hover {
   /* Inset boxes / Sub-surfaces con efecto Frosted */
   html.dark .app-inset-box {
     background: rgba(8, 13, 24, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   html.light .app-inset-box {
-    background: rgba(241, 245, 249, 0.85);
-    border: 1px solid rgba(226, 232, 240, 0.9);
+    background: rgba(241, 245, 249, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.95);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   /* Liquid Glass Inputs & Selects */
   html.dark .liquid-input {
-    background: rgba(10, 16, 28, 0.7);
+    background: rgba(10, 16, 28, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #f8fafc;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
@@ -234,23 +252,23 @@ html.light ::-webkit-scrollbar-thumb:hover {
     transition: all 0.2s ease-in-out;
   }
   html.dark .liquid-input:focus {
-    border-color: rgba(59, 130, 246, 0.7);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(59, 130, 246, 0.25);
-    background: rgba(14, 22, 40, 0.85);
+    border-color: rgba(59, 130, 246, 0.75);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(59, 130, 246, 0.28);
+    background: rgba(14, 22, 40, 0.88);
     transform: scale(1.01);
   }
 
   html.light .liquid-input {
-    background: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(203, 213, 225, 0.8);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(203, 213, 225, 0.9);
     color: #0f172a;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
     backdrop-filter: blur(12px);
     transition: all 0.2s ease-in-out;
   }
   html.light .liquid-input:focus {
-    border-color: rgba(37, 99, 235, 0.7);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03), 0 0 0 3px rgba(37, 99, 235, 0.18);
+    border-color: rgba(37, 99, 235, 0.75);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03), 0 0 0 3px rgba(37, 99, 235, 0.2);
     background: #ffffff;
     transform: scale(1.01);
   }
@@ -292,14 +310,14 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   html.light .iphone-glass-dock {
-    background: rgba(255, 255, 255, 0.84);
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(36px) saturate(220%);
     -webkit-backdrop-filter: blur(36px) saturate(220%);
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.98);
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 1), 
-      0 20px 48px -10px rgba(148, 163, 184, 0.32),
-      0 0 25px rgba(37, 99, 235, 0.14);
+      0 20px 48px -10px rgba(148, 163, 184, 0.35),
+      0 0 25px rgba(37, 99, 235, 0.16);
   }
 
   html.dark .iphone-glass-header {
@@ -311,11 +329,11 @@ html.light ::-webkit-scrollbar-thumb:hover {
   }
 
   html.light .iphone-glass-header {
-    background: rgba(246, 248, 252, 0.88);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
-    box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 16px rgba(148, 163, 184, 0.12);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 16px rgba(148, 163, 184, 0.14);
   }
 
   /* Item de pestaña móvil tipo iPhone */
@@ -337,12 +355,13 @@ html.light ::-webkit-scrollbar-thumb:hover {
       0 0 20px rgba(59, 130, 246, 0.3);
     color: #ffffff !important;
   }
+
   html.light .iphone-active-pill {
-    background: rgba(15, 23, 42, 0.94);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
     border: 1px solid rgba(255, 255, 255, 0.95);
     box-shadow: 
       inset 0 1px 0 0 rgba(255, 255, 255, 0.45), 
-      0 8px 20px rgba(15, 23, 42, 0.3);
+      0 8px 20px rgba(37, 99, 235, 0.35);
     color: #ffffff !important;
   }
 

@@ -412,40 +412,56 @@ export default function Matricula() {
                   key={curso.id}
                   type="button"
                   onClick={() => toggleCurso(curso.id)}
-                  className={`p-4 rounded-2xl border text-left flex items-start space-x-3 transition-all cursor-pointer ${
+                  className={`p-4 rounded-2xl border text-left flex items-start space-x-3 transition-all cursor-pointer glare-hover hover-scale-pop ${
                     estaInscrito
                       ? esElectivo
-                        ? "bg-purple-500/20 dark:bg-purple-950/50 light:bg-purple-100 border-purple-500/60 light:border-purple-400 shadow-md shadow-purple-500/10"
-                        : "bg-blue-500/10 dark:bg-blue-500/10 light:bg-blue-50 border-blue-500/50 light:border-blue-300 shadow-md shadow-blue-500/5"
+                        ? tema === 'dark'
+                          ? "bg-purple-950/60 border-purple-500/60 text-purple-200 shadow-md shadow-purple-500/10"
+                          : "bg-purple-100 border-purple-400 text-purple-900 shadow-md shadow-purple-500/5"
+                        : tema === 'dark'
+                          ? "bg-blue-950/50 border-blue-500/50 text-blue-200 shadow-md shadow-blue-500/5"
+                          : "bg-blue-50 border-blue-400 text-blue-900 shadow-md shadow-blue-500/5"
                       : esElectivo
-                      ? "bg-purple-950/20 dark:bg-purple-950/20 light:bg-purple-50/40 border-purple-900/40 light:border-purple-200 hover:bg-purple-900/30"
-                      : "bg-slate-950/60 dark:bg-slate-950/60 light:bg-white border-slate-800 dark:border-slate-800 light:border-slate-200 hover:bg-slate-800/40"
+                      ? tema === 'dark'
+                        ? "bg-purple-950/20 border-purple-900/40 hover:bg-purple-900/30"
+                        : "bg-purple-50/50 border-purple-200 hover:bg-purple-100/50"
+                      : tema === 'dark'
+                        ? "bg-[#090e1a]/80 border-white/10 text-slate-200 hover:bg-slate-800/40"
+                        : "bg-white border-slate-200 text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   <div className={`w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 border transition-all ${
                     estaInscrito
                       ? esElectivo
                         ? "bg-purple-600 border-purple-400 text-white"
-                        : "bg-blue-500 border-blue-400 text-slate-950"
-                      : "bg-slate-900 dark:bg-slate-900 light:bg-slate-100 border-slate-700 light:border-slate-300"
+                        : "bg-blue-500 border-blue-400 text-white"
+                      : tema === 'dark'
+                        ? "bg-slate-900 border-slate-700"
+                        : "bg-slate-100 border-slate-300"
                   }`}>
                     {estaInscrito && <Check className="w-3 h-3 font-bold" />}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-black text-slate-100 dark:text-slate-100 light:text-slate-900 leading-tight flex items-center justify-between gap-1">
+                    <div className={`text-xs font-black ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} leading-tight flex items-center justify-between gap-1`}>
                       <span>{curso.nombre}</span>
                       {esElectivo && (
-                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 light:bg-purple-200 light:text-purple-900 border border-purple-500/30 shrink-0">⚡ ELECTIVO</span>
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
+                          tema === 'dark'
+                            ? "bg-purple-500/20 text-purple-300 border-purple-500/30"
+                            : "bg-purple-200 text-purple-900 border-purple-300"
+                        } shrink-0`}>⚡ ELECTIVO</span>
                       )}
                     </div>
                     <div className="flex items-center space-x-2 mt-1.5 font-mono text-[10px]">
-                      <span className="text-slate-400 light:text-slate-600 font-bold">{curso.id}</span>
-                      <span className="text-slate-600 light:text-slate-400">·</span>
-                      <span className="text-slate-300 light:text-slate-800 font-extrabold">{curso.creditos} CR</span>
-                      <span className="text-slate-600 light:text-slate-400">·</span>
+                      <span className={`font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{curso.id}</span>
+                      <span className="text-slate-400">·</span>
+                      <span className={`font-extrabold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}`}>{curso.creditos} CR</span>
+                      <span className="text-slate-400">·</span>
                       <span className={`px-1.5 py-0.5 rounded text-[9px] font-black ${
-                        estaInscrito ? "bg-blue-500/20 text-blue-300 light:bg-blue-200 light:text-blue-900" : "bg-slate-800 light:bg-slate-200 text-slate-400 light:text-slate-600"
+                        estaInscrito
+                          ? tema === 'dark' ? "bg-blue-500/20 text-blue-300" : "bg-blue-200 text-blue-900"
+                          : tema === 'dark' ? "bg-slate-800 text-slate-400" : "bg-slate-200 text-slate-600"
                       }`}>
                         Ciclo {NOMBRES_CICLO[curso.ciclo]}
                       </span>

@@ -343,7 +343,7 @@ export default function ConfiguracionInicial() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline">
-                <div className="text-xl font-black text-purple-400 dark:text-purple-300 light:text-purple-900">{creditosElectivosAprobados} <span className="text-xs font-bold text-slate-400">/ 15 CR</span></div>
+                <div className={`text-xl font-black ${tema === 'dark' ? 'text-purple-300' : 'text-purple-900'}`}>{creditosElectivosAprobados} <span className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR</span></div>
                 <span className="text-[10px] font-black text-purple-400">{porcentajeElectivos}%</span>
               </div>
               <div className={`text-[10px] font-bold ${tema === 'dark' ? 'text-purple-300/80' : 'text-purple-700'} uppercase tracking-wider flex items-center space-x-1`}>
@@ -551,9 +551,11 @@ export default function ConfiguracionInicial() {
                     key={curso.id}
                     type="button"
                     onClick={() => toggleCurso(curso.id)}
-                    className={`p-4 rounded-2xl border text-left flex items-start space-x-3.5 transition-all duration-200 cursor-pointer group ${
+                    className={`p-4 rounded-2xl border text-left flex items-start space-x-3.5 transition-all duration-200 cursor-pointer group glare-hover hover-scale-pop ${
                       estaSeleccionado
-                        ? "bg-purple-500/20 border-purple-500/60 dark:border-purple-500/60 light:border-purple-400 text-purple-900 dark:text-purple-200 shadow-lg shadow-purple-500/10"
+                        ? tema === 'dark'
+                          ? "bg-purple-500/20 border-purple-500/60 text-purple-200 shadow-lg shadow-purple-500/10"
+                          : "bg-purple-100 border-purple-400 text-purple-900 shadow-md shadow-purple-500/5"
                         : tema === 'dark'
                         ? "bg-purple-950/20 border-purple-900/40 hover:border-purple-500/40 text-purple-300/90"
                         : "bg-purple-50/60 border-purple-200 hover:border-purple-300 text-slate-800"
@@ -563,16 +565,22 @@ export default function ConfiguracionInicial() {
                       className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 border transition-all ${
                         estaSeleccionado
                           ? "bg-purple-600 border-purple-400 text-white"
-                          : "bg-slate-200 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                          : tema === 'dark' ? "bg-slate-900 border-slate-700" : "bg-slate-200 border-slate-300"
                       }`}
                     >
                       {estaSeleccionado && <CheckCircle2 className="w-4 h-4 font-bold" />}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-extrabold leading-tight flex items-center justify-between gap-1 text-purple-300 light:text-purple-900">
+                      <div className={`text-xs font-extrabold leading-tight flex items-center justify-between gap-1 ${
+                        tema === 'dark' ? 'text-purple-300' : 'text-purple-900'
+                      }`}>
                         <span>{curso.nombre}</span>
-                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 light:bg-purple-200 light:text-purple-900 border border-purple-500/30 shrink-0">
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
+                          tema === 'dark'
+                            ? "bg-purple-500/20 text-purple-300 border-purple-500/30"
+                            : "bg-purple-200 text-purple-900 border-purple-300"
+                        } shrink-0`}>
                           ⚡ Ciclo {curso.ciclo}
                         </span>
                       </div>

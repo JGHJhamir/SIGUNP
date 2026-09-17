@@ -467,29 +467,39 @@ export default function MallaCurricular() {
           <button
             type="button"
             onClick={expandirTodos}
-            className="px-3.5 py-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-100 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-200 text-slate-300 dark:text-slate-300 light:text-slate-700 text-xs font-bold rounded-xl border border-slate-700 dark:border-slate-700 light:border-slate-200 transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm"
+            className={`px-3.5 py-2 ${
+              tema === 'dark'
+                ? 'bg-[#090e1a]/80 text-slate-300 hover:bg-slate-800 border-white/10'
+                : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200/90 shadow-sm'
+            } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer hover-scale-pop`}
           >
-            <FolderOpen className="w-3.5 h-3.5 text-blue-400 light:text-blue-600" />
+            <FolderOpen className="w-3.5 h-3.5 text-blue-500" />
             <span>Expandir</span>
           </button>
           
           <button
             type="button"
             onClick={colapsarTodos}
-            className="px-3.5 py-2 bg-slate-800 dark:bg-slate-800 light:bg-slate-100 hover:bg-slate-700 dark:hover:bg-slate-700 light:hover:bg-slate-200 text-slate-300 dark:text-slate-300 light:text-slate-700 text-xs font-bold rounded-xl border border-slate-700 dark:border-slate-700 light:border-slate-200 transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm"
+            className={`px-3.5 py-2 ${
+              tema === 'dark'
+                ? 'bg-[#090e1a]/80 text-slate-300 hover:bg-slate-800 border-white/10'
+                : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200/90 shadow-sm'
+            } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer hover-scale-pop`}
           >
-            <FolderClosed className="w-3.5 h-3.5 text-slate-400 light:text-slate-500" />
+            <FolderClosed className="w-3.5 h-3.5 text-slate-400" />
             <span>Colapsar</span>
           </button>
 
-          <div className="flex bg-slate-950 dark:bg-slate-950 light:bg-slate-100 p-1 rounded-xl border border-slate-800 dark:border-slate-800 light:border-slate-200">
+          <div className={`flex ${
+            tema === 'dark' ? 'bg-[#090e1a] border-white/10' : 'bg-slate-100 border-slate-200'
+          } p-1 rounded-xl border`}>
             <button
               type="button"
               onClick={() => setCriterioOrden("alfabetico")}
               className={`px-3 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
                 criterioOrden === "alfabetico"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                  : "text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-slate-200 dark:hover:text-slate-200 light:hover:text-slate-900"
+                  : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               A-Z
@@ -500,7 +510,7 @@ export default function MallaCurricular() {
               className={`px-3 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
                 criterioOrden === "creditos"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                  : "text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-slate-200 dark:hover:text-slate-200 light:hover:text-slate-900"
+                  : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Créditos
@@ -510,24 +520,30 @@ export default function MallaCurricular() {
       </div>
 
       {/* Status Legend */}
-      <div className="flex flex-wrap items-center gap-4 px-2 text-[11px] font-extrabold text-slate-400 light:text-slate-600 uppercase tracking-wider">
+      <div className={`flex flex-wrap items-center gap-4 px-2 text-[11px] font-extrabold ${
+        tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
+      } uppercase tracking-wider`}>
         <div className="flex items-center space-x-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-          <span className="text-slate-300 light:text-slate-800">Aprobado</span>
+          <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Aprobado</span>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
-          <span className="text-slate-300 light:text-slate-800">Disponible</span>
+          <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Disponible</span>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
-          <span className="text-slate-400 light:text-slate-600">Bloqueado</span>
+          <div className="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
+          <span className={tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}>Bloqueado</span>
         </div>
-        <span className="text-slate-700 light:text-slate-300">|</span>
-        <div className="flex items-center space-x-1.5 bg-blue-500/10 text-blue-400 light:bg-blue-100 light:text-blue-800 border border-blue-500/20 px-2.5 py-1 rounded-full">
+        <span className={tema === 'dark' ? 'text-slate-700' : 'text-slate-300'}>|</span>
+        <div className={`flex items-center space-x-1.5 ${
+          tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-800 border-blue-200'
+        } border px-2.5 py-1 rounded-full`}>
           <span>📘 O = Obligatorio</span>
         </div>
-        <div className="flex items-center space-x-1.5 bg-purple-500/20 text-purple-300 light:bg-purple-100 light:text-purple-900 border border-purple-500/30 px-2.5 py-1 rounded-full font-black">
+        <div className={`flex items-center space-x-1.5 ${
+          tema === 'dark' ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' : 'bg-purple-50 text-purple-800 border-purple-200'
+        } border px-2.5 py-1 rounded-full font-black`}>
           <span>⚡ E = Electivo</span>
         </div>
       </div>
@@ -555,37 +571,43 @@ export default function MallaCurricular() {
           const cursosFiltradosYOrdenados = ordenarCursos(cursosFiltrados);
 
           return (
-            <div key={semestre.ciclo} className="bg-slate-900/80 dark:bg-slate-900/80 light:bg-white border border-slate-800/90 dark:border-slate-800/90 light:border-slate-200/90 rounded-3xl overflow-hidden shadow-xl transition-all backdrop-blur-2xl">
+            <div key={semestre.ciclo} className={`liquid-glass-card rounded-3xl overflow-hidden transition-all backdrop-blur-2xl`}>
               
               {/* Accordion Header Button */}
               <button
                 type="button"
                 onClick={() => toggleCiclo(semestre.ciclo)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-800/40 dark:hover:bg-slate-800/40 light:hover:bg-slate-50 transition-colors cursor-pointer focus:outline-none"
+                className={`w-full px-6 py-4 flex items-center justify-between text-left ${
+                  tema === 'dark' ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'
+                } transition-colors cursor-pointer focus:outline-none`}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="text-sm font-black text-white dark:text-white light:text-slate-900 tracking-tight">
+                  <div className={`text-sm font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
                     {semestre.ciclo}
                   </div>
                   <span className={`text-[10px] font-black px-3 py-1 rounded-full border ${
                     aprobadosEnCiclo === totalCursosCiclo
-                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                      ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
                       : aprobadosEnCiclo > 0
-                      ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                      : "bg-slate-800 dark:bg-slate-800 light:bg-slate-100 text-slate-400 light:text-slate-600 border-slate-700 light:border-slate-200"
+                      ? "bg-blue-500/10 text-blue-500 border-blue-500/30"
+                      : tema === 'dark'
+                      ? "bg-slate-800 text-slate-400 border-slate-700"
+                      : "bg-slate-100 text-slate-600 border-slate-200"
                   }`}>
                     {aprobadosEnCiclo} / {totalCursosCiclo} Aprobados
                   </span>
                 </div>
                 
                 <div className="flex items-center space-x-2 text-slate-400">
-                  {estaExpandido ? <ChevronUp className="w-5 h-5 text-blue-400" /> : <ChevronDown className="w-5 h-5" />}
+                  {estaExpandido ? <ChevronUp className="w-5 h-5 text-blue-500" /> : <ChevronDown className="w-5 h-5" />}
                 </div>
               </button>
 
               {/* Accordion Expanded Course Cards Grid */}
               {estaExpandido && (
-                <div className="px-6 pb-6 pt-2 border-t border-slate-800/80 dark:border-slate-800/80 light:border-slate-200/80 animate-fadeIn">
+                <div className={`px-6 pb-6 pt-2 border-t ${
+                  tema === 'dark' ? 'border-white/10' : 'border-slate-200/80'
+                } animate-fadeIn`}>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {cursosFiltradosYOrdenados.map((curso) => {
                       const estado = obtenerEstadoCurso(curso);
@@ -596,25 +618,37 @@ export default function MallaCurricular() {
 
                       if (esElectivo) {
                         if (estado === "aprobado") {
-                          bgCardStyle = "bg-gradient-to-br from-purple-950/60 via-slate-950/90 to-purple-900/30 dark:from-purple-950/60 dark:via-slate-950/90 dark:to-purple-900/30 light:from-purple-100 light:via-white light:to-purple-50 border-purple-500/60 light:border-purple-400 shadow-purple-500/10";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-gradient-to-br from-purple-950/80 via-slate-950/90 to-purple-900/40 border-purple-500/60 shadow-purple-500/10"
+                            : "bg-gradient-to-br from-purple-50 via-white to-purple-100/60 border-purple-300 shadow-purple-500/5";
                           accentBarStyle = "bg-gradient-to-b from-emerald-400 to-purple-500";
                         } else if (estado === "disponible") {
-                          bgCardStyle = "bg-gradient-to-br from-purple-950/40 via-slate-950/90 to-amber-950/20 dark:from-purple-950/40 dark:via-slate-950/90 dark:to-amber-950/20 light:from-purple-50 light:via-white light:to-amber-50/50 border-purple-500/40 hover:border-purple-400 light:border-purple-300 light:hover:border-purple-500 shadow-purple-500/5";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-gradient-to-br from-purple-950/40 via-slate-950/90 to-amber-950/20 border-purple-500/40 hover:border-purple-400 shadow-purple-500/5"
+                            : "bg-gradient-to-br from-purple-50/70 via-white to-amber-50/50 border-purple-300 hover:border-purple-400 shadow-purple-500/5";
                           accentBarStyle = "bg-gradient-to-b from-purple-500 via-violet-400 to-amber-400";
                         } else {
-                          bgCardStyle = "bg-slate-950/40 dark:bg-purple-950/20 light:bg-slate-100 border-purple-900/30 dark:border-purple-900/30 light:border-slate-200 opacity-60 hover:opacity-80";
-                          accentBarStyle = "bg-purple-900/50 light:bg-purple-300";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-slate-950/40 border-purple-900/30 opacity-60 hover:opacity-80"
+                            : "bg-slate-50 border-slate-200 opacity-60 hover:opacity-80";
+                          accentBarStyle = "bg-purple-900/50";
                         }
                       } else {
                         if (estado === "aprobado") {
-                          bgCardStyle = "bg-slate-950/90 dark:bg-slate-950/90 light:bg-emerald-50/60 border-emerald-500/50 light:border-emerald-300 hover:border-emerald-400 shadow-emerald-500/5";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-slate-950/90 border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/5"
+                            : "bg-emerald-50/80 border-emerald-300 hover:border-emerald-400 shadow-emerald-500/5";
                           accentBarStyle = "bg-emerald-500";
                         } else if (estado === "disponible") {
-                          bgCardStyle = "bg-slate-950/90 dark:bg-slate-950/90 light:bg-white border-blue-500/50 light:border-blue-300 hover:border-blue-400 shadow-blue-500/5";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-slate-950/90 border-blue-500/50 hover:border-blue-400 shadow-blue-500/5"
+                            : "bg-white border-blue-300 hover:border-blue-400 shadow-blue-500/5";
                           accentBarStyle = "bg-blue-500";
                         } else {
-                          bgCardStyle = "bg-slate-950/40 dark:bg-slate-950/40 light:bg-slate-100 border-slate-800/80 light:border-slate-200 opacity-60 hover:opacity-80";
-                          accentBarStyle = "bg-slate-700 light:bg-slate-400";
+                          bgCardStyle = tema === 'dark'
+                            ? "bg-slate-950/40 border-white/10 opacity-60 hover:opacity-80"
+                            : "bg-slate-100 border-slate-200 opacity-60 hover:opacity-80";
+                          accentBarStyle = "bg-slate-500";
                         }
                       }
 
@@ -623,58 +657,72 @@ export default function MallaCurricular() {
                           key={curso.id}
                           type="button"
                           onClick={() => manejarClickCurso(curso)}
-                          className={`p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 shadow-md relative overflow-hidden group cursor-pointer ${bgCardStyle}`}
+                          className={`p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 shadow-md relative overflow-hidden group cursor-pointer glare-hover hover-scale-pop ${bgCardStyle}`}
                         >
                           {/* Accent status bar */}
                           <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${accentBarStyle}`}></div>
 
                           <div className="pl-2 space-y-1">
-                            <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 light:text-slate-600">
+                            <div className="flex justify-between items-center text-[10px] font-bold text-slate-400">
                               <span className="font-mono tracking-wider">{curso.id}</span>
                               <div className="flex items-center space-x-1.5">
                                 <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold ${
                                   esElectivo
-                                    ? "bg-gradient-to-r from-purple-500/20 to-amber-500/20 text-purple-300 dark:text-purple-300 light:bg-purple-200 light:text-purple-900 border border-purple-500/40 light:border-purple-300 shadow-sm"
-                                    : "bg-blue-500/10 text-blue-400 dark:text-blue-400 light:bg-blue-100 light:text-blue-800 border border-blue-500/20 light:border-blue-300"
+                                    ? tema === 'dark'
+                                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm"
+                                      : "bg-purple-100 text-purple-900 border border-purple-300"
+                                    : tema === 'dark'
+                                      ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                                      : "bg-blue-100 text-blue-800 border border-blue-300"
                                 }`}>
                                   {esElectivo ? "⚡ ELECTIVO" : "Obligatorio"}
                                 </span>
-                                <span className="text-slate-300 dark:text-slate-300 light:text-slate-700 font-mono font-bold">{curso.creditos} CR</span>
+                                <span className={`font-mono font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>{curso.creditos} CR</span>
                               </div>
                             </div>
 
-                            <h4 className="text-xs font-black text-slate-100 dark:text-slate-100 light:text-slate-900 leading-tight min-h-[32px] pt-1">
+                            <h4 className={`text-xs font-black ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} leading-tight min-h-[32px] pt-1`}>
                               {curso.nombre}
                             </h4>
                           </div>
 
-                          <div className="mt-4 pt-3 border-t border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 flex items-center justify-between text-[10px] text-slate-400 light:text-slate-600 font-semibold pl-2">
+                          <div className={`mt-4 pt-3 border-t ${
+                            tema === 'dark' ? 'border-white/10 text-slate-400' : 'border-slate-200 text-slate-600'
+                          } flex items-center justify-between text-[10px] font-semibold pl-2`}>
                             <span className="truncate max-w-[130px]" title={curso.requisitos.join(", ")}>
                               Req: {curso.requisitos.length > 0 ? curso.requisitos.join(" · ") : "Ninguno"}
                             </span>
                             
                             <span className={`text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full flex items-center space-x-1 ${
                               estado === "aprobado"
-                                ? "bg-emerald-500/20 text-emerald-400 light:bg-emerald-100 light:text-emerald-800 border border-emerald-500/30"
+                                ? tema === 'dark'
+                                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                                  : "bg-emerald-100 text-emerald-800 border border-emerald-300"
                                 : estado === "disponible"
                                 ? esElectivo
-                                  ? "bg-purple-500/20 text-purple-300 light:bg-purple-100 light:text-purple-800 border border-purple-500/30"
-                                  : "bg-blue-500/20 text-blue-400 light:bg-blue-100 light:text-blue-800 border border-blue-500/30"
-                                : "bg-slate-800 light:bg-slate-200 text-slate-500 light:text-slate-600"
+                                  ? tema === 'dark'
+                                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                                    : "bg-purple-100 text-purple-800 border border-purple-300"
+                                  : tema === 'dark'
+                                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                                    : "bg-blue-100 text-blue-800 border border-blue-300"
+                                : tema === 'dark'
+                                  ? "bg-slate-800 text-slate-500"
+                                  : "bg-slate-200 text-slate-600"
                             }`}>
                               {estado === "aprobado" ? (
                                 <>
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-400 light:text-emerald-600" />
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                                   <span>Aprobado</span>
                                 </>
                               ) : estado === "disponible" ? (
                                 <>
-                                  <Unlock className="w-3 h-3 text-blue-400 light:text-blue-600" />
+                                  <Unlock className="w-3 h-3 text-blue-500" />
                                   <span>Aprobar</span>
                                 </>
                               ) : (
                                 <>
-                                  <Lock className="w-3 h-3 text-slate-500 light:text-slate-600" />
+                                  <Lock className="w-3 h-3 text-slate-400" />
                                   <span>Bloqueado</span>
                                 </>
                               )}

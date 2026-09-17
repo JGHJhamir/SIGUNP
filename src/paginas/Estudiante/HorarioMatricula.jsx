@@ -127,50 +127,50 @@ const estructuraHorarioClases = [
 // Paleta de estilos por asignatura (Gradientes pulidos con glow y contraste alto)
 const paletaColoresNuevos = [
   {
-    badge: "bg-blue-500/20 dark:bg-blue-500/20 light:bg-blue-100 text-blue-300 dark:text-blue-300 light:text-blue-900 border border-blue-500/40 light:border-blue-300",
-    card: "bg-gradient-to-br from-blue-950/90 via-blue-900/50 to-slate-950/90 dark:from-blue-950/90 dark:via-blue-900/50 dark:to-slate-950/90 light:from-blue-50 light:via-white light:to-sky-50/80 border-blue-500/50 dark:border-blue-500/50 light:border-blue-300 text-blue-200 dark:text-blue-200 light:text-slate-900 hover:border-blue-400 light:hover:border-blue-500 shadow-lg shadow-blue-500/10 light:shadow-blue-500/5",
+    badge: "bg-blue-100 dark:bg-blue-500/20 text-blue-900 dark:text-blue-300 border-blue-300 dark:border-blue-500/40 border",
+    card: "bg-gradient-to-br from-blue-50 via-white to-sky-50/80 dark:from-blue-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-blue-300 dark:border-blue-500/50 text-slate-900 dark:text-blue-200 hover:border-blue-500 dark:hover:border-blue-400 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10",
     solido: "bg-blue-600 text-white",
     glow: "shadow-blue-500/40 border-blue-400 ring-2 ring-blue-400/50 scale-[1.02]",
     tag: "Blue"
   },
   {
-    badge: "bg-emerald-500/20 dark:bg-emerald-500/20 light:bg-emerald-100 text-emerald-300 dark:text-emerald-300 light:text-emerald-900 border border-emerald-500/40 light:border-emerald-300",
-    card: "bg-gradient-to-br from-emerald-950/90 via-teal-900/50 to-slate-950/90 dark:from-emerald-950/90 dark:via-teal-900/50 dark:to-slate-950/90 light:from-emerald-50 light:via-white light:to-teal-50/80 border-emerald-500/50 dark:border-emerald-500/50 light:border-emerald-300 text-emerald-200 dark:text-emerald-200 light:text-slate-900 hover:border-emerald-400 light:hover:border-emerald-500 shadow-lg shadow-emerald-500/10 light:shadow-emerald-500/5",
+    badge: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40 border",
+    card: "bg-gradient-to-br from-emerald-50 via-white to-teal-50/80 dark:from-emerald-950/90 dark:via-teal-900/50 dark:to-slate-950/90 border-emerald-300 dark:border-emerald-500/50 text-slate-900 dark:text-emerald-200 hover:border-emerald-500 dark:hover:border-emerald-400 shadow-lg shadow-emerald-500/5 dark:shadow-emerald-500/10",
     solido: "bg-emerald-600 text-white",
     glow: "shadow-emerald-500/40 border-emerald-400 ring-2 ring-emerald-400/50 scale-[1.02]",
     tag: "Emerald"
   },
   {
-    badge: "bg-purple-500/20 dark:bg-purple-500/20 light:bg-purple-100 text-purple-300 dark:text-purple-300 light:text-purple-900 border border-purple-500/40 light:border-purple-300",
-    card: "bg-gradient-to-br from-purple-950/90 via-violet-900/50 to-slate-950/90 dark:from-purple-950/90 dark:via-violet-900/50 dark:to-slate-950/90 light:from-purple-50 light:via-white light:to-violet-50/80 border-purple-500/50 dark:border-purple-500/50 light:border-purple-300 text-purple-200 dark:text-purple-200 light:text-slate-900 hover:border-purple-400 light:hover:border-purple-500 shadow-lg shadow-purple-500/10 light:shadow-purple-500/5",
+    badge: "bg-purple-100 dark:bg-purple-500/20 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-500/40 border",
+    card: "bg-gradient-to-br from-purple-50 via-white to-violet-50/80 dark:from-purple-950/90 dark:via-violet-900/50 dark:to-slate-950/90 border-purple-300 dark:border-purple-500/50 text-slate-900 dark:text-purple-200 hover:border-purple-500 dark:hover:border-purple-400 shadow-lg shadow-purple-500/5 dark:shadow-purple-500/10",
     solido: "bg-purple-600 text-white",
     glow: "shadow-purple-500/40 border-purple-400 ring-2 ring-purple-400/50 scale-[1.02]",
     tag: "Purple"
   },
   {
-    badge: "bg-amber-500/20 dark:bg-amber-500/20 light:bg-amber-100 text-amber-300 dark:text-amber-300 light:text-amber-900 border border-amber-500/40 light:border-amber-300",
-    card: "bg-gradient-to-br from-amber-950/90 via-orange-900/50 to-slate-950/90 dark:from-amber-950/90 dark:via-orange-900/50 dark:to-slate-950/90 light:from-amber-50 light:via-white light:to-orange-50/80 border-amber-500/50 dark:border-amber-500/50 light:border-amber-300 text-amber-200 dark:text-amber-200 light:text-slate-900 hover:border-amber-400 light:hover:border-amber-500 shadow-lg shadow-amber-500/10 light:shadow-amber-500/5",
+    badge: "bg-amber-100 dark:bg-amber-500/20 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-500/40 border",
+    card: "bg-gradient-to-br from-amber-50 via-white to-orange-50/80 dark:from-amber-950/90 dark:via-orange-900/50 dark:to-slate-950/90 border-amber-300 dark:border-amber-500/50 text-slate-900 dark:text-amber-200 hover:border-amber-500 dark:hover:border-amber-400 shadow-lg shadow-amber-500/5 dark:shadow-amber-500/10",
     solido: "bg-amber-600 text-white",
     glow: "shadow-amber-500/40 border-amber-400 ring-2 ring-amber-400/50 scale-[1.02]",
     tag: "Amber"
   },
   {
-    badge: "bg-rose-500/20 dark:bg-rose-500/20 light:bg-rose-100 text-rose-300 dark:text-rose-300 light:text-rose-900 border border-rose-500/40 light:border-rose-300",
-    card: "bg-gradient-to-br from-rose-950/90 via-red-900/50 to-slate-950/90 dark:from-rose-950/90 dark:via-red-900/50 dark:to-slate-950/90 light:from-rose-50 light:via-white light:to-red-50/80 border-rose-500/50 dark:border-rose-500/50 light:border-rose-300 text-rose-200 dark:text-rose-200 light:text-slate-900 hover:border-rose-400 light:hover:border-rose-500 shadow-lg shadow-rose-500/10 light:shadow-rose-500/5",
+    badge: "bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 border-rose-300 dark:border-rose-500/40 border",
+    card: "bg-gradient-to-br from-rose-50 via-white to-red-50/80 dark:from-rose-950/90 dark:via-red-900/50 dark:to-slate-950/90 border-rose-300 dark:border-rose-500/50 text-slate-900 dark:text-rose-200 hover:border-rose-500 dark:hover:border-rose-400 shadow-lg shadow-rose-500/5 dark:shadow-rose-500/10",
     solido: "bg-rose-600 text-white",
     glow: "shadow-rose-500/40 border-rose-400 ring-2 ring-rose-400/50 scale-[1.02]",
     tag: "Rose"
   },
   {
-    badge: "bg-sky-500/20 dark:bg-sky-500/20 light:bg-sky-100 text-sky-300 dark:text-sky-300 light:text-sky-900 border border-sky-500/40 light:border-sky-300",
-    card: "bg-gradient-to-br from-sky-950/90 via-cyan-900/50 to-slate-950/90 dark:from-sky-950/90 dark:via-cyan-900/50 dark:to-slate-950/90 light:from-sky-50 light:via-white light:to-cyan-50/80 border-sky-500/50 dark:border-sky-500/50 light:border-sky-300 text-sky-200 dark:text-sky-200 light:text-slate-900 hover:border-sky-400 light:hover:border-sky-500 shadow-lg shadow-sky-500/10 light:shadow-sky-500/5",
+    badge: "bg-sky-100 dark:bg-sky-500/20 text-sky-900 dark:text-sky-300 border-sky-300 dark:border-sky-500/40 border",
+    card: "bg-gradient-to-br from-sky-50 via-white to-cyan-50/80 dark:from-sky-950/90 dark:via-cyan-900/50 dark:to-slate-950/90 border-sky-300 dark:border-sky-500/50 text-slate-900 dark:text-sky-200 hover:border-sky-500 dark:hover:border-sky-400 shadow-lg shadow-sky-500/5 dark:shadow-sky-500/10",
     solido: "bg-sky-600 text-white",
     glow: "shadow-sky-500/40 border-sky-400 ring-2 ring-sky-400/50 scale-[1.02]",
     tag: "Sky"
   },
   {
-    badge: "bg-indigo-500/20 dark:bg-indigo-500/20 light:bg-indigo-100 text-indigo-300 dark:text-indigo-300 light:text-indigo-900 border border-indigo-500/40 light:border-indigo-300",
-    card: "bg-gradient-to-br from-indigo-950/90 via-blue-900/50 to-slate-950/90 dark:from-indigo-950/90 dark:via-blue-900/50 dark:to-slate-950/90 light:from-indigo-50 light:via-white light:to-blue-50/80 border-indigo-500/50 dark:border-indigo-500/50 light:border-indigo-300 text-indigo-200 dark:text-indigo-200 light:text-slate-900 hover:border-indigo-400 light:hover:border-indigo-500 shadow-lg shadow-indigo-500/10 light:shadow-indigo-500/5",
+    badge: "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-900 dark:text-indigo-300 border-indigo-300 dark:border-indigo-500/40 border",
+    card: "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80 dark:from-indigo-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-indigo-300 dark:border-indigo-500/50 text-slate-900 dark:text-indigo-200 hover:border-indigo-500 dark:hover:border-indigo-400 shadow-lg shadow-indigo-500/5 dark:shadow-indigo-500/10",
     solido: "bg-indigo-600 text-white",
     glow: "shadow-indigo-500/40 border-indigo-400 ring-2 ring-indigo-400/50 scale-[1.02]",
     tag: "Indigo"
