@@ -124,55 +124,55 @@ const estructuraHorarioClases = [
   }
 ];
 
-// Paleta de estilos por asignatura (Gradientes pulidos con glow y contraste alto)
+// Paleta de estilos por asignatura (Gradientes vibrantes para modo claro y dark mode elegante)
 const paletaColoresNuevos = [
   {
-    badge: "bg-blue-100 dark:bg-blue-500/20 text-blue-900 dark:text-blue-300 border-blue-300 dark:border-blue-500/40 border",
-    card: "bg-gradient-to-br from-blue-50 via-white to-sky-50/80 dark:from-blue-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-blue-300 dark:border-blue-500/50 text-slate-900 dark:text-blue-200 hover:border-blue-500 dark:hover:border-blue-400 shadow-lg shadow-blue-500/5 dark:shadow-blue-500/10",
+    badge: "bg-blue-600 text-white border-blue-700 dark:bg-blue-500/25 dark:text-blue-300 dark:border-blue-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-blue-100/90 via-blue-50 to-sky-100/80 dark:from-blue-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-blue-300 dark:border-blue-500/50 text-blue-950 dark:text-blue-100 hover:border-blue-500 dark:hover:border-blue-400 shadow-md shadow-blue-500/10",
     solido: "bg-blue-600 text-white",
-    glow: "shadow-blue-500/40 border-blue-400 ring-2 ring-blue-400/50 scale-[1.02]",
+    glow: "shadow-blue-500/40 border-blue-500 ring-2 ring-blue-500/60 scale-[1.02]",
     tag: "Blue"
   },
   {
-    badge: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40 border",
-    card: "bg-gradient-to-br from-emerald-50 via-white to-teal-50/80 dark:from-emerald-950/90 dark:via-teal-900/50 dark:to-slate-950/90 border-emerald-300 dark:border-emerald-500/50 text-slate-900 dark:text-emerald-200 hover:border-emerald-500 dark:hover:border-emerald-400 shadow-lg shadow-emerald-500/5 dark:shadow-emerald-500/10",
+    badge: "bg-emerald-600 text-white border-emerald-700 dark:bg-emerald-500/25 dark:text-emerald-300 dark:border-emerald-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-emerald-100/90 via-emerald-50 to-teal-100/80 dark:from-emerald-950/90 dark:via-teal-900/50 dark:to-slate-950/90 border-emerald-300 dark:border-emerald-500/50 text-emerald-950 dark:text-emerald-100 hover:border-emerald-500 dark:hover:border-emerald-400 shadow-md shadow-emerald-500/10",
     solido: "bg-emerald-600 text-white",
-    glow: "shadow-emerald-500/40 border-emerald-400 ring-2 ring-emerald-400/50 scale-[1.02]",
+    glow: "shadow-emerald-500/40 border-emerald-500 ring-2 ring-emerald-500/60 scale-[1.02]",
     tag: "Emerald"
   },
   {
-    badge: "bg-purple-100 dark:bg-purple-500/20 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-500/40 border",
-    card: "bg-gradient-to-br from-purple-50 via-white to-violet-50/80 dark:from-purple-950/90 dark:via-violet-900/50 dark:to-slate-950/90 border-purple-300 dark:border-purple-500/50 text-slate-900 dark:text-purple-200 hover:border-purple-500 dark:hover:border-purple-400 shadow-lg shadow-purple-500/5 dark:shadow-purple-500/10",
+    badge: "bg-purple-600 text-white border-purple-700 dark:bg-purple-500/25 dark:text-purple-300 dark:border-purple-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-purple-100/90 via-purple-50 to-violet-100/80 dark:from-purple-950/90 dark:via-violet-900/50 dark:to-slate-950/90 border-purple-300 dark:border-purple-500/50 text-purple-950 dark:text-purple-100 hover:border-purple-500 dark:hover:border-purple-400 shadow-md shadow-purple-500/10",
     solido: "bg-purple-600 text-white",
-    glow: "shadow-purple-500/40 border-purple-400 ring-2 ring-purple-400/50 scale-[1.02]",
+    glow: "shadow-purple-500/40 border-purple-500 ring-2 ring-purple-500/60 scale-[1.02]",
     tag: "Purple"
   },
   {
-    badge: "bg-amber-100 dark:bg-amber-500/20 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-500/40 border",
-    card: "bg-gradient-to-br from-amber-50 via-white to-orange-50/80 dark:from-amber-950/90 dark:via-orange-900/50 dark:to-slate-950/90 border-amber-300 dark:border-amber-500/50 text-slate-900 dark:text-amber-200 hover:border-amber-500 dark:hover:border-amber-400 shadow-lg shadow-amber-500/5 dark:shadow-amber-500/10",
+    badge: "bg-amber-600 text-white border-amber-700 dark:bg-amber-500/25 dark:text-amber-300 dark:border-amber-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-amber-100/90 via-amber-50 to-orange-100/80 dark:from-amber-950/90 dark:via-orange-900/50 dark:to-slate-950/90 border-amber-300 dark:border-amber-500/50 text-amber-950 dark:text-amber-100 hover:border-amber-500 dark:hover:border-amber-400 shadow-md shadow-amber-500/10",
     solido: "bg-amber-600 text-white",
-    glow: "shadow-amber-500/40 border-amber-400 ring-2 ring-amber-400/50 scale-[1.02]",
+    glow: "shadow-amber-500/40 border-amber-500 ring-2 ring-amber-500/60 scale-[1.02]",
     tag: "Amber"
   },
   {
-    badge: "bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 border-rose-300 dark:border-rose-500/40 border",
-    card: "bg-gradient-to-br from-rose-50 via-white to-red-50/80 dark:from-rose-950/90 dark:via-red-900/50 dark:to-slate-950/90 border-rose-300 dark:border-rose-500/50 text-slate-900 dark:text-rose-200 hover:border-rose-500 dark:hover:border-rose-400 shadow-lg shadow-rose-500/5 dark:shadow-rose-500/10",
+    badge: "bg-rose-600 text-white border-rose-700 dark:bg-rose-500/25 dark:text-rose-300 dark:border-rose-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-rose-100/90 via-rose-50 to-pink-100/80 dark:from-rose-950/90 dark:via-red-900/50 dark:to-slate-950/90 border-rose-300 dark:border-rose-500/50 text-rose-950 dark:text-rose-100 hover:border-rose-500 dark:hover:border-rose-400 shadow-md shadow-rose-500/10",
     solido: "bg-rose-600 text-white",
-    glow: "shadow-rose-500/40 border-rose-400 ring-2 ring-rose-400/50 scale-[1.02]",
+    glow: "shadow-rose-500/40 border-rose-500 ring-2 ring-rose-500/60 scale-[1.02]",
     tag: "Rose"
   },
   {
-    badge: "bg-sky-100 dark:bg-sky-500/20 text-sky-900 dark:text-sky-300 border-sky-300 dark:border-sky-500/40 border",
-    card: "bg-gradient-to-br from-sky-50 via-white to-cyan-50/80 dark:from-sky-950/90 dark:via-cyan-900/50 dark:to-slate-950/90 border-sky-300 dark:border-sky-500/50 text-slate-900 dark:text-sky-200 hover:border-sky-500 dark:hover:border-sky-400 shadow-lg shadow-sky-500/5 dark:shadow-sky-500/10",
-    solido: "bg-sky-600 text-white",
-    glow: "shadow-sky-500/40 border-sky-400 ring-2 ring-sky-400/50 scale-[1.02]",
+    badge: "bg-cyan-600 text-white border-cyan-700 dark:bg-sky-500/25 dark:text-sky-300 dark:border-sky-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-cyan-100/90 via-sky-50 to-teal-100/80 dark:from-sky-950/90 dark:via-cyan-900/50 dark:to-slate-950/90 border-cyan-300 dark:border-sky-500/50 text-cyan-950 dark:text-sky-100 hover:border-cyan-500 dark:hover:border-sky-400 shadow-md shadow-cyan-500/10",
+    solido: "bg-cyan-600 text-white",
+    glow: "shadow-cyan-500/40 border-cyan-500 ring-2 ring-cyan-500/60 scale-[1.02]",
     tag: "Sky"
   },
   {
-    badge: "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-900 dark:text-indigo-300 border-indigo-300 dark:border-indigo-500/40 border",
-    card: "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80 dark:from-indigo-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-indigo-300 dark:border-indigo-500/50 text-slate-900 dark:text-indigo-200 hover:border-indigo-500 dark:hover:border-indigo-400 shadow-lg shadow-indigo-500/5 dark:shadow-indigo-500/10",
+    badge: "bg-indigo-600 text-white border-indigo-700 dark:bg-indigo-500/25 dark:text-indigo-300 dark:border-indigo-500/40 border shadow-sm font-extrabold",
+    card: "bg-gradient-to-br from-indigo-100/90 via-indigo-50 to-blue-100/80 dark:from-indigo-950/90 dark:via-blue-900/50 dark:to-slate-950/90 border-indigo-300 dark:border-indigo-500/50 text-indigo-950 dark:text-indigo-100 hover:border-indigo-500 dark:hover:border-indigo-400 shadow-md shadow-indigo-500/10",
     solido: "bg-indigo-600 text-white",
-    glow: "shadow-indigo-500/40 border-indigo-400 ring-2 ring-indigo-400/50 scale-[1.02]",
+    glow: "shadow-indigo-500/40 border-indigo-500 ring-2 ring-indigo-500/60 scale-[1.02]",
     tag: "Indigo"
   }
 ];
@@ -428,7 +428,9 @@ export default function HorarioMatricula() {
 
     if (!datos) {
       return (
-        <div className={`h-full ${esSubHora ? 'min-h-[46px]' : 'min-h-[96px]'} flex items-center justify-center text-[11px] text-slate-700/60 dark:text-slate-600 font-mono select-none`}>
+        <div className={`h-full ${esSubHora ? 'min-h-[42px]' : 'min-h-[88px]'} flex items-center justify-center text-[11px] ${
+          tema === 'dark' ? 'text-slate-600' : 'text-slate-300'
+        } font-mono select-none`}>
           —
         </div>
       );
@@ -443,28 +445,32 @@ export default function HorarioMatricula() {
         onClick={() => setCursoDetalleModal({ ...datos, horaActualModal: horarioMostrar })}
         onMouseEnter={() => setCursoResaltado(datos.cursoId)}
         onMouseLeave={() => setCursoResaltado(null)}
-        className={`p-2 rounded-2xl border h-full ${
-          esSubHora ? 'min-h-[46px]' : 'min-h-[96px]'
+        className={`p-1.5 sm:p-2 rounded-xl border h-full ${
+          esSubHora ? 'min-h-[42px]' : 'min-h-[88px]'
         } flex flex-col justify-center text-center cursor-pointer transition-all duration-200 relative group overflow-hidden ${
           datos.estilo.card
-        } ${esDestacado ? datos.estilo.glow : ""} ${esOpaco ? "opacity-35 scale-[0.98] blur-[0.3px]" : ""}`}
+        } ${esDestacado ? datos.estilo.glow : ""} ${esOpaco ? "opacity-30 scale-[0.98] blur-[0.3px]" : ""}`}
       >
         <div className="flex items-center justify-between space-x-1 mb-0.5">
-          <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border backdrop-blur-md ${datos.estilo.badge}`}>
+          <span className={`text-[9px] px-1.5 py-0.5 rounded-md border ${datos.estilo.badge}`}>
             {datos.cursoId}
           </span>
-          <span className="text-[9px] font-bold text-slate-300 group-hover:text-white transition-colors">
+          <span className={`text-[9px] font-extrabold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} group-hover:opacity-100 transition-colors`}>
             {datos.infoGrupo.etiqueta}
           </span>
         </div>
 
-        <div className={`text-[11px] font-extrabold tracking-tight leading-snug line-clamp-2 ${esDestacado ? "text-white" : ""}`}>
+        <div className={`text-[11px] font-extrabold tracking-tight leading-tight line-clamp-2 ${
+          esDestacado ? (tema === 'dark' ? "text-white" : "text-slate-950") : ""
+        }`}>
           {datos.nombre}
         </div>
 
         {!esVistaCompacta && !esSubHora && (
-          <div className="text-[9px] opacity-75 font-mono mt-1 flex items-center justify-center space-x-1">
-            <Clock className="w-2.5 h-2.5 opacity-70" />
+          <div className={`text-[9px] font-mono mt-1 flex items-center justify-center space-x-1 ${
+            tema === 'dark' ? 'text-slate-300/80' : 'text-slate-700/80'
+          }`}>
+            <Clock className="w-2.5 h-2.5 opacity-75" />
             <span>{horarioMostrar}</span>
           </div>
         )}
@@ -801,7 +807,7 @@ export default function HorarioMatricula() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse min-w-[960px] text-xs print-table">
               <thead>
-                <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-600 bg-slate-100'} text-[11px] font-bold uppercase tracking-wider`}>
+                <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[11px] font-bold uppercase tracking-wider`}>
                   <th className={`py-3.5 px-4 text-left w-44 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
                     <div className="flex items-center space-x-2 text-slate-400">
                       <Clock className="w-4 h-4 text-blue-500" />
@@ -813,14 +819,16 @@ export default function HorarioMatricula() {
                     return (
                       <th
                         key={dia}
-                        className={`py-4 px-3 text-center border-r border-slate-800/80 relative ${
-                          esHoy ? "bg-emerald-500/10 text-emerald-300 font-black" : ""
+                        className={`py-3 px-3 text-center border-r ${
+                          tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
+                        } relative ${
+                          esHoy ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-300 font-black" : ""
                         }`}
                       >
                         <div className="flex items-center justify-center space-x-1.5">
                           <span>{dia}</span>
                           {esHoy && (
-                            <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/30 text-emerald-300 font-extrabold">
+                            <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold border border-emerald-500/30">
                               Hoy
                             </span>
                           )}
@@ -833,31 +841,40 @@ export default function HorarioMatricula() {
               <tbody>
                 {estructuraHorarioClases.map((fila) => {
                   if (fila.tipoFila === "recreo" || fila.tipoFila === "almuerzo") {
+                    const esAlmuerzo = fila.tipoFila === "almuerzo";
                     return (
                       <tr
                         key={fila.identificadorFila}
-                        className={`text-[11px] ${
-                          fila.tipoFila === "almuerzo"
-                            ? "bg-gradient-to-r from-sky-950/50 via-slate-900 to-sky-950/50 text-sky-300 border-y border-sky-800/40"
-                            : "bg-slate-950/80 text-slate-400 border-y border-slate-800/60"
+                        className={`text-[10px] ${
+                          esAlmuerzo
+                            ? tema === 'dark'
+                              ? "bg-amber-950/40 text-amber-300 border-y border-amber-800/60"
+                              : "bg-amber-50 text-amber-900 border-y border-amber-200/80"
+                            : tema === 'dark'
+                              ? "bg-slate-950/80 text-slate-400 border-y border-slate-800/60"
+                              : "bg-slate-100/90 text-slate-600 border-y border-slate-200/80"
                         }`}
                       >
-                        <td className="py-2.5 px-4 font-mono font-bold border-r border-slate-800 flex items-center space-x-2">
-                          <Clock className="w-3.5 h-3.5 opacity-60" />
-                          <span>{fila.unicaHora}</span>
+                        <td className={`py-1 px-3 font-mono font-bold text-[10px] border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'} whitespace-nowrap`}>
+                          <div className="flex items-center space-x-1.5 opacity-80">
+                            <Clock className="w-3 h-3 shrink-0 text-amber-500" />
+                            <span>{fila.unicaHora}</span>
+                          </div>
                         </td>
-                        <td colSpan={5} className="text-center font-extrabold tracking-widest uppercase py-2">
-                          {fila.tipoFila === "almuerzo" ? (
-                            <span className="inline-flex items-center space-x-2 text-sky-300 bg-sky-500/10 px-4 py-1 rounded-full border border-sky-500/20 shadow-sm">
-                              <Utensils className="w-4 h-4" />
-                              <span>Horario de Almuerzo Universitario</span>
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center space-x-2 text-slate-400 bg-slate-800/60 px-4 py-1 rounded-full border border-slate-700/50 shadow-sm">
-                              <Coffee className="w-3.5 h-3.5 text-amber-400" />
-                              <span>Receso / Intermedio</span>
-                            </span>
-                          )}
+                        <td colSpan={5} className="py-1 px-2 text-center">
+                          <div className="inline-flex items-center justify-center space-x-1.5 font-extrabold tracking-wider uppercase text-[10px]">
+                            {esAlmuerzo ? (
+                              <>
+                                <Utensils className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                                <span>Receso / Horario de Almuerzo</span>
+                              </>
+                            ) : (
+                              <>
+                                <Coffee className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400 shrink-0" />
+                                <span>Receso Intermedio (10 min)</span>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     );
@@ -866,9 +883,9 @@ export default function HorarioMatricula() {
                   return (
                     <React.Fragment key={fila.identificadorFila}>
                       {/* 1ra Hora del Bloque (e.g. 7:00-7:50) */}
-                      <tr className="border-b border-slate-800/30 hover:bg-slate-800/20 transition-colors">
-                        <td className="py-2 px-3 border-r border-slate-800 align-middle">
-                          <div className="text-[11px] font-black text-slate-200">{fila.primeraHoraPedagogica}</div>
+                      <tr className={`border-b ${tema === 'dark' ? 'border-slate-800/40 hover:bg-slate-800/20' : 'border-slate-200/60 hover:bg-slate-100/60'} transition-colors`}>
+                        <td className={`py-1.5 px-3 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'} align-middle`}>
+                          <div className={`text-[11px] font-black ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{fila.primeraHoraPedagogica}</div>
                         </td>
                         <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaLunes, "Lunes", fila.rangoHorario, false)}</td>
                         <td rowSpan={2} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaMartes, "Martes", fila.rangoHorario, false)}</td>
@@ -878,9 +895,9 @@ export default function HorarioMatricula() {
                       </tr>
 
                       {/* 2da Hora del Bloque (e.g. 7:50-8:40) */}
-                      <tr className="border-b border-slate-800/80 hover:bg-slate-800/20 transition-colors">
-                        <td className="py-2 px-3 border-r border-slate-800 align-middle">
-                          <div className="text-[10px] text-slate-400 font-mono font-semibold">{fila.segundaHoraPedagogica}</div>
+                      <tr className={`border-b ${tema === 'dark' ? 'border-slate-800/80 hover:bg-slate-800/20' : 'border-slate-200 hover:bg-slate-100/60'} transition-colors`}>
+                        <td className={`py-1.5 px-3 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'} align-middle`}>
+                          <div className={`text-[10px] font-mono font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{fila.segundaHoraPedagogica}</div>
                         </td>
                         <td rowSpan={1} className="p-1 align-stretch">{renderizarCeldaGrilla(fila.diaMiercolesSegundaHora, "Miércoles", fila.segundaHoraPedagogica, true)}</td>
                       </tr>
@@ -895,22 +912,26 @@ export default function HorarioMatricula() {
 
       {/* VISTA 2: AGENDA TIMELINE POR DÍA */}
       {tieneDatos && modoVista === "agenda" && (
-        <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl shadow-xl p-6 backdrop-blur-2xl space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div className={`border ${
+          tema === 'dark' ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-md'
+        } rounded-3xl p-6 backdrop-blur-2xl space-y-6`}>
+          <div className={`flex items-center justify-between border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-4`}>
             <div>
-              <h2 className="text-lg font-black text-white flex items-center space-x-2">
+              <h2 className={`text-lg font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} flex items-center space-x-2`}>
                 <span>Cronograma del {diaFiltroAgenda}</span>
                 {diaHoyNombre === diaFiltroAgenda && (
-                  <span className="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-black">
+                  <span className="text-xs bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-black">
                     ¡Día Actual!
                   </span>
                 )}
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-0.5`}>
                 Clases organizadas secuencialmente por bloque de hora.
               </p>
             </div>
-            <span className="text-xs font-black text-slate-400 bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800">
+            <span className={`text-xs font-black ${
+              tema === 'dark' ? 'text-slate-400 bg-slate-950 border-slate-800' : 'text-slate-600 bg-slate-100 border-slate-200'
+            } px-3.5 py-1.5 rounded-xl border`}>
               {bloquesPorDiaAgenda[diaFiltroAgenda]?.filter((b) => !b.esPausa).length || 0} Sesiones
             </span>
           </div>
@@ -923,12 +944,12 @@ export default function HorarioMatricula() {
                     key={idx}
                     className={`p-3 rounded-2xl border flex items-center justify-between text-xs font-extrabold ${
                       item.tipo === "almuerzo"
-                        ? "bg-sky-950/40 border-sky-900/50 text-sky-300"
-                        : "bg-slate-950/40 border-slate-800 text-slate-400"
+                        ? tema === 'dark' ? "bg-amber-950/40 border-amber-900/50 text-amber-300" : "bg-amber-50 border-amber-200 text-amber-900"
+                        : tema === 'dark' ? "bg-slate-950/40 border-slate-800 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-600"
                     }`}
                   >
                     <div className="flex items-center space-x-2">
-                      {item.tipo === "almuerzo" ? <Utensils className="w-4 h-4 text-sky-400" /> : <Coffee className="w-4 h-4 text-amber-400" />}
+                      {item.tipo === "almuerzo" ? <Utensils className="w-4 h-4 text-amber-500" /> : <Coffee className="w-4 h-4 text-amber-500" />}
                       <span>{item.tipo === "almuerzo" ? "Horario de Almuerzo" : "Receso"}</span>
                     </div>
                     <span className="font-mono text-[11px]">{item.hora}</span>
@@ -944,30 +965,34 @@ export default function HorarioMatricula() {
                   className={`p-5 rounded-3xl border flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer transition-all hover:scale-[1.01] ${c.estilo.card}`}
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-950/80 border border-slate-700/60 flex items-center justify-center font-bold text-sm shrink-0 shadow-inner">
-                      <BookOpen className="w-6 h-6 text-blue-400" />
+                    <div className={`w-12 h-12 rounded-2xl ${tema === 'dark' ? 'bg-slate-950/80 border-slate-700/60 text-blue-400' : 'bg-white border-blue-200 text-blue-600'} border flex items-center justify-center font-bold text-sm shrink-0 shadow-sm`}>
+                      <BookOpen className="w-6 h-6" />
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-md border ${c.estilo.badge}`}>
                           {c.cursoId}
                         </span>
-                        <span className="text-xs font-black text-slate-300">{c.infoGrupo.etiqueta}</span>
+                        <span className={`text-xs font-black ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>{c.infoGrupo.etiqueta}</span>
                       </div>
-                      <h3 className="text-base font-black text-white mt-1 leading-snug">{c.nombre}</h3>
+                      <h3 className={`text-base font-black ${tema === 'dark' ? 'text-white' : 'text-slate-950'} mt-1 leading-snug`}>{c.nombre}</h3>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between md:justify-end space-x-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800/60">
+                  <div className={`flex items-center justify-between md:justify-end space-x-4 border-t md:border-t-0 pt-3 md:pt-0 ${
+                    tema === 'dark' ? 'border-slate-800/60' : 'border-slate-200'
+                  }`}>
                     <div className="text-left md:text-right font-mono">
-                      <div className="text-xs font-black text-slate-200 flex items-center space-x-1.5">
-                        <Clock className="w-3.5 h-3.5 text-blue-400" />
+                      <div className={`text-xs font-black ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'} flex items-center space-x-1.5`}>
+                        <Clock className="w-3.5 h-3.5 text-blue-500" />
                         <span>{item.hora}</span>
                       </div>
-                      <div className="text-[10px] text-slate-400 mt-0.5 font-sans font-semibold">{c.infoGrupo.diasTexto}</div>
+                      <div className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-0.5 font-sans font-semibold`}>{c.infoGrupo.diasTexto}</div>
                     </div>
 
-                    <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-white transition-colors shadow-sm">
+                    <div className={`w-9 h-9 rounded-xl ${
+                      tema === 'dark' ? 'bg-slate-800/80 border-slate-700 text-slate-400' : 'bg-white border-slate-300 text-slate-600'
+                    } border flex items-center justify-center transition-colors shadow-sm`}>
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
@@ -991,27 +1016,29 @@ export default function HorarioMatricula() {
                 <span className={`text-xs font-black px-2.5 py-1 rounded-xl border ${c.estilo.badge}`}>
                   {c.cursoId}
                 </span>
-                <span className="text-xs font-black px-3 py-1 rounded-xl bg-slate-950/80 border border-slate-700 text-slate-200">
+                <span className={`text-xs font-black px-3 py-1 rounded-xl ${
+                  tema === 'dark' ? 'bg-slate-950/80 border-slate-700 text-slate-200' : 'bg-white/90 border-slate-300 text-slate-800 shadow-sm'
+                } border`}>
                   {c.infoGrupo.etiqueta}
                 </span>
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-white leading-tight">{c.nombre}</h3>
-                <p className="text-xs text-slate-400 mt-1 flex items-center space-x-1.5 font-medium">
-                  <Clock className="w-3.5 h-3.5 text-blue-400" />
+                <h3 className={`text-lg font-black ${tema === 'dark' ? 'text-white' : 'text-slate-950'} leading-tight`}>{c.nombre}</h3>
+                <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-1 flex items-center space-x-1.5 font-medium`}>
+                  <Clock className="w-3.5 h-3.5 text-blue-500" />
                   <span>{c.infoGrupo.horario}</span>
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-800/80 text-xs space-y-2">
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="text-slate-400 font-medium">Días de dictado:</span>
-                  <span className="font-bold text-slate-100">{c.infoGrupo.diasTexto}</span>
+              <div className={`pt-3 border-t ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} text-xs space-y-2`}>
+                <div className="flex items-center justify-between">
+                  <span className={`${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} font-medium`}>Días de dictado:</span>
+                  <span className={`font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-800'}`}>{c.infoGrupo.diasTexto}</span>
                 </div>
-                <div className="flex items-center justify-between text-slate-300">
-                  <span className="text-slate-400 font-medium">Horas por semana:</span>
-                  <span className="font-extrabold text-emerald-400">~6 hrs pedagógicas</span>
+                <div className="flex items-center justify-between">
+                  <span className={`${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} font-medium`}>Horas por semana:</span>
+                  <span className="font-extrabold text-emerald-600 dark:text-emerald-400">~6 hrs pedagógicas</span>
                 </div>
               </div>
             </div>
@@ -1022,11 +1049,15 @@ export default function HorarioMatricula() {
       {/* Modal de Detalle de Curso al hacer clic */}
       {cursoDetalleModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className={`${
+            tema === 'dark' ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-2xl'
+          } border rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-6 relative overflow-hidden`}>
             <button
               type="button"
               onClick={() => setCursoDetalleModal(null)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 transition-colors cursor-pointer"
+              className={`absolute top-5 right-5 ${
+                tema === 'dark' ? 'text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-800 border-slate-700/50' : 'text-slate-500 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border-slate-300'
+              } p-2 rounded-xl border transition-colors cursor-pointer`}
             >
               <X className="w-5 h-5" />
             </button>
@@ -1040,26 +1071,28 @@ export default function HorarioMatricula() {
                   <span className={`text-xs font-black px-2.5 py-0.5 rounded-lg border ${cursoDetalleModal.estilo.badge}`}>
                     {cursoDetalleModal.cursoId}
                   </span>
-                  <span className="text-xs font-black text-slate-300">{cursoDetalleModal.infoGrupo.etiqueta}</span>
+                  <span className={`text-xs font-black ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>{cursoDetalleModal.infoGrupo.etiqueta}</span>
                 </div>
-                <h3 className="text-xl font-black text-white mt-1 leading-snug">{cursoDetalleModal.nombre}</h3>
+                <h3 className={`text-xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} mt-1 leading-snug`}>{cursoDetalleModal.nombre}</h3>
               </div>
             </div>
 
-            <div className="bg-slate-950/70 rounded-2xl p-4 border border-slate-800 space-y-3 text-xs">
-              <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400 font-medium">Horario Regular:</span>
-                <span className="font-mono font-bold text-blue-400">{cursoDetalleModal.infoGrupo.horario}</span>
+            <div className={`${
+              tema === 'dark' ? 'bg-slate-950/70 border-slate-800' : 'bg-slate-50 border-slate-200'
+            } rounded-2xl p-4 border space-y-3 text-xs`}>
+              <div className={`flex justify-between items-center py-1 border-b ${tema === 'dark' ? 'border-slate-800/60' : 'border-slate-200'}`}>
+                <span className={`${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-medium`}>Horario Regular:</span>
+                <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{cursoDetalleModal.infoGrupo.horario}</span>
               </div>
 
-              <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400 font-medium">Frecuencia Semanal:</span>
-                <span className="font-bold text-slate-200">{cursoDetalleModal.infoGrupo.diasTexto}</span>
+              <div className={`flex justify-between items-center py-1 border-b ${tema === 'dark' ? 'border-slate-800/60' : 'border-slate-200'}`}>
+                <span className={`${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-medium`}>Frecuencia Semanal:</span>
+                <span className={`font-bold ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{cursoDetalleModal.infoGrupo.diasTexto}</span>
               </div>
 
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-400 font-medium">Estado en Matrícula:</span>
-                <span className="font-extrabold text-emerald-400 flex items-center space-x-1">
+                <span className={`${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-medium`}>Estado en Matrícula:</span>
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Inscrito ({semestreVista})</span>
                 </span>
@@ -1070,7 +1103,9 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={() => setCursoDetalleModal(null)}
-                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-black text-xs rounded-xl border border-slate-700 transition-all cursor-pointer shadow-sm"
+                className={`px-5 py-2.5 ${
+                  tema === 'dark' ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
+                } font-black text-xs rounded-xl border transition-all cursor-pointer shadow-sm`}
               >
                 Cerrar
               </button>
