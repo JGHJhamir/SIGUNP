@@ -20,40 +20,8 @@ import {
 } from "lucide-react";
 import { useTema } from "../../contexto/ContextoTema";
 import { supabase } from "../../lib/supabase";
+import { ESTRUCTURA_FACULTADES_DISPONIBLES } from "../../datos/planesEstudio";
 
-const unpEstructura = {
-  "Facultad de Ingeniería Industrial": [
-    "Ingeniería Informática",
-    "Ingeniería Industrial",
-    "Ingeniería Agroindustrial",
-    "Ingeniería Mecatrónica"
-  ],
-  "Facultad de Ciencias": [
-    "Ciencias Biológicas",
-    "Física",
-    "Matemáticas",
-    "Estadística",
-    "Ingeniería Electrónica y Telecomunicaciones"
-  ],
-  "Facultad de Ciencias de la Salud": [
-    "Medicina Humana",
-    "Enfermería",
-    "Obstetricia",
-    "Estomatología"
-  ],
-  "Facultad de Derecho y Ciencias Políticas": ["Derecho"],
-  "Facultad de Ciencias Administrativas": ["Administración"],
-  "Facultad de Ciencias Contables y Financieras": ["Contabilidad"],
-  "Facultad de Economía": ["Economía"],
-  "Facultad de Ingeniería de Minas": [
-    "Ingeniería de Minas",
-    "Ingeniería Geológica",
-    "Ingeniería de Petróleo",
-    "Ingeniería Química"
-  ],
-  "Facultad de Ingeniería Civil": ["Ingeniería Civil"],
-  "Facultad de Arquitectura y Urbanismo": ["Arquitectura"]
-};
 
 export default function PerfilEstudiante() {
   const { tema } = useTema();
@@ -427,15 +395,27 @@ export default function PerfilEstudiante() {
                     <Building2 className="w-3.5 h-3.5 text-blue-500" />
                     <span>Facultad</span>
                   </label>
-                  <input
-                    type="text"
-                    value={facultad || "Facultad de Ingeniería Industrial"}
-                    disabled
-                    readOnly
+                  <select
+                    value={facultad}
+                    onChange={manejarCambioFacultad}
                     className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-400' : 'bg-slate-100 border-slate-300 text-slate-600'
-                    } border text-xs font-semibold cursor-not-allowed`}
-                  />
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer`}
+                  >
+                    <option value="">Seleccione Facultad</option>
+                    {ESTRUCTURA_FACULTADES_DISPONIBLES.map((fObj) => {
+                      const tieneDisponibles = fObj.escuelas.some((e) => e.disponible);
+                      return (
+                        <option
+                          key={fObj.facultad}
+                          value={fObj.facultad}
+                          disabled={!tieneDisponibles}
+                        >
+                          {fObj.facultad} {!tieneDisponibles ? "(Próximamente)" : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
 
                 <div>
@@ -443,15 +423,27 @@ export default function PerfilEstudiante() {
                     <BookOpenCheck className="w-3.5 h-3.5 text-blue-500" />
                     <span>Escuela Profesional</span>
                   </label>
-                  <input
-                    type="text"
-                    value={escuela || "Ingeniería Informática"}
-                    disabled
-                    readOnly
+                  <select
+                    value={escuela}
+                    onChange={(e) => setEscuela(e.target.value)}
                     className={`w-full px-4 py-3 rounded-2xl ${
-                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-400' : 'bg-slate-100 border-slate-300 text-slate-600'
-                    } border text-xs font-semibold cursor-not-allowed`}
-                  />
+                      tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
+                    } border text-xs font-semibold focus:outline-none focus:border-blue-500 cursor-pointer disabled:opacity-40`}
+                    disabled={!facultad}
+                  >
+                    <option value="">Seleccione Escuela</option>
+                    {facultad &&
+                      ESTRUCTURA_FACULTADES_DISPONIBLES.find((f) => f.facultad === facultad)
+                        ?.escuelas.map((escObj) => (
+                          <option
+                            key={escObj.nombre}
+                            value={escObj.nombre}
+                            disabled={!escObj.disponible}
+                          >
+                            {escObj.nombre} {!escObj.disponible ? "(Próximamente)" : "✓ Malla disponible"}
+                          </option>
+                        ))}
+                  </select>
                 </div>
               </div>
 

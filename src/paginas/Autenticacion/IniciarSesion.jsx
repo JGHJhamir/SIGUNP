@@ -24,40 +24,8 @@ import {
 } from "lucide-react";
 import { useTema } from "../../contexto/ContextoTema";
 import { supabase } from "../../lib/supabase";
+import { ESTRUCTURA_FACULTADES_DISPONIBLES } from "../../datos/planesEstudio";
 
-const unpEstructura = {
-  "Facultad de Ingeniería Industrial": [
-    "Ingeniería Informática",
-    "Ingeniería Industrial",
-    "Ingeniería Agroindustrial",
-    "Ingeniería Mecatrónica"
-  ],
-  "Facultad de Ciencias": [
-    "Ciencias Biológicas",
-    "Física",
-    "Matemáticas",
-    "Estadística",
-    "Ingeniería Electrónica y Telecomunicaciones"
-  ],
-  "Facultad de Ciencias de la Salud": [
-    "Medicina Humana",
-    "Enfermería",
-    "Obstetricia",
-    "Estomatología"
-  ],
-  "Facultad de Derecho y Ciencias Políticas": ["Derecho"],
-  "Facultad de Ciencias Administrativas": ["Administración"],
-  "Facultad de Ciencias Contables y Financieras": ["Contabilidad"],
-  "Facultad de Economía": ["Economía"],
-  "Facultad de Ingeniería de Minas": [
-    "Ingeniería de Minas",
-    "Ingeniería Geológica",
-    "Ingeniería de Petróleo",
-    "Ingeniería Química"
-  ],
-  "Facultad de Ingeniería Civil": ["Ingeniería Civil"],
-  "Facultad de Arquitectura y Urbanismo": ["Arquitectura"]
-};
 
 export default function IniciarSesion() {
   const navegar = useNavigate();
@@ -281,6 +249,17 @@ export default function IniciarSesion() {
       return;
     }
 
+    const facObj = ESTRUCTURA_FACULTADES_DISPONIBLES.find((f) => f.facultad === facultad);
+    const escObj = facObj?.escuelas.find((e) => e.nombre === escuela);
+
+    if (!escObj || !escObj.disponible) {
+      setMensaje({
+        tipo: "error",
+        texto: "La malla curricular para esta escuela no está disponible por el momento (Próximamente). Selecciona una escuela habilitada."
+      });
+      return;
+    }
+
     setMostrarModalConfirmacion(true);
   };
 
@@ -294,6 +273,9 @@ export default function IniciarSesion() {
       const codigoLimpio = codigoUni.trim() || null;
       const emailLimpio = email.trim() ? email.trim().toLowerCase() : `${dniLimpio || codigoLimpio}@estudiante.unp.edu.pe`;
       const rolFinal = esSuperusuario ? modoIngreso : "Estudiante";
+
+      const carreraKey = escuela.toLowerCase().includes("contab") ? "contabilidad" : "informatica";
+      localStorage.setItem("carreraActiva", carreraKey);
 
       const payload = {
         nombres: nombres.trim(),
@@ -925,9 +907,18 @@ export default function IniciarSesion() {
                   required
                 >
                   <option value="">Seleccione Facultad</option>
-                  {Object.keys(unpEstructura).map((fac) => (
-                    <option key={fac} value={fac}>{fac}</option>
-                  ))}
+                  {ESTRUCTURA_FACULTADES_DISPONIBLES.map((fObj) => {
+                    const tieneDisponibles = fObj.escuelas.some((e) => e.disponible);
+                    return (
+                      <option
+                        key={fObj.facultad}
+                        value={fObj.facultad}
+                        disabled={!tieneDisponibles}
+                      >
+                        {fObj.facultad} {!tieneDisponibles ? "(Próximamente)" : ""}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -946,9 +937,17 @@ export default function IniciarSesion() {
                   required
                 >
                   <option value="">Seleccione Escuela</option>
-                  {facultad && unpEstructura[facultad].map((esc) => (
-                    <option key={esc} value={esc}>{esc}</option>
-                  ))}
+                  {facultad &&
+                    ESTRUCTURA_FACULTADES_DISPONIBLES.find((f) => f.facultad === facultad)
+                      ?.escuelas.map((escObj) => (
+                        <option
+                          key={escObj.nombre}
+                          value={escObj.nombre}
+                          disabled={!escObj.disponible}
+                        >
+                          {escObj.nombre} {!escObj.disponible ? "(Próximamente)" : "✓ Malla disponible"}
+                        </option>
+                      ))}
                 </select>
               </div>
             </div>

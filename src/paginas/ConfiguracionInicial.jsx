@@ -15,95 +15,29 @@ import {
   Moon
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
+import { obtenerPlanEstudiosActual } from "../datos/planesEstudio";
 
-const cursosReales = [
-  // ── Ciclo I ──
-  { id: "ED1292", nombre: "Actividad Deportiva", ciclo: "I", creditos: 2 },
-  { id: "SI1447", nombre: "Algoritmos", ciclo: "I", creditos: 4 },
-  { id: "ED1331", nombre: "Comunicación", ciclo: "I", creditos: 3 },
-  { id: "MA1470", nombre: "Geometría Analítica", ciclo: "I", creditos: 4 },
-  { id: "SI1358", nombre: "Herramientas Ofimáticas para la Vida Universitaria", ciclo: "I", creditos: 3 },
-  { id: "SI1216", nombre: "Introducción a la Ingeniería Informática", ciclo: "I", creditos: 2 },
-  { id: "MA1408", nombre: "Matemática Básica", ciclo: "I", creditos: 4 },
-  { id: "ED1297", nombre: "Metodología de los Estudios Superiores Universitarios", ciclo: "I", creditos: 2 },
-  // ── Ciclo II ──
-  { id: "CB1324", nombre: "Biología y Educación Ambiental", ciclo: "II", creditos: 3 },
-  { id: "MA1435", nombre: "Cálculo I", ciclo: "II", creditos: 4 },
-  { id: "FI1363", nombre: "Concepción Física del Universo", ciclo: "II", creditos: 3 },
-  { id: "SI1445", nombre: "Estructuras Discretas", ciclo: "II", creditos: 4 },
-  { id: "CS1286", nombre: "Filosofía y Ética", ciclo: "II", creditos: 2 },
-  { id: "SI1435", nombre: "Programación I", ciclo: "II", creditos: 4 },
-  { id: "QU1363", nombre: "Química General", ciclo: "II", creditos: 3 },
-  // ── Ciclo III ──
-  { id: "CA2337", nombre: "Administración", ciclo: "III", creditos: 3 },
-  { id: "MA2441", nombre: "Cálculo II", ciclo: "III", creditos: 4 },
-  { id: "EC2201", nombre: "Economía General", ciclo: "III", creditos: 2 },
-  { id: "FI2410", nombre: "Física I", ciclo: "III", creditos: 4 },
-  { id: "SI2422", nombre: "Programación II", ciclo: "III", creditos: 4 },
-  { id: "CS2397", nombre: "Realidad Nacional y Regional", ciclo: "III", creditos: 3 },
-  { id: "CS2258", nombre: "Sociología", ciclo: "III", creditos: 2 },
-  { id: "ED2278", nombre: "Taller de Arte", ciclo: "III", creditos: 2 },
-  // ── Ciclo IV ──
-  { id: "CA2101", nombre: "Actividad de Responsabilidad Social Universitaria", ciclo: "IV", creditos: 1 },
-  { id: "MA2333", nombre: "Álgebra Lineal", ciclo: "IV", creditos: 3 },
-  { id: "ES2300", nombre: "Estadística General", ciclo: "IV", creditos: 3 },
-  { id: "SI2418", nombre: "Estructura de Datos", ciclo: "IV", creditos: 4 },
-  { id: "FI2411", nombre: "Física II", ciclo: "IV", creditos: 4 },
-  { id: "SI2452", nombre: "Ingeniería de Procesos de Negocios", ciclo: "IV", creditos: 4 },
-  { id: "CO2201", nombre: "Introducción a la Contabilidad", ciclo: "IV", creditos: 2 },
-  { id: "CS2259", nombre: "Psicología General", ciclo: "IV", creditos: 2 },
-  // ── Ciclo V ──
-  { id: "SI3422", nombre: "Análisis y Diseño de Sistemas I", ciclo: "V", creditos: 4 },
-  { id: "MA3412", nombre: "Cálculo III", ciclo: "V", creditos: 4 },
-  { id: "FI3492", nombre: "Circuitos Eléctricos y Electrónicos", ciclo: "V", creditos: 4 },
-  { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", ciclo: "V", creditos: 2 },
-  { id: "ED3283", nombre: "Inglés I", ciclo: "V", creditos: 2 },
-  { id: "SI3421", nombre: "Modelado de Datos", ciclo: "V", creditos: 4 },
-  // ── Ciclo VI ──
-  { id: "SI3423", nombre: "Análisis y Diseño de Sistemas II", ciclo: "VI", creditos: 4 },
-  { id: "SI3400", nombre: "Arquitectura de Computadores", ciclo: "VI", creditos: 4 },
-  { id: "SI3420", nombre: "Base de Datos", ciclo: "VI", creditos: 4 },
-  { id: "ED3287", nombre: "Defensa Nacional", ciclo: "VI", creditos: 2 },
-  { id: "ES3336", nombre: "Inferencia y Probabilidades", ciclo: "VI", creditos: 3 },
-  { id: "ED3284", nombre: "Inglés II", ciclo: "VI", creditos: 2 },
-  { id: "ED3285", nombre: "Taller de Redacción Científica", ciclo: "VI", creditos: 2 },
-  // ── Ciclo VII ──
-  { id: "IO4447", nombre: "Diseños de Investigación para Ingeniería", ciclo: "VII", creditos: 4 },
-  { id: "CA4221", nombre: "Emprendedurismo", ciclo: "VII", creditos: 2 },
-  { id: "IO4448", nombre: "Investigación de Operaciones", ciclo: "VII", creditos: 4 },
-  { id: "SI4386", nombre: "Programación Visual", ciclo: "VII", creditos: 3 },
-  { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", ciclo: "VII", creditos: 4 },
-  { id: "SI4490", nombre: "Sistemas Operativos", ciclo: "VII", creditos: 4 },
-  // ── Ciclo VIII ──
-  { id: "DP4331", nombre: "Derecho Informático", ciclo: "VIII", creditos: 3 },
-  { id: "SI4488", nombre: "Ingeniería de Software", ciclo: "VIII", creditos: 4 },
-  { id: "EM4461", nombre: "Microeconomía", ciclo: "VIII", creditos: 4 },
-  { id: "SI4360", nombre: "Organización y Administración Informática", ciclo: "VIII", creditos: 3 },
-  { id: "SI4491", nombre: "Redes", ciclo: "VIII", creditos: 4 },
-  { id: "SI4465", nombre: "Sistemas de Información Gerencial", ciclo: "VIII", creditos: 4 },
-  // ── Ciclo IX ──
-  { id: "SI5364", nombre: "Elaboración de Proyectos Informáticos", ciclo: "IX", creditos: 3 },
-  { id: "IO5365", nombre: "Metodología para el Proyecto de Investigación", ciclo: "IX", creditos: 3 },
-  { id: "SI5497", nombre: "Procesos de Desarrollo de Software", ciclo: "IX", creditos: 4 },
-  { id: "SI5496", nombre: "Seguridad de la Información", ciclo: "IX", creditos: 4 },
-  { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", ciclo: "IX", creditos: 4 },
-  { id: "SI5365", nombre: "Tecnología y Desarrollo Web", ciclo: "IX", creditos: 3 },
-  // ── Ciclo X ──
-  { id: "CO5397", nombre: "Contabilidad de Costos y Presupuestos", ciclo: "X", creditos: 3 },
-  { id: "SI5367", nombre: "Desarrollo de la Investigación Informática", ciclo: "X", creditos: 3 },
-  { id: "SI5411", nombre: "Gestión en Informática", ciclo: "X", creditos: 4 },
-  { id: "SI5499", nombre: "Inteligencia de Negocios", ciclo: "X", creditos: 4 },
-  { id: "SI5498", nombre: "Sistemas Orientados a Servicios", ciclo: "X", creditos: 4 },
-  { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", ciclo: "X", creditos: 3 },
-  { id: "SI5373", nombre: "Trabajo de Investigación", ciclo: "X", creditos: 3 }
-];
+const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 export default function ConfiguracionInicial() {
   const navigate = useNavigate();
   const { tema, alternarTema } = useTema();
 
+  const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
+  const planActual = obtenerPlanEstudiosActual();
+  
+  const cursosReales = planActual.flatMap((sem) =>
+    sem.cursos.map((c) => ({
+      id: c.id,
+      nombre: c.nombre,
+      ciclo: NOMBRES_CICLO[sem.numeroCiclo - 1] || `Ciclo ${sem.numeroCiclo}`,
+      creditos: c.creditos
+    }))
+  );
+
   const [aprobados, setAprobados] = useState(() => {
-    const guardados = localStorage.getItem("cursosAprobados");
+    const storageKeyAprobados = `cursosAprobados_${carreraKey}`;
+    const guardados = localStorage.getItem(storageKeyAprobados) || localStorage.getItem("cursosAprobados");
     if (guardados) {
       try {
         return JSON.parse(guardados);
@@ -127,6 +61,7 @@ export default function ConfiguracionInicial() {
 
   const manejarConfirmar = () => {
     localStorage.setItem("tutorialCompletado", "true");
+    localStorage.setItem(`cursosAprobados_${carreraKey}`, JSON.stringify(aprobados));
     localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
     navigate("/estudiante/inicio");
   };

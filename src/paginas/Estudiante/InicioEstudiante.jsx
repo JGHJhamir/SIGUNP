@@ -18,6 +18,7 @@ import {
   BookMarked
 } from "lucide-react";
 import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
+import ModalGuiaInteractiva from "../../componentes/ModalGuiaInteractiva";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -25,10 +26,21 @@ export default function InicioEstudiante() {
   const { tema } = useTema();
   const [cursosAprobados, setCursosAprobados] = useState([]);
   const [cursosInscritos, setCursosInscritos] = useState([]);
+  const [mostrarGuia, setMostrarGuia] = useState(false);
 
   const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
   const planActual = obtenerPlanEstudiosActual();
   const nombreCarrera = obtenerNombreCarreraActual();
+
+  const obtenerSaludoHora = () => {
+    const hora = new Date().getHours();
+    if (hora >= 5 && hora < 12) return { texto: "¡Buenos días", icono: "☀️" };
+    if (hora >= 12 && hora < 19) return { texto: "¡Buenas tardes", icono: "🌤️" };
+    return { texto: "¡Buenas noches", icono: "🌙" };
+  };
+
+  const saludo = obtenerSaludoHora();
+
 
   const planEstudiosCompleto = useMemo(() => {
     return planActual.flatMap((sem) =>
@@ -123,34 +135,39 @@ export default function InicioEstudiante() {
                   tema === 'dark' ? 'bg-slate-500/10 text-slate-400 border-slate-500/20' : 'bg-slate-100 text-slate-600 border-slate-200'
                 } border`}>
                   <Info className="w-3 h-3 text-blue-500 shrink-0" />
-                  <span>Ingeniería Informática</span>
+                  <span>{nombreCarrera}</span>
                 </span>
               </div>
 
               <h1 className={`text-lg sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                ¡Hola, {nombreEstudiante}! 👋
+                {saludo.texto}, {nombreEstudiante}! {saludo.icono}
               </h1>
               <p className={`text-[11px] sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} max-w-xl`}>
-                Plan Curricular 2018-1 · UNP (OCRE)
+                Plan Curricular Oficial · Universidad Nacional de Piura
               </p>
             </div>
           </div>
 
-          <div className={`flex items-center space-x-2.5 ${
-            tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-white/90 border-slate-200 shadow-xs'
-          } border px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl shrink-0 self-stretch sm:self-auto justify-between sm:justify-start hover-scale-pop`}>
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 shrink-0" />
-              <div>
-                <div className={`text-[8px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Activo</div>
-                <div className={`text-xs sm:text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-I</div>
+          <div className="flex items-center space-x-2 shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
+            <button
+              onClick={() => setMostrarGuia(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs shadow-lg shadow-blue-500/20 flex items-center space-x-1.5 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Guía Interactiva</span>
+            </button>
+
+            <div className={`flex items-center space-x-2.5 ${
+              tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-white/90 border-slate-200 shadow-xs'
+            } border px-3 py-2 sm:px-4 sm:py-2 rounded-xl hover-scale-pop`}>
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 shrink-0" />
+                <div>
+                  <div className={`text-[8px] sm:text-[10px] uppercase tracking-wider font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Semestre Activo</div>
+                  <div className={`text-xs sm:text-sm font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>2026-I</div>
+                </div>
               </div>
             </div>
-            <span className={`sm:hidden text-[10px] font-bold px-2 py-0.5 rounded-full ${
-              tema === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-            }`}>
-              Matriculado
-            </span>
           </div>
         </div>
       </div>
@@ -487,6 +504,12 @@ export default function InicioEstudiante() {
         </div>
 
       </div>
+
+      {/* Modal Guía Interactiva Paso a Paso */}
+      <ModalGuiaInteractiva
+        abierto={mostrarGuia}
+        alCerrar={() => setMostrarGuia(false)}
+      />
 
     </div>
   );

@@ -310,3 +310,79 @@ export function obtenerNombreCarreraActual() {
 
   return "ING. INFORMÁTICA · UNP";
 }
+
+export const ESTRUCTURA_FACULTADES_DISPONIBLES = [
+  {
+    facultad: "Facultad de Ingeniería Industrial",
+    escuelas: [
+      { nombre: "Ingeniería Informática", disponible: true, carreraKey: "informatica" },
+      { nombre: "Ingeniería Industrial", disponible: false, carreraKey: null },
+      { nombre: "Ingeniería Agroindustrial", disponible: false, carreraKey: null },
+      { nombre: "Ingeniería Mecatrónica", disponible: false, carreraKey: null }
+    ]
+  },
+  {
+    facultad: "Facultad de Ciencias Contables y Financieras",
+    escuelas: [
+      { nombre: "Contabilidad", disponible: true, carreraKey: "contabilidad" }
+    ]
+  },
+  {
+    facultad: "Facultad de Ciencias",
+    escuelas: [
+      { nombre: "Ciencias Biológicas", disponible: false },
+      { nombre: "Física", disponible: false },
+      { nombre: "Matemáticas", disponible: false },
+      { nombre: "Estadística", disponible: false },
+      { nombre: "Ingeniería Electrónica y Telecomunicaciones", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Ciencias de la Salud",
+    escuelas: [
+      { nombre: "Medicina Humana", disponible: false },
+      { nombre: "Enfermería", disponible: false },
+      { nombre: "Obstetricia", disponible: false },
+      { nombre: "Estomatología", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Derecho y Ciencias Políticas",
+    escuelas: [
+      { nombre: "Derecho", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Ciencias Administrativas",
+    escuelas: [
+      { nombre: "Administración", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Economía",
+    escuelas: [
+      { nombre: "Economía", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Ingeniería de Minas",
+    escuelas: [
+      { nombre: "Ingeniería de Minas", disponible: false },
+      { nombre: "Ingeniería Geológica", disponible: false },
+      { nombre: "Ingeniería de Petróleo", disponible: false },
+      { nombre: "Ingeniería Química", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Ingeniería Civil",
+    escuelas: [
+      { nombre: "Ingeniería Civil", disponible: false }
+    ]
+  },
+  {
+    facultad: "Facultad de Arquitectura y Urbanismo",
+    escuelas: [
+      { nombre: "Arquitectura", disponible: false }
+    ]
+  }
+];
