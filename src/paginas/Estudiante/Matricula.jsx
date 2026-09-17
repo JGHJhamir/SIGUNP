@@ -9,12 +9,6 @@ import {
   Info
 } from "lucide-react";
 
-const ELECTIVOS_SET = new Set([
-  "SI3331", "SI3334", "SI3337", "SI3336", "AA3303", "SI3335",
-  "SI4388", "IO4334", "SI4387", "IO4332", "SI5370", "II5314",
-  "SI5369", "SI5361", "II5345", "II5344", "SI5371"
-]);
-
 const CURSOS_APROBADOS_DEFECTO = [
   "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
   "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363",
@@ -79,8 +73,6 @@ const planEstudiosCompleto = [
   { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", creditos: 2, ciclo: 5, requisitos: ["CS2397"] },
   { id: "ED3283", nombre: "Inglés I", creditos: 2, ciclo: 5, requisitos: [] },
   { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, ciclo: 5, requisitos: ["SI2418"] },
-  { id: "SI3331", nombre: "Aplicaciones Avanzadas con Hojas de Cálculo", creditos: 3, ciclo: 5, requisitos: ["SI1447"] },
-  { id: "SI3334", nombre: "Introducción a los Entornos Operativos", creditos: 3, ciclo: 5, requisitos: ["SI1216"] },
   // ── Ciclo VI ──
   { id: "SI3423", nombre: "Análisis y Diseño de Sistemas II", creditos: 4, ciclo: 6, requisitos: ["SI3422"] },
   { id: "SI3400", nombre: "Arquitectura de Computadores", creditos: 4, ciclo: 6, requisitos: ["FI3492"] },
@@ -89,10 +81,6 @@ const planEstudiosCompleto = [
   { id: "ES3336", nombre: "Inferencia y Probabilidades", creditos: 3, ciclo: 6, requisitos: ["ES2300"] },
   { id: "ED3284", nombre: "Inglés II", creditos: 2, ciclo: 6, requisitos: ["ED3283"] },
   { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, ciclo: 6, requisitos: ["ED1331"] },
-  { id: "SI3337", nombre: "Análisis de Algoritmos", creditos: 3, ciclo: 6, requisitos: ["SI2422"] },
-  { id: "SI3336", nombre: "Gráficos por Computadoras", creditos: 3, ciclo: 6, requisitos: ["SI2422"] },
-  { id: "AA3303", nombre: "Logística Empresarial", creditos: 3, ciclo: 6, requisitos: ["CA2337"] },
-  { id: "SI3335", nombre: "Teoría de Compiladores", creditos: 3, ciclo: 6, requisitos: ["SI2418"] },
   // ── Ciclo VII ──
   { id: "IO4447", nombre: "Diseños de Investigación para Ingeniería", creditos: 4, ciclo: 7, requisitos: ["ED3285", "ES3336"] },
   { id: "CA4221", nombre: "Emprendedurismo", creditos: 2, ciclo: 7, requisitos: [] },
@@ -100,10 +88,6 @@ const planEstudiosCompleto = [
   { id: "SI4386", nombre: "Programación Visual", creditos: 3, ciclo: 7, requisitos: ["SI2422"] },
   { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", creditos: 4, ciclo: 7, requisitos: ["SI3420"] },
   { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, ciclo: 7, requisitos: ["SI2418", "SI3400"] },
-  { id: "SI4388", nombre: "Métodos de Acceso", creditos: 3, ciclo: 7, requisitos: ["SI3421"] },
-  { id: "IO4334", nombre: "Métodos Numéricos", creditos: 3, ciclo: 7, requisitos: ["MA3412"] },
-  { id: "SI4387", nombre: "Programación Multimedia", creditos: 3, ciclo: 7, requisitos: ["SI2422"] },
-  { id: "IO4332", nombre: "Simulación y Juegos", creditos: 3, ciclo: 7, requisitos: ["SI2422"] },
   // ── Ciclo VIII ──
   { id: "DP4331", nombre: "Derecho Informático", creditos: 3, ciclo: 8, requisitos: ["CS1286", "ED3286"] },
   { id: "SI4488", nombre: "Ingeniería de Software", creditos: 4, ciclo: 8, requisitos: ["SI3423", "SI4489"] },
@@ -118,9 +102,6 @@ const planEstudiosCompleto = [
   { id: "SI5496", nombre: "Seguridad de la Información", creditos: 4, ciclo: 9, requisitos: ["SI4491"] },
   { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", creditos: 4, ciclo: 9, requisitos: ["DP4331", "SI4488"] },
   { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, ciclo: 9, requisitos: ["SI4488"] },
-  { id: "SI5370", nombre: "Microcomputadoras", creditos: 3, ciclo: 9, requisitos: ["SI3400"] },
-  { id: "II5314", nombre: "Programación de Microbots", creditos: 3, ciclo: 9, requisitos: ["SI3400"] },
-  { id: "SI5369", nombre: "Tratamiento Digital de Imágenes y Audio", creditos: 3, ciclo: 9, requisitos: ["MA3412", "SI2422"] },
   // ── Ciclo X ──
   { id: "CO5397", nombre: "Contabilidad de Costos y Presupuestos", creditos: 3, ciclo: 10, requisitos: ["CO2201", "EM4461"] },
   { id: "SI5367", nombre: "Desarrollo de la Investigación Informática", creditos: 3, ciclo: 10, requisitos: ["IO5365"] },
@@ -128,11 +109,7 @@ const planEstudiosCompleto = [
   { id: "SI5499", nombre: "Inteligencia de Negocios", creditos: 4, ciclo: 10, requisitos: ["SI4465"] },
   { id: "SI5498", nombre: "Sistemas Orientados a Servicios", creditos: 4, ciclo: 10, requisitos: ["SI5365"] },
   { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", creditos: 3, ciclo: 10, requisitos: ["SI5365"] },
-  { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, ciclo: 10, requisitos: ["IO5365"] },
-  { id: "SI5361", nombre: "Introducción a la Inteligencia Artificial", creditos: 3, ciclo: 10, requisitos: ["SI2418"] },
-  { id: "II5345", nombre: "Planeamiento y Control de Producción", creditos: 3, ciclo: 10, requisitos: ["IO4448"] },
-  { id: "II5344", nombre: "Sistemas SCADA", creditos: 3, ciclo: 10, requisitos: ["SI3400"] },
-  { id: "SI5371", nombre: "Taller de Servidores", creditos: 3, ciclo: 10, requisitos: ["SI4491"] }
+  { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, ciclo: 10, requisitos: ["IO5365"] }
 ];
 
 const NOMBRES_CICLO = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -439,7 +416,6 @@ export default function Matricula() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {catalogoFiltrado.map((curso) => {
               const estaInscrito = borradorCursos.includes(curso.id);
-              const esElectivo = ELECTIVOS_SET.has(curso.id);
               return (
                 <button
                   key={curso.id}
@@ -447,17 +423,9 @@ export default function Matricula() {
                   onClick={() => toggleCurso(curso.id)}
                   className={`p-4 rounded-2xl border text-left flex items-start space-x-3 transition-all cursor-pointer glare-hover hover-scale-pop ${
                     estaInscrito
-                      ? esElectivo
-                        ? tema === 'dark'
-                          ? "bg-purple-950/60 border-purple-500/60 text-purple-200 shadow-md shadow-purple-500/10"
-                          : "bg-purple-100 border-purple-400 text-purple-900 shadow-md shadow-purple-500/5"
-                        : tema === 'dark'
-                          ? "bg-blue-950/50 border-blue-500/50 text-blue-200 shadow-md shadow-blue-500/5"
-                          : "bg-blue-50 border-blue-400 text-blue-900 shadow-md shadow-blue-500/5"
-                      : esElectivo
                       ? tema === 'dark'
-                        ? "bg-purple-950/20 border-purple-900/40 hover:bg-purple-900/30"
-                        : "bg-purple-50/50 border-purple-200 hover:bg-purple-100/50"
+                        ? "bg-blue-950/50 border-blue-500/50 text-blue-200 shadow-md shadow-blue-500/5"
+                        : "bg-blue-50 border-blue-400 text-blue-900 shadow-md shadow-blue-500/5"
                       : tema === 'dark'
                         ? "bg-[#090e1a]/80 border-white/10 text-slate-200 hover:bg-slate-800/40"
                         : "bg-white border-slate-200 text-slate-900 hover:bg-slate-50"
@@ -465,9 +433,7 @@ export default function Matricula() {
                 >
                   <div className={`w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 border transition-all ${
                     estaInscrito
-                      ? esElectivo
-                        ? "bg-purple-600 border-purple-400 text-white"
-                        : "bg-blue-500 border-blue-400 text-white"
+                      ? "bg-blue-500 border-blue-400 text-white"
                       : tema === 'dark'
                         ? "bg-slate-900 border-slate-700"
                         : "bg-slate-100 border-slate-300"
@@ -478,13 +444,6 @@ export default function Matricula() {
                   <div className="flex-1 min-w-0">
                     <div className={`text-xs font-black ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} leading-tight flex items-center justify-between gap-1`}>
                       <span>{curso.nombre}</span>
-                      {esElectivo && (
-                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
-                          tema === 'dark'
-                            ? "bg-purple-500/20 text-purple-300 border-purple-500/30"
-                            : "bg-purple-200 text-purple-900 border-purple-300"
-                        } shrink-0`}>⚡ ELECTIVO</span>
-                      )}
                     </div>
                     <div className="flex items-center space-x-2 mt-1.5 font-mono text-[10px]">
                       <span className={`font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{curso.id}</span>

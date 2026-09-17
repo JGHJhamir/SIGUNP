@@ -106,9 +106,7 @@ const planEstudios = [
       { id: "FI3492", nombre: "Circuitos Eléctricos y Electrónicos", creditos: 4, tipo: "O", requisitos: ["FI2411"] },
       { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", creditos: 2, tipo: "O", requisitos: ["CS2397"] },
       { id: "ED3283", nombre: "Inglés I", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, tipo: "O", requisitos: ["SI2418"] },
-      { id: "SI3331", nombre: "Aplicaciones Avanzadas con Hojas de Cálculo", creditos: 3, tipo: "E", requisitos: ["SI1447"] },
-      { id: "SI3334", nombre: "Introducción a los Entornos Operativos", creditos: 3, tipo: "E", requisitos: ["SI1216"] }
+      { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, tipo: "O", requisitos: ["SI2418"] }
     ]
   },
   {
@@ -121,11 +119,7 @@ const planEstudios = [
       { id: "ED3287", nombre: "Defensa Nacional", creditos: 2, tipo: "O", requisitos: ["CS2397"] },
       { id: "ES3336", nombre: "Inferencia y Probabilidades", creditos: 3, tipo: "O", requisitos: ["ES2300"] },
       { id: "ED3284", nombre: "Inglés II", creditos: 2, tipo: "O", requisitos: ["ED3283"] },
-      { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, tipo: "O", requisitos: ["ED1331"] },
-      { id: "SI3337", nombre: "Análisis de Algoritmos", creditos: 3, tipo: "E", requisitos: ["SI2422"] },
-      { id: "SI3336", nombre: "Gráficos por Computadoras", creditos: 3, tipo: "E", requisitos: ["SI2422"] },
-      { id: "AA3303", nombre: "Logística Empresarial", creditos: 3, tipo: "E", requisitos: ["CA2337"] },
-      { id: "SI3335", nombre: "Teoría de Compiladores", creditos: 3, tipo: "E", requisitos: ["SI2418"] }
+      { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, tipo: "O", requisitos: ["ED1331"] }
     ]
   },
   {
@@ -137,11 +131,7 @@ const planEstudios = [
       { id: "IO4448", nombre: "Investigación de Operaciones", creditos: 4, tipo: "O", requisitos: ["ES3336", "MA2333"] },
       { id: "SI4386", nombre: "Programación Visual", creditos: 3, tipo: "O", requisitos: ["SI2422"] },
       { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", creditos: 4, tipo: "O", requisitos: ["SI3420"] },
-      { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, tipo: "O", requisitos: ["SI2418", "SI3400"] },
-      { id: "SI4388", nombre: "Métodos de Acceso", creditos: 3, tipo: "E", requisitos: ["SI3421"] },
-      { id: "IO4334", nombre: "Métodos Numéricos", creditos: 3, tipo: "E", requisitos: ["MA3412"] },
-      { id: "SI4387", nombre: "Programación Multimedia", creditos: 3, tipo: "E", requisitos: ["SI2422"] },
-      { id: "IO4332", nombre: "Simulación y Juegos", creditos: 3, tipo: "E", requisitos: ["SI2422"] }
+      { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, tipo: "O", requisitos: ["SI2418", "SI3400"] }
     ]
   },
   {
@@ -165,10 +155,7 @@ const planEstudios = [
       { id: "SI5497", nombre: "Procesos de Desarrollo de Software", creditos: 4, tipo: "O", requisitos: ["SI3423"] },
       { id: "SI5496", nombre: "Seguridad de la Información", creditos: 4, tipo: "O", requisitos: ["SI4491"] },
       { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", creditos: 4, tipo: "O", requisitos: ["DP4331", "SI4488"] },
-      { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, tipo: "O", requisitos: ["SI4488"] },
-      { id: "SI5370", nombre: "Microcomputadoras", creditos: 3, tipo: "E", requisitos: ["SI3400"] },
-      { id: "II5314", nombre: "Programación de Microbots", creditos: 3, tipo: "E", requisitos: ["SI3400"] },
-      { id: "SI5369", nombre: "Tratamiento Digital de Imágenes y Audio", creditos: 3, tipo: "E", requisitos: ["MA3412", "SI2422"] }
+      { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, tipo: "O", requisitos: ["SI4488"] }
     ]
   },
   {
@@ -181,11 +168,7 @@ const planEstudios = [
       { id: "SI5499", nombre: "Inteligencia de Negocios", creditos: 4, tipo: "O", requisitos: ["SI4465"] },
       { id: "SI5498", nombre: "Sistemas Orientados a Servicios", creditos: 4, tipo: "O", requisitos: ["SI5365"] },
       { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", creditos: 3, tipo: "O", requisitos: ["SI5365"] },
-      { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, tipo: "O", requisitos: ["IO5365"] },
-      { id: "SI5361", nombre: "Introducción a la Inteligencia Artificial", creditos: 3, tipo: "E", requisitos: ["SI2418"] },
-      { id: "II5345", nombre: "Planeamiento y Control de Producción", creditos: 3, tipo: "E", requisitos: ["IO4448"] },
-      { id: "II5344", nombre: "Sistemas SCADA", creditos: 3, tipo: "E", requisitos: ["SI3400"] },
-      { id: "SI5371", nombre: "Taller de Servidores", creditos: 3, tipo: "E", requisitos: ["SI4491"] }
+      { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, tipo: "O", requisitos: ["IO5365"] }
     ]
   }
 ];
@@ -564,15 +547,11 @@ export default function MallaCurricular() {
     }
   };
 
-  const totalObligatoriosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.filter((c) => c.tipo === "O").length, 0);
-  const totalElectivosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.filter((c) => c.tipo === "E").length, 0);
-  const creditosElectivosAprobados = planEstudios.reduce((acc, sem) => {
-    return acc + sem.cursos.reduce((sAcc, c) => sAcc + (c.tipo === "E" && aprobados.includes(c.id) ? c.creditos : 0), 0);
-  }, 0);
+  const totalObligatoriosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.length, 0);
+  const totalCreditosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.reduce((sAcc, c) => sAcc + c.creditos, 0), 0);
 
   const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / totalObligatoriosPlan) * 100);
-  const porcentajeElectivos = Math.min(100, Math.round((creditosElectivosAprobados / 15) * 100));
-  const porcentajeProgreso = Math.min(100, Math.round((totalCreditosAprobados / 274) * 100));
+  const porcentajeProgreso = Math.min(100, Math.round((totalCreditosAprobados / (totalCreditosPlan || 205)) * 100));
 
   // Determine active highlights for hover / selected course
   const setAntecesoresActivos = useMemo(() => {
@@ -606,41 +585,23 @@ export default function MallaCurricular() {
         </div>
 
         {/* Breakdown Metric Cards Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           
           {/* Cursos Obligatorios */}
           <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-              <span>Obligatorios</span>
+              <span>Asignaturas</span>
               <span className="bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded font-bold border border-blue-500/20 text-[9px]">{porcentajeObligatorios}%</span>
             </div>
             <div className="flex items-baseline justify-between">
               <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalObligatoriosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
+                {totalObligatoriosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan} Cursos</span>
               </div>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
               <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }}></div>
-            </div>
-          </div>
-
-          {/* Cursos Electivos */}
-          <div className={`p-3.5 sm:p-4 rounded-xl border ${
-            tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
-          } space-y-2 liquid-btn`}>
-            <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
-              <span>Electivos</span>
-              <span className="bg-purple-500/10 text-purple-500 px-1.5 py-0.5 rounded font-bold border border-purple-500/20 text-[9px]">{porcentajeElectivos}%</span>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {creditosElectivosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR</span>
-              </div>
-            </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-purple-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeElectivos}%` }}></div>
             </div>
           </div>
 
@@ -654,7 +615,7 @@ export default function MallaCurricular() {
             </div>
             <div className="flex items-baseline justify-between">
               <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCreditosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
+                {totalCreditosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalCreditosPlan} CR</span>
               </div>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
@@ -667,12 +628,12 @@ export default function MallaCurricular() {
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-sky-500 uppercase tracking-wider">
-              <span>Progreso</span>
+              <span>Progreso Carrera</span>
               <span className="text-sky-500 font-bold text-[9px]">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
               <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan + totalElectivosPlan}</span>
+                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
               </div>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
@@ -1018,7 +979,7 @@ export default function MallaCurricular() {
                     <span className="text-xs font-mono text-slate-400 font-bold block sm:inline sm:ml-2">({cursoModalCadena.id})</span>
                   </h2>
                   <p className="text-[11px] text-slate-400">
-                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos · {cursoModalCadena.tipo === "E" ? "Asignatura Electiva" : "Asignatura Obligatoria"}
+                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos · Asignatura Obligatoria
                   </p>
                 </div>
 

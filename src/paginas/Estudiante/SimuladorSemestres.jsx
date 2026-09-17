@@ -52,8 +52,6 @@ const planEstudiosCompleto = [
   { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", creditos: 2, requisitos: ["CS2397"], ciclo: 5 },
   { id: "ED3283", nombre: "Inglés I", creditos: 2, requisitos: [], ciclo: 5 },
   { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, requisitos: ["SI2418"], ciclo: 5 },
-  { id: "SI3331", nombre: "Aplicaciones Avanzadas con Hojas de Cálculo", creditos: 3, requisitos: ["SI1447"], ciclo: 5 },
-  { id: "SI3334", nombre: "Introducción a los Entornos Operativos", creditos: 3, requisitos: ["SI1216"], ciclo: 5 },
   { id: "SI3423", nombre: "Análisis y Diseño de Sistemas II", creditos: 4, requisitos: ["SI3422"], ciclo: 6 },
   { id: "SI3400", nombre: "Arquitectura de Computadores", creditos: 4, requisitos: ["FI3492"], ciclo: 6 },
   { id: "SI3420", nombre: "Base de Datos", creditos: 4, requisitos: ["SI3421"], ciclo: 6 },
@@ -61,20 +59,12 @@ const planEstudiosCompleto = [
   { id: "ES3336", nombre: "Inferencia y Probabilidades", creditos: 3, requisitos: ["ES2300"], ciclo: 6 },
   { id: "ED3284", nombre: "Inglés II", creditos: 2, requisitos: ["ED3283"], ciclo: 6 },
   { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, requisitos: ["ED1331"], ciclo: 6 },
-  { id: "SI3337", nombre: "Análisis de Algoritmos", creditos: 3, requisitos: ["SI2422"], ciclo: 6 },
-  { id: "SI3336", nombre: "Gráficos por Computadoras", creditos: 3, requisitos: ["SI2422"], ciclo: 6 },
-  { id: "AA3303", nombre: "Logística Empresarial", creditos: 3, requisitos: ["CA2337"], ciclo: 6 },
-  { id: "SI3335", nombre: "Teoría de Compiladores", creditos: 3, requisitos: ["SI2418"], ciclo: 6 },
   { id: "IO4447", nombre: "Diseños de Investigación para Ingeniería", creditos: 4, requisitos: ["ED3285", "ES3336"], ciclo: 7 },
   { id: "CA4221", nombre: "Emprendedurismo", creditos: 2, requisitos: [], ciclo: 7 },
   { id: "IO4448", nombre: "Investigación de Operaciones", creditos: 4, requisitos: ["ES3336", "MA2333"], ciclo: 7 },
   { id: "SI4386", nombre: "Programación Visual", creditos: 3, requisitos: ["SI2422"], ciclo: 7 },
   { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", creditos: 4, requisitos: ["SI3420"], ciclo: 7 },
   { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, requisitos: ["SI2418", "SI3400"], ciclo: 7 },
-  { id: "SI4388", nombre: "Métodos de Acceso", creditos: 3, requisitos: ["SI3421"], ciclo: 7 },
-  { id: "IO4334", nombre: "Métodos Numéricos", creditos: 3, requisitos: ["MA3412"], ciclo: 7 },
-  { id: "SI4387", nombre: "Programación Multimedia", creditos: 3, requisitos: ["SI2422"], ciclo: 7 },
-  { id: "IO4332", nombre: "Simulación y Juegos", creditos: 3, requisitos: ["SI2422"], ciclo: 7 },
   { id: "DP4331", nombre: "Derecho Informático", creditos: 3, requisitos: ["CS1286", "ED3286"], ciclo: 8 },
   { id: "SI4488", nombre: "Ingeniería de Software", creditos: 4, requisitos: ["SI3423", "SI4489"], ciclo: 8 },
   { id: "EM4461", nombre: "Microeconomía", creditos: 4, requisitos: ["EC2201"], ciclo: 8 },
@@ -87,27 +77,14 @@ const planEstudiosCompleto = [
   { id: "SI5496", nombre: "Seguridad de la Información", creditos: 4, requisitos: ["SI4491"], ciclo: 9 },
   { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", creditos: 4, requisitos: ["DP4331", "SI4488"], ciclo: 9 },
   { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, requisitos: ["SI4488"], ciclo: 9 },
-  { id: "SI5370", nombre: "Microcomputadoras", creditos: 3, requisitos: ["SI3400"], ciclo: 9 },
-  { id: "II5314", nombre: "Programación de Microbots", creditos: 3, requisitos: ["SI3400"], ciclo: 9 },
-  { id: "SI5369", nombre: "Tratamiento Digital de Imágenes y Audio", creditos: 3, requisitos: ["MA3412", "SI2422"], ciclo: 9 },
   { id: "CO5397", nombre: "Contabilidad de Costos y Presupuestos", creditos: 3, requisitos: ["CO2201", "EM4461"], ciclo: 10 },
   { id: "SI5367", nombre: "Desarrollo de la Investigación Informática", creditos: 3, requisitos: ["IO5365"], ciclo: 10 },
   { id: "SI5411", nombre: "Gestión en Informática", creditos: 4, requisitos: ["SI5364"], ciclo: 10 },
   { id: "SI5499", nombre: "Inteligencia de Negocios", creditos: 4, requisitos: ["SI4465"], ciclo: 10 },
   { id: "SI5498", nombre: "Sistemas Orientados a Servicios", creditos: 4, requisitos: ["SI5365"], ciclo: 10 },
   { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", creditos: 3, requisitos: ["SI5365"], ciclo: 10 },
-  { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, requisitos: ["IO5365"], ciclo: 10 },
-  { id: "SI5361", nombre: "Introducción a la Inteligencia Artificial", creditos: 3, requisitos: ["SI2418"], ciclo: 10 },
-  { id: "II5345", nombre: "Planeamiento y Control de Producción", creditos: 3, requisitos: ["IO4448"], ciclo: 10 },
-  { id: "II5344", nombre: "Sistemas SCADA", creditos: 3, requisitos: ["SI3400"], ciclo: 10 },
-  { id: "SI5371", nombre: "Taller de Servidores", creditos: 3, requisitos: ["SI4491"], ciclo: 10 }
+  { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, requisitos: ["IO5365"], ciclo: 10 }
 ];
-
-const ELECTIVOS_SET = new Set([
-  "SI3331", "SI3334", "SI3337", "SI3336", "AA3303", "SI3335",
-  "SI4388", "IO4334", "SI4387", "IO4332", "SI5370", "II5314",
-  "SI5369", "SI5361", "II5345", "II5344", "SI5371"
-]);
 
 export default function SimuladorSemestres() {
   const { tema } = useTema();
@@ -520,7 +497,6 @@ export default function SimuladorSemestres() {
                       cursosDeEsteSemestre.map((curso) => {
                         const aprobado = aprobadosSimulacion.includes(curso.id);
                         const requisitosCumplidos = validarPrerrequisitosCurso(curso, semestre.id);
-                        const esElectivo = ELECTIVOS_SET.has(curso.id);
 
                         return (
                           <div
@@ -530,10 +506,6 @@ export default function SimuladorSemestres() {
                                 ? tema === 'dark'
                                   ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
                                   : "bg-emerald-50 border-emerald-300 text-emerald-900"
-                                : esElectivo
-                                ? tema === 'dark'
-                                  ? "bg-purple-950/30 border-purple-500/40 text-purple-200"
-                                  : "bg-purple-50/80 border-purple-300 text-purple-900"
                                 : tema === 'dark'
                                   ? "bg-[#090e1a]/80 border-white/10 text-slate-200"
                                   : "bg-white border-slate-200 text-slate-900"
@@ -551,13 +523,6 @@ export default function SimuladorSemestres() {
                                   <span className={`font-bold px-1.5 py-0.5 rounded ${
                                     tema === 'dark' ? 'text-purple-400 bg-purple-500/10' : 'text-purple-700 bg-purple-100'
                                   }`}>Ciclo {ROMANOS[curso.ciclo]}</span>
-                                  {esElectivo && (
-                                    <span className={`px-1.5 py-0.5 rounded font-black border ${
-                                      tema === 'dark'
-                                        ? 'text-amber-300 bg-amber-500/20 border-amber-500/30'
-                                        : 'text-purple-900 bg-purple-200 border-purple-300'
-                                    }`}>⚡ ELECTIVO</span>
-                                  )}
                                 </div>
                                 <div className={`text-xs font-black ${
                                   tema === 'dark' ? 'text-slate-100' : 'text-slate-900'

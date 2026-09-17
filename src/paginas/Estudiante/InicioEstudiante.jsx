@@ -109,12 +109,6 @@ const planEstudiosCompleto = [
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-const ELECTIVOS_SET = new Set([
-  "SI3331", "SI3334", "SI3337", "SI3336", "AA3303", "SI3335",
-  "SI4388", "IO4334", "SI4387", "IO4332", "SI5370", "II5314",
-  "SI5369", "SI5361", "II5345", "II5344", "SI5371"
-]);
-
 export default function InicioEstudiante() {
   const { tema } = useTema();
   const [cursosAprobados, setCursosAprobados] = useState([]);
@@ -147,21 +141,15 @@ export default function InicioEstudiante() {
     .filter((c) => cursosAprobados.includes(c.id))
     .reduce((acc, c) => acc + c.creditos, 0);
 
-  const totalObligatoriosAprobados = cursosAprobados.filter((id) => !ELECTIVOS_SET.has(id)).length;
-  const totalElectivosAprobados = cursosAprobados.filter((id) => ELECTIVOS_SET.has(id)).length;
-  const creditosElectivosAprobados = planEstudiosCompleto
-    .filter((c) => ELECTIVOS_SET.has(c.id) && cursosAprobados.includes(c.id))
-    .reduce((acc, c) => acc + c.creditos, 0);
-
-  const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / 69) * 100);
-  const porcentajeElectivos = Math.min(100, Math.round((creditosElectivosAprobados / 15) * 100));
+  const totalObligatoriosAprobados = cursosAprobados.length;
+  const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / 63) * 100);
 
   // El ciclo estimado se determina por el menor ciclo que contiene al menos un curso obligatorio pendiente
   const calcularCicloEstimado = () => {
     if (cursosAprobados.length === 0) return "Ciclo I";
     for (let c = 1; c <= 10; c++) {
       const obligatoriosDelCiclo = planEstudiosCompleto.filter(
-        (curso) => curso.ciclo === c && !ELECTIVOS_SET.has(curso.id)
+        (curso) => curso.ciclo === c
       );
       const tienePendiente = obligatoriosDelCiclo.some(
         (curso) => !cursosAprobados.includes(curso.id)
@@ -176,7 +164,7 @@ export default function InicioEstudiante() {
   const nombreCiclo = calcularCicloEstimado();
 
   const cantidadInscritos = cursosInscritos.length;
-  const porcentajeProgreso = Math.min(100, Math.round((creditosAprobados / 274) * 100));
+  const porcentajeProgreso = Math.min(100, Math.round((creditosAprobados / 205) * 100));
 
   const notificaciones = [
     {
@@ -198,7 +186,7 @@ export default function InicioEstudiante() {
     {
       id: 3,
       titulo: "Consolidación de Créditos Plan 2018-1",
-      mensaje: "Se ha verificado la asignación de créditos obligatorios y electivos. Puedes consultar tu avance en el módulo Malla Curricular.",
+      mensaje: "Se ha verificado la asignación de créditos obligatorios. Puedes consultar tu avance en el módulo Malla Curricular.",
       tipo: "sistema",
       categoria: "sistema",
       fecha: "Hace 1 día"
@@ -268,7 +256,7 @@ export default function InicioEstudiante() {
       </div>
 
       {/* Resumen Académico Metric Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         
         {/* Créditos Aprobados */}
         <div className="p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
@@ -277,7 +265,7 @@ export default function InicioEstudiante() {
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Créditos Aprobados</span>
               <div className="flex items-baseline space-x-2">
                 <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 274 CR</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 205 CR</span>
               </div>
             </div>
             <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
@@ -306,7 +294,7 @@ export default function InicioEstudiante() {
               <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider block`}>Cursos Obligatorios</span>
               <div className="flex items-baseline space-x-2">
                 <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{totalObligatoriosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 69 completados</span>
+                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 63 completados</span>
               </div>
             </div>
             <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'} border flex items-center justify-center shadow-sm`}>
@@ -321,32 +309,6 @@ export default function InicioEstudiante() {
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-2 rounded-full overflow-hidden`}>
               <div className="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeObligatorios}%` }} />
-            </div>
-          </div>
-        </div>
-
-        {/* Cursos Electivos */}
-        <div className="p-5 rounded-2xl liquid-glass-card glare-hover hover-scale-pop flex flex-col justify-between">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'} uppercase tracking-wider block`}>Créditos Electivos</span>
-              <div className="flex items-baseline space-x-2">
-                <span className={`text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{creditosElectivosAprobados}</span>
-                <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ 15 CR requeridos</span>
-              </div>
-            </div>
-            <div className={`w-10 h-10 rounded-xl ${tema === 'dark' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-purple-50 text-purple-700 border-purple-200'} border flex items-center justify-center shadow-sm`}>
-              <Sparkles className="w-5 h-5" />
-            </div>
-          </div>
-
-          <div className="mt-4 space-y-1.5">
-            <div className={`flex justify-between text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
-              <span>Progreso Electivo ({totalElectivosAprobados} cursos)</span>
-              <span className={`font-bold ${tema === 'dark' ? 'text-purple-400' : 'text-purple-700'}`}>{porcentajeElectivos}%</span>
-            </div>
-            <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-2 rounded-full overflow-hidden`}>
-              <div className="bg-purple-600 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeElectivos}%` }} />
             </div>
           </div>
         </div>
