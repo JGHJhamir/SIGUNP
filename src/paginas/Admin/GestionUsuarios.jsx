@@ -308,7 +308,7 @@ export default function GestionUsuarios() {
       </div>
 
       {/* Filtros y Buscador */}
-      <div className={`p-4 rounded-2xl ${tema === 'dark' ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200'} border flex flex-col md:flex-row items-center justify-between gap-4`}>
+      <div className="p-4.5 rounded-2xl liquid-glass-card border flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
         
         {/* Buscador */}
         <div className="relative w-full md:w-96">
@@ -318,29 +318,25 @@ export default function GestionUsuarios() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por código, nombres, apellidos o carrera..."
-            className={`w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border outline-none transition-all ${
-              tema === 'dark'
-                ? 'bg-slate-950 border-slate-800 text-slate-200 focus:border-purple-500'
-                : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-purple-600'
-            }`}
+            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl liquid-input outline-none transition-all"
           />
         </div>
 
         {/* Badges Filtro por Rol */}
         <div className="flex items-center space-x-2 overflow-x-auto w-full md:w-auto">
-          <span className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} flex items-center gap-1`}>
-            <Filter className="w-3.5 h-3.5" /> Rol:
+          <span className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-600'} flex items-center gap-1.5 shrink-0`}>
+            <Filter className="w-3.5 h-3.5 text-purple-400" /> Rol:
           </span>
           {["Todos", "Estudiante", "Docente", "Administrador"].map((rol) => (
             <button
               key={rol}
               onClick={() => setFiltroRol(rol)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer liquid-btn ${
                 filtroRol === rol
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-600/20"
+                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25"
                   : tema === 'dark'
-                    ? "bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200"
-                    : "bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900"
+                    ? "bg-slate-900/80 border border-white/10 text-slate-300 hover:text-white"
+                    : "bg-white border border-slate-200 text-slate-600 hover:text-slate-900 shadow-sm"
               }`}
             >
               {rol}

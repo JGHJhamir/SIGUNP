@@ -216,12 +216,17 @@ export default function ConfiguracionInicial() {
 
   return (
     <div className={`min-h-screen ${
-      tema === 'dark' ? 'bg-[#090d16] text-slate-100' : 'bg-slate-50 text-slate-900'
+      tema === 'dark' ? 'bg-[#060911] text-slate-100' : 'bg-slate-50 text-slate-900'
     } flex items-center justify-center p-4 md:p-8 font-sans selection:bg-blue-600 selection:text-white relative overflow-hidden transition-colors duration-300`}>
 
-      <div className={`w-full max-w-5xl ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-xl'
-      } rounded-2xl border p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 animate-fadeIn transition-colors duration-300 max-w-full`}>
+      {/* Background Glowing Ambient Orbs for Liquid Glass Refraction */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-[600px] h-[600px] rounded-full bg-blue-600/15 dark:bg-blue-500/12 blur-[130px] animate-float-orb-1"></div>
+        <div className="absolute -bottom-20 -right-20 w-[700px] h-[700px] rounded-full bg-indigo-600/15 dark:bg-purple-500/12 blur-[150px] animate-float-orb-2"></div>
+        <div className="absolute top-[40%] right-[25%] w-[450px] h-[450px] rounded-full bg-sky-500/12 dark:bg-indigo-500/10 blur-[130px] animate-pulse-subtle"></div>
+      </div>
+
+      <div className="w-full max-w-5xl liquid-glass-modal rounded-3xl border p-4 sm:p-6 md:p-10 relative overflow-hidden z-10 animate-scale-in transition-colors duration-300 max-w-full shadow-2xl">
         
         {/* Step Indicator Bar */}
         <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'} pb-4 gap-3`}>

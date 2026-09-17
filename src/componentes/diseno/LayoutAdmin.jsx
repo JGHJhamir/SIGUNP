@@ -73,23 +73,30 @@ export default function LayoutAdmin() {
   const itemActivo = menuItems.find((item) => item.ruta === localizacion.pathname) || menuItems[0];
 
   return (
-    <div className={`min-h-screen ${tema === 'dark' ? 'bg-[#090d16] text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col md:flex-row font-sans selection:bg-purple-600 selection:text-white relative overflow-hidden transition-colors duration-200`}>
+    <div className={`min-h-screen ${tema === 'dark' ? 'bg-[#060911] text-slate-100' : 'bg-slate-50 text-slate-900'} flex flex-col md:flex-row font-sans selection:bg-purple-600 selection:text-white relative overflow-hidden transition-colors duration-200`}>
       
+      {/* Background Glowing Ambient Orbs for Liquid Glass Refraction */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-[550px] h-[550px] rounded-full bg-purple-600/15 dark:bg-purple-500/12 blur-[130px] animate-float-orb-1"></div>
+        <div className="absolute -bottom-20 -right-10 w-[650px] h-[650px] rounded-full bg-indigo-600/15 dark:bg-blue-500/10 blur-[140px] animate-float-orb-2"></div>
+        <div className="absolute top-[40%] right-[30%] w-[450px] h-[450px] rounded-full bg-fuchsia-500/10 dark:bg-purple-500/10 blur-[130px] animate-pulse-subtle"></div>
+      </div>
+
       {/* Sidebar Lateral para Desktop */}
-      <aside className={`hidden md:flex md:w-72 ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800/80' : 'bg-white border-slate-200'} border-r flex-col shrink-0 relative z-30 transition-colors duration-200`}>
+      <aside className="hidden md:flex md:w-72 liquid-glass border-r border-white/10 dark:border-white/10 border-slate-200/80 flex-col shrink-0 relative z-30 transition-colors duration-200">
         
         {/* Header del Sidebar */}
-        <div className={`p-5 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} space-y-4`}>
+        <div className={`p-5 border-b ${tema === 'dark' ? 'border-white/10' : 'border-slate-200/80'} space-y-4`}>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 p-0.5 border border-purple-500/30 flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 p-0.5 border border-purple-500/40 flex items-center justify-center shadow-lg shrink-0 overflow-hidden hover-pop">
               <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className={`font-extrabold tracking-tight text-base ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                <span className={`font-black tracking-tight text-base ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                   SIGUNP
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-500 border border-purple-500/20 uppercase tracking-wider">
+                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-purple-500/15 text-purple-400 border border-purple-500/30 uppercase tracking-wider shadow-sm">
                   Admin
                 </span>
               </div>
@@ -100,12 +107,12 @@ export default function LayoutAdmin() {
           </div>
 
           {/* Tarjeta de Estado del Administrador */}
-          <div className={`p-3 rounded-xl ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-50 border-slate-200'} border space-y-1.5`}>
+          <div className={`p-3 rounded-2xl ${tema === 'dark' ? 'bg-[#0a1020]/75 border-white/10' : 'bg-white/80 border-slate-200/90'} border space-y-1.5 liquid-btn glare-hover shadow-sm`}>
             <div className="flex items-center justify-between">
-              <span className={`text-[11px] font-bold uppercase tracking-wider ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} flex items-center gap-1.5`}>
-                <ShieldCheck className="w-3.5 h-3.5 text-purple-500" /> Superusuario
+              <span className={`text-[11px] font-extrabold uppercase tracking-wider ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} flex items-center gap-1.5`}>
+                <ShieldCheck className="w-3.5 h-3.5 text-purple-400" /> Superusuario
               </span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
                 Online
               </span>
             </div>
@@ -119,8 +126,8 @@ export default function LayoutAdmin() {
         </div>
 
         {/* Links del Menú Lateral */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          <div className={`px-3 py-1 text-[10px] font-bold tracking-wider uppercase ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+        <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
+          <div className={`px-3 py-1 text-[10px] font-black tracking-wider uppercase ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
             Módulos Principales
           </div>
           {menuItems.map((item) => {
@@ -129,15 +136,15 @@ export default function LayoutAdmin() {
               <Link
                 key={item.ruta}
                 to={item.ruta}
-                className={`group flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-xs font-semibold relative ${
+                className={`group flex items-center space-x-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 text-xs font-semibold relative liquid-btn ${
                   estaActivo
-                    ? "bg-purple-600 text-white font-bold shadow-sm"
+                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold shadow-lg shadow-purple-500/25"
                     : tema === 'dark'
-                      ? "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      ? "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/90 border border-transparent hover:border-slate-200"
                 }`}
               >
-                <div className={`${estaActivo ? "text-white" : "text-slate-400 group-hover:text-purple-500"} transition-colors`}>
+                <div className={`${estaActivo ? "text-white" : "text-slate-400 group-hover:text-purple-400"} transition-colors`}>
                   {item.icono}
                 </div>
                 <div className="flex-1 truncate">
@@ -155,13 +162,13 @@ export default function LayoutAdmin() {
         </nav>
 
         {/* Footer del Sidebar */}
-        <div className={`p-4 border-t ${tema === 'dark' ? 'border-slate-800/80 bg-[#090e1a]' : 'border-slate-200 bg-slate-50'} space-y-2`}>
+        <div className={`p-4 border-t ${tema === 'dark' ? 'border-white/10 bg-[#070b16]/75' : 'border-slate-200 bg-slate-50/80'} space-y-2`}>
           {/* Botón para cambiar a Vista Estudiante */}
           <button
             onClick={irAVistaEstudiante}
-            className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-xs font-semibold transition-all ${
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl border text-xs font-semibold transition-all liquid-btn ${
               tema === 'dark'
-                ? 'bg-slate-800/60 border-slate-700/60 text-slate-300 hover:bg-slate-800 hover:text-white'
+                ? 'bg-slate-800/60 border-white/10 text-slate-300 hover:bg-slate-800 hover:text-white'
                 : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900 shadow-sm'
             }`}
           >
@@ -174,7 +181,7 @@ export default function LayoutAdmin() {
           {/* Botón de Cerrar Sesión */}
           <button
             onClick={manejarCerrarSesion}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium text-rose-500 hover:bg-rose-500/10 border border-rose-500/20 transition-all"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-500 hover:bg-rose-500/15 border border-rose-500/20 transition-all liquid-btn"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Cerrar Sesión</span>

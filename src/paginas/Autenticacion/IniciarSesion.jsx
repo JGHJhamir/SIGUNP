@@ -386,19 +386,26 @@ export default function IniciarSesion() {
   return (
     <div className={`min-h-screen flex items-center justify-center ${
       tema === 'dark'
-        ? 'bg-[#090d16] text-slate-100'
-        : 'bg-slate-100 text-slate-900'
+        ? 'bg-[#060911] text-slate-100'
+        : 'bg-slate-50 text-slate-900'
     } p-4 md:p-8 font-sans relative overflow-hidden selection:bg-blue-600 selection:text-white transition-colors duration-200`}>
+
+      {/* Background Glowing Ambient Orbs for Liquid Glass Refraction */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-[600px] h-[600px] rounded-full bg-blue-600/20 dark:bg-blue-500/15 blur-[140px] animate-float-orb-1"></div>
+        <div className="absolute -bottom-20 -right-20 w-[700px] h-[700px] rounded-full bg-indigo-600/20 dark:bg-indigo-500/15 blur-[160px] animate-float-orb-2"></div>
+        <div className="absolute top-[40%] left-[35%] w-[450px] h-[450px] rounded-full bg-sky-500/15 dark:bg-purple-500/12 blur-[140px] animate-pulse-subtle"></div>
+      </div>
 
       {/* Botón Tema */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
         <button
           type="button"
           onClick={alternarTema}
-          className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 shadow-sm ${
+          className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer flex items-center space-x-2 shadow-md liquid-btn ${
             tema === 'dark'
-              ? "bg-[#0e1526] border-slate-700 text-slate-200 hover:bg-slate-800"
-              : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+              ? "bg-[#0e1526]/80 border-white/10 text-slate-200 hover:bg-slate-800"
+              : "bg-white/80 border-slate-200 text-slate-700 hover:bg-slate-50"
           }`}
         >
           {tema === 'dark' ? (
@@ -415,12 +422,10 @@ export default function IniciarSesion() {
         </button>
       </div>
 
-      <div className={`w-full max-w-xl ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-xl'
-      } border rounded-2xl p-6 sm:p-8 md:p-10 relative overflow-hidden z-10 transition-all duration-200`}>
+      <div className="w-full max-w-xl liquid-glass-modal rounded-3xl p-6 sm:p-8 md:p-10 relative overflow-hidden z-10 transition-all duration-300 shadow-2xl animate-scale-in">
         
         {/* Accent Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600"></div>
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-sky-400"></div>
 
         {/* ── 1. PANTALLA DE BIENVENIDA ── */}
         {vista === "bienvenida" && (

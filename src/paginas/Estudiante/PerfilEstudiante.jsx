@@ -268,21 +268,19 @@ export default function PerfilEstudiante() {
     <div className="space-y-6">
       
       {/* Encabezado del Perfil */}
-      <div className={`p-6 md:p-8 rounded-3xl border ${
-        tema === 'dark' ? 'bg-slate-900/90 border-slate-800/90' : 'bg-white border-slate-200 shadow-xl'
-      } backdrop-blur-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6`}>
-        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-center sm:text-left">
+      <div className="p-6 md:p-8 rounded-3xl liquid-glass-card relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl animate-scale-in glare-hover">
+        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-center sm:text-left z-10">
           <div className="relative">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-blue-600 via-sky-400 to-purple-600 p-1 shadow-xl flex items-center justify-center">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-blue-600 via-sky-400 to-purple-600 p-1 shadow-2xl flex items-center justify-center hover-pop">
               <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-2xl text-white">
                 {nombres.charAt(0)}{apellidos.charAt(0)}
               </div>
             </div>
-            <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-slate-950 rounded-full"></span>
+            <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-slate-950 rounded-full animate-pulse-subtle"></span>
           </div>
 
           <div>
-            <div className="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold mb-1">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-500 dark:text-blue-400 text-[11px] font-extrabold mb-1.5 shadow-sm">
               <GraduationCap className="w-3.5 h-3.5" />
               <span>{escuela || "Ingeniería Informática"}</span>
             </div>
@@ -295,16 +293,16 @@ export default function PerfilEstudiante() {
           </div>
         </div>
 
-        <div className={`px-4 py-3 rounded-2xl ${
-          tema === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-slate-50 border-slate-200'
-        } border text-xs space-y-1 font-mono shrink-0`}>
+        <div className={`px-4 py-3.5 rounded-2xl ${
+          tema === 'dark' ? 'bg-[#090e1a]/80 border-white/10' : 'bg-slate-50/90 border-slate-200'
+        } border text-xs space-y-1.5 font-mono shrink-0 shadow-sm z-10 hover-pop-subtle`}>
           <div className="flex items-center space-x-2 text-slate-400">
             <Hash className="w-3.5 h-3.5 text-blue-500" />
-            <span>Código: <strong className="text-white dark:text-white light:text-slate-900">{codigoUni || "Sin registrar"}</strong></span>
+            <span>Código: <strong className={tema === 'dark' ? 'text-white' : 'text-slate-900'}>{codigoUni || "Sin registrar"}</strong></span>
           </div>
           <div className="flex items-center space-x-2 text-slate-400">
             <IdCard className="w-3.5 h-3.5 text-purple-500" />
-            <span>DNI: <strong className="text-white dark:text-white light:text-slate-900">{dni || "Sin registrar"}</strong></span>
+            <span>DNI: <strong className={tema === 'dark' ? 'text-white' : 'text-slate-900'}>{dni || "Sin registrar"}</strong></span>
           </div>
         </div>
       </div>

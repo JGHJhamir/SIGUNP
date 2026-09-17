@@ -130,22 +130,20 @@ export default function InicioAdmin() {
     <div className="space-y-8 animate-fadeIn">
       
       {/* Banner de Bienvenida Ejecutivo */}
-      <div className={`p-5 sm:p-6 md:p-8 rounded-2xl ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } border relative overflow-hidden transition-colors`}>
+      <div className="p-5 sm:p-6 md:p-8 rounded-3xl liquid-glass-card border relative overflow-hidden transition-all shadow-2xl glare-hover animate-scale-in">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center space-x-4">
             <div className="shrink-0 hidden sm:flex items-center justify-center">
-              <div className="w-16 h-16 rounded-xl bg-slate-900 border border-purple-500/30 p-0.5 flex items-center justify-center overflow-hidden shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-purple-500/40 p-0.5 flex items-center justify-center overflow-hidden shadow-lg hover-pop">
                 <img src="/sigunp-logo.png" alt="SIGUNP Logo" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 text-purple-500 dark:text-purple-400 border border-purple-500/20 text-xs font-bold uppercase tracking-wider">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30 text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
                 <span>SIGUNP — Administrador Principal</span>
               </div>
-              <h2 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              <h2 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 ¡Bienvenido al Panel, {usuarioNombre.split(" ")[0]}!
               </h2>
               <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-2xl`}>
@@ -156,49 +154,50 @@ export default function InicioAdmin() {
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
               to="/admin/usuarios"
-              className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-lg shadow-purple-500/25 transition-all flex items-center gap-2 liquid-btn"
             >
               <UserPlus className="w-4 h-4" /> Nuevo Usuario
             </Link>
             <Link
               to="/admin/configuracion"
-              className={`px-3.5 py-2 rounded-xl border font-bold text-xs transition-all ${
+              className={`px-4 py-2.5 rounded-xl border font-bold text-xs transition-all liquid-btn ${
                 tema === 'dark'
-                  ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
+                  ? 'bg-slate-800/80 border-white/10 text-slate-200 hover:bg-slate-800'
                   : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
               }`}
             >
-              Ajustes de Sistema
+              Configurar Periodo
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Grid de Estadísticas / KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* Grid de Estadísticas Clave (Liquid Glass Cards) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {stats.map((st, idx) => (
           <div
             key={idx}
-            className={`p-5 rounded-2xl ${
-              tema === 'dark' ? 'app-surface-card' : 'app-surface-card app-surface-card-hover'
-            } space-y-4`}
+            className="p-5 rounded-2xl liquid-glass-card hover-pop glare-hover flex flex-col justify-between space-y-4 shadow-xl border"
           >
-            <div className="flex items-center justify-between">
-              <div className={`p-2.5 rounded-xl ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-100'}`}>
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <span className={`text-[11px] font-extrabold uppercase tracking-wider ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                  {st.titulo}
+                </span>
+                <div className={`text-3xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                  {st.valor}
+                </div>
+              </div>
+              <div className={`p-3 rounded-2xl ${tema === 'dark' ? 'bg-slate-800/80 border-white/10' : 'bg-slate-100 border-slate-200'} border shadow-sm`}>
                 {st.icono}
               </div>
-              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${st.badgeColor}`}>
+            </div>
+
+            <div className="space-y-2">
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold border ${st.badgeColor}`}>
                 {st.badge}
               </span>
-            </div>
-            <div>
-              <div className={`text-2xl sm:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {st.valor}
-              </div>
-              <div className={`text-xs font-semibold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
-                {st.titulo}
-              </div>
-              <div className={`text-[11px] ${tema === 'dark' ? 'text-slate-500' : 'text-slate-600'} mt-1`}>
+              <div className={`text-[11px] font-medium ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                 {st.subtexto}
               </div>
             </div>
