@@ -18,7 +18,13 @@ import {
   RotateCcw,
   Zap,
   Info,
-  Filter
+  Filter,
+  GitBranch,
+  ArrowRight,
+  ArrowDown,
+  ChevronRight,
+  Workflow,
+  ShieldCheck
 } from "lucide-react";
 
 // Estructura completa de la carrera de Ingeniería Informática - Plan 2018-1
@@ -163,6 +169,7 @@ export default function MallaCurricular() {
   // Pestaña de ciclo activa: 1 al 10 o "todos"
   const [cicloActivo, setCicloActivo] = useState(1);
   const [busqueda, setBusqueda] = useState("");
+  const [cursoDetalleModal, setCursoDetalleModal] = useState(null);
 
   // Todos los cursos plano
   const todosLosCursos = useMemo(() => {
@@ -181,6 +188,18 @@ export default function MallaCurricular() {
     todosLosCursos.forEach((c) => { mapa[c.id] = c; });
     return mapa;
   }, [todosLosCursos]);
+
+  // Requisitos previos del curso en modal
+  const requisitosPreviosModal = useMemo(() => {
+    if (!cursoDetalleModal || !cursoDetalleModal.requisitos) return [];
+    return cursoDetalleModal.requisitos.map((id) => mapaCursos[id]).filter(Boolean);
+  }, [cursoDetalleModal, mapaCursos]);
+
+  // Cursos que abre (post-requisitos) del curso en modal
+  const cursosQueAbreModal = useMemo(() => {
+    if (!cursoDetalleModal) return [];
+    return todosLosCursos.filter((c) => c.requisitos.includes(cursoDetalleModal.id));
+  }, [cursoDetalleModal, todosLosCursos]);
 
   // Cargar cursos aprobados al iniciar
   useEffect(() => {
@@ -639,8 +658,8 @@ export default function MallaCurricular() {
                 </div>
               </div>
 
-              {/* Lista Vertical de Cursos (Compacta) */}
-              <div className="space-y-2 sm:space-y-2.5">
+              {/* Lista Vertical de Cursos (Diseño Ultra Compacto y Táctil) */}
+              <div className="space-y-1.5 sm:space-y-2">
                 {cursosFiltrados.map((curso) => {
                   const estado = obtenerEstadoCurso(curso);
                   const estaAprobado = estado === "aprobado";
@@ -649,45 +668,45 @@ export default function MallaCurricular() {
                   return (
                     <div
                       key={curso.id}
-                      onClick={() => manejarClickCurso(curso)}
-                      className={`p-3 sm:p-3.5 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 cursor-pointer liquid-btn hover-scale-pop ${
+                      onClick={() => setCursoDetalleModal(curso)}
+                      className={`p-2 sm:p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 cursor-pointer liquid-btn hover-scale-pop ${
                         estaAprobado
                           ? tema === 'dark'
-                            ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-100 hover:border-emerald-500/50"
+                            ? "bg-emerald-950/25 border-emerald-500/30 text-emerald-100 hover:border-emerald-500/50"
                             : "bg-emerald-50/90 border-emerald-200 text-slate-900 hover:border-emerald-300"
                           : estaDisponible
                           ? tema === 'dark'
-                            ? "bg-blue-950/20 border-blue-500/30 text-white hover:border-blue-500/50"
+                            ? "bg-blue-950/25 border-blue-500/30 text-white hover:border-blue-500/50"
                             : "bg-blue-50/80 border-blue-200 text-slate-900 hover:border-blue-300"
                           : tema === 'dark'
                           ? "bg-[#090e1a]/50 border-slate-800/60 text-slate-400 hover:border-slate-700 opacity-75"
                           : "bg-slate-100/70 border-slate-200 text-slate-500 hover:border-slate-300 opacity-75"
                       }`}
                     >
-                      <div className="flex items-start space-x-2.5 flex-1">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
                         {/* Estado Icono */}
-                        <div className="shrink-0 mt-0.5">
+                        <div className="shrink-0">
                           {estaAprobado && (
-                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
-                              <CheckCircle2 className="w-4 h-4" />
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
                             </div>
                           )}
                           {estaDisponible && (
-                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
-                              <Unlock className="w-3.5 h-3.5" />
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                              <Unlock className="w-3 h-3" />
                             </div>
                           )}
                           {!estaAprobado && !estaDisponible && (
-                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-slate-500/10 text-slate-500 border border-slate-500/20 flex items-center justify-center">
-                              <Lock className="w-3.5 h-3.5" />
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-slate-500/10 text-slate-500 border border-slate-500/20 flex items-center justify-center">
+                              <Lock className="w-3 h-3" />
                             </div>
                           )}
                         </div>
 
-                        {/* Nombre y Detalles */}
-                        <div className="space-y-0.5">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <span className={`px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-extrabold ${
+                        {/* Nombre y Detalles Comprimidos */}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center space-x-1.5">
+                            <span className={`px-1 py-0.1 rounded text-[9px] font-extrabold ${
                               estaAprobado
                                 ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                                 : estaDisponible
@@ -696,13 +715,12 @@ export default function MallaCurricular() {
                             }`}>
                               {curso.id}
                             </span>
-
-                            <span className={`text-[9px] sm:text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span className={`text-[9px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
                               {curso.creditos} CR
                             </span>
                           </div>
 
-                          <h3 className={`text-xs sm:text-sm font-bold ${
+                          <h3 className={`text-xs font-bold truncate leading-tight mt-0.5 ${
                             estaAprobado
                               ? tema === 'dark' ? 'text-emerald-300' : 'text-emerald-950'
                               : estaDisponible
@@ -711,56 +729,27 @@ export default function MallaCurricular() {
                           }`}>
                             {curso.nombre}
                           </h3>
-
-                          {/* Prerrequisitos */}
-                          {curso.requisitos.length > 0 ? (
-                            <div className="flex flex-wrap items-center gap-1 pt-0.5">
-                              <span className="text-[9px] font-bold text-slate-500">Requisitos:</span>
-                              {curso.requisitos.map((reqId) => {
-                                const reqAprobado = aprobados.includes(reqId);
-                                return (
-                                  <span
-                                    key={reqId}
-                                    className={`inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded text-[8px] sm:text-[9px] font-bold ${
-                                      reqAprobado
-                                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                        : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                                    }`}
-                                  >
-                                    <span>{reqId}</span>
-                                    <span>{reqAprobado ? "✓" : "🔒"}</span>
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          ) : (
-                            <div className="text-[9px] font-semibold text-slate-500">
-                              Libre matrícula
-                            </div>
-                          )}
                         </div>
                       </div>
 
-                      {/* Botón de Acción Directa */}
-                      <div className="shrink-0 self-end sm:self-center">
+                      {/* Badge de Estado y Flecha Árbol */}
+                      <div className="flex items-center space-x-1.5 shrink-0">
                         {estaAprobado && (
-                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1">
-                            <Check className="w-3 h-3" />
-                            <span>Aprobado</span>
+                          <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold">
+                            Aprobado
                           </span>
                         )}
                         {estaDisponible && (
-                          <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1 hover:bg-blue-500 transition-colors shadow-2xs">
-                            <Unlock className="w-3 h-3" />
-                            <span>Aprobar</span>
+                          <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[9px] font-bold shadow-2xs">
+                            Aprobar
                           </span>
                         )}
                         {!estaAprobado && !estaDisponible && (
-                          <span className="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 text-[10px] sm:text-xs font-bold inline-flex items-center space-x-1">
-                            <Lock className="w-3 h-3" />
-                            <span>Bloqueado</span>
+                          <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700 text-[9px] font-bold">
+                            Bloqueado
                           </span>
                         )}
+                        <GitBranch className="w-3.5 h-3.5 text-slate-400 hover:text-blue-400 transition-colors" />
                       </div>
                     </div>
                   );
@@ -771,6 +760,212 @@ export default function MallaCurricular() {
           );
         })}
       </div>
+
+      {/* Modal Interactivo de Árbol de Dependencias del Curso */}
+      {cursoDetalleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl liquid-glass-card border border-white/20 p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl animate-scaleUp">
+            
+            {/* Cabecera del Modal */}
+            <div className="flex items-start justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                    {cursoDetalleModal.cicloNombre || `Ciclo ${cursoDetalleModal.numeroCiclo}`}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-500/15 text-purple-400 border border-purple-500/30">
+                    {cursoDetalleModal.id}
+                  </span>
+                  <span className={`text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {cursoDetalleModal.creditos} Créditos
+                  </span>
+                </div>
+                <h2 className={`text-lg sm:text-xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                  {cursoDetalleModal.nombre}
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setCursoDetalleModal(null)}
+                className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Subtítulo Árbol Flujo */}
+            <div className="flex items-center space-x-2 text-xs font-bold text-blue-500 uppercase tracking-wider">
+              <GitBranch className="w-4 h-4" />
+              <span>Flujo Curricular: Requisitos y Cadena de Desbloqueo</span>
+            </div>
+
+            {/* Estructura del Árbol (3 Capas: Requisitos -> Actual -> Abre) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+              
+              {/* Columna 1: Cursos Anteriores (Requisitos) */}
+              <div className={`p-3 rounded-2xl border ${
+                tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+              } space-y-2 flex flex-col justify-between`}>
+                <div>
+                  <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>Requisitos Previos</span>
+                    <span className="text-amber-500 font-bold">{requisitosPreviosModal.length}</span>
+                  </div>
+
+                  {requisitosPreviosModal.length === 0 ? (
+                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-semibold text-emerald-400 text-center">
+                      ✨ Libre Matrícula (Sin prerrequisitos anteriores)
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {requisitosPreviosModal.map((req) => {
+                        const reqAprobado = aprobados.includes(req.id);
+                        return (
+                          <div
+                            key={req.id}
+                            onClick={() => setCursoDetalleModal(req)}
+                            className={`p-2 rounded-xl border text-left cursor-pointer transition-all hover:scale-102 ${
+                              reqAprobado
+                                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+                                : "bg-rose-500/10 border-rose-500/30 text-rose-300"
+                            }`}
+                            title="Haz clic para inspeccionar este prerrequisito"
+                          >
+                            <div className="flex items-center justify-between text-[10px] font-black">
+                              <span>{req.id}</span>
+                              <span>{reqAprobado ? "✓ Aprobado" : "🔒 Pendiente"}</span>
+                            </div>
+                            <div className="text-xs font-bold truncate mt-0.5">{req.nombre}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Columna 2: Nodo Central (Curso Seleccionado) */}
+              <div className={`p-3.5 rounded-2xl border-2 ${
+                obtenerEstadoCurso(cursoDetalleModal) === 'aprobado'
+                  ? 'border-emerald-500 bg-emerald-500/10'
+                  : obtenerEstadoCurso(cursoDetalleModal) === 'disponible'
+                  ? 'border-blue-500 bg-blue-500/10'
+                  : 'border-slate-700 bg-slate-900/80'
+              } flex flex-col justify-between space-y-3 relative overflow-hidden glare-hover shadow-lg`}>
+                <div className="space-y-1 text-center">
+                  <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-blue-600 text-white">
+                    Curso Seleccionado
+                  </span>
+                  <div className="text-xs font-black tracking-tight text-white mt-2">
+                    {cursoDetalleModal.id}
+                  </div>
+                  <div className="text-sm font-black text-white leading-tight">
+                    {cursoDetalleModal.nombre}
+                  </div>
+                  <div className="text-[11px] font-bold text-slate-300 mt-1">
+                    {cursoDetalleModal.creditos} CR · {cursoDetalleModal.cicloNombre || `Ciclo ${cursoDetalleModal.numeroCiclo}`}
+                  </div>
+                </div>
+
+                {/* Badge de Estado del Curso */}
+                <div className="text-center pt-2">
+                  {obtenerEstadoCurso(cursoDetalleModal) === 'aprobado' && (
+                    <span className="px-3 py-1 rounded-xl bg-emerald-500 text-white text-xs font-extrabold inline-flex items-center space-x-1 shadow-xs">
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>APROBADO</span>
+                    </span>
+                  )}
+                  {obtenerEstadoCurso(cursoDetalleModal) === 'disponible' && (
+                    <span className="px-3 py-1 rounded-xl bg-blue-600 text-white text-xs font-extrabold inline-flex items-center space-x-1 shadow-xs animate-pulse">
+                      <Unlock className="w-4 h-4" />
+                      <span>DISPONIBLE</span>
+                    </span>
+                  )}
+                  {obtenerEstadoCurso(cursoDetalleModal) === 'bloqueado' && (
+                    <span className="px-3 py-1 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 text-xs font-extrabold inline-flex items-center space-x-1">
+                      <Lock className="w-4 h-4" />
+                      <span>BLOQUEADO</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Columna 3: Cursos que Abre (Post-requisitos) */}
+              <div className={`p-3 rounded-2xl border ${
+                tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800' : 'bg-slate-50 border-slate-200'
+              } space-y-2 flex flex-col justify-between`}>
+                <div>
+                  <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                    <span>Cursos que Abre</span>
+                    <span className="text-purple-400 font-bold">{cursosQueAbreModal.length}</span>
+                  </div>
+
+                  {cursosQueAbreModal.length === 0 ? (
+                    <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700 text-[11px] font-semibold text-slate-400 text-center">
+                      🏁 Último nivel de la cadena
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                      {cursosQueAbreModal.map((post) => {
+                        const postAprobado = aprobados.includes(post.id);
+                        return (
+                          <div
+                            key={post.id}
+                            onClick={() => setCursoDetalleModal(post)}
+                            className={`p-2 rounded-xl border text-left cursor-pointer transition-all hover:scale-102 ${
+                              postAprobado
+                                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+                                : "bg-purple-500/10 border-purple-500/30 text-purple-300"
+                            }`}
+                            title="Haz clic para inspeccionar este curso posterior"
+                          >
+                            <div className="flex items-center justify-between text-[10px] font-black">
+                              <span>{post.id}</span>
+                              <span className="text-[9px] font-bold">Ciclo {post.numeroCiclo}</span>
+                            </div>
+                            <div className="text-xs font-bold truncate mt-0.5">{post.nombre}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Footer con Botón de Marcado de Aprobación */}
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+              {obtenerEstadoCurso(cursoDetalleModal) === 'aprobado' ? (
+                <button
+                  type="button"
+                  onClick={() => manejarClickCurso(cursoDetalleModal)}
+                  className="w-full py-2.5 sm:py-3 rounded-xl bg-rose-600/20 hover:bg-rose-600 border border-rose-500/40 text-rose-300 hover:text-white font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Desmarcar Aprobado</span>
+                </button>
+              ) : obtenerEstadoCurso(cursoDetalleModal) === 'disponible' ? (
+                <button
+                  type="button"
+                  onClick={() => manejarClickCurso(cursoDetalleModal)}
+                  className="w-full py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs sm:text-sm transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg active:scale-98 glare-hover"
+                >
+                  <Zap className="w-4 h-4 text-amber-300" />
+                  <span>¡Marcar como Aprobado! 🎉</span>
+                </button>
+              ) : (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 font-semibold flex items-center space-x-2">
+                  <Lock className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>Este curso está bloqueado. Aprueba los requisitos previos resaltados arriba para habilitarlo.</span>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );
