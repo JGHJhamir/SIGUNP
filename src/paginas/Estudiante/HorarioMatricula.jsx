@@ -578,40 +578,39 @@ export default function HorarioMatricula() {
         }
       `}</style>
 
-      {/* Header Principal */}
-      <div className={`rounded-2xl border ${
+      {/* Header Principal Ultra-Compacto */}
+      <div className={`rounded-xl border ${
         tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } p-5 sm:p-6 md:p-8 space-y-6 no-print transition-colors`}>
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold mb-2">
-              <span>CALENDARIO SEMANAL & HORARIO DE CLASES</span>
-            </div>
-            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'} flex items-center space-x-3`}>
-              <span>Mi Horario Universitario</span>
+      } p-3 sm:p-4 no-print space-y-2.5 transition-colors`}>
+        {/* Fila 1: Título + Semestres + Acciones */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center space-x-2">
+            <h1 className="text-base sm:text-xl font-black tracking-tight flex items-center space-x-2">
+              <span>Mi Horario</span>
               {diaHoyNombre && (
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20 flex items-center space-x-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                  <span>Hoy es {diaHoyNombre}</span>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Hoy {diaHoyNombre}
                 </span>
               )}
             </h1>
-            <p className={`text-xs sm:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} mt-1`}>
-              Visualización interactiva, sincronizada automáticamente con tu plan de estudios y matrícula.
-            </p>
+
+            {tieneDatos && (
+              <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 hidden sm:inline-block">
+                {estadisticasHorario.totalCursos} asignaturas • ~{estadisticasHorario.totalHorasLectivas} hrs ({rangoHorarioTexto})
+              </span>
+            )}
           </div>
 
           {/* Acciones principales del Header */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Botón Cargar Demo cuando no hay matrícula */}
+          <div className="flex flex-wrap items-center gap-1.5">
             {!tieneDatos && !modoDemoActivo && (
               <button
                 type="button"
                 onClick={() => setModoDemoActivo(true)}
-                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all flex items-center space-x-2 cursor-pointer shadow-sm"
+                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm"
               >
-                <Zap className="w-4 h-4" />
-                <span>Cargar Horario de Ejemplo (Demo)</span>
+                <Zap className="w-3.5 h-3.5" />
+                <span>Cargar Horario Demo</span>
               </button>
             )}
 
@@ -619,15 +618,15 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={() => setModoDemoActivo(false)}
-                className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer hover:bg-amber-500/20"
+                className="px-2 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-lg transition-all flex items-center space-x-1 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
-                <span>Desactivar Demo</span>
+                <span>Quitar Demo</span>
               </button>
             )}
 
             {/* Selector de Semestres */}
-            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border overflow-x-auto no-scrollbar max-w-full`}>
+            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-0.5 rounded-lg border overflow-x-auto no-scrollbar`}>
               {semestresDisponibles.map((sem) => {
                 const tieneMatriculaGuardada = matriculasPorSemestre[sem]?.cursos?.length > 0;
                 return (
@@ -638,7 +637,7 @@ export default function HorarioMatricula() {
                       setSemestreVista(sem);
                       setModoDemoActivo(false);
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
+                    className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1 ${
                       semestreVista === sem && !modoDemoActivo
                         ? "bg-blue-600 text-white shadow-sm"
                         : tema === 'dark' ? "text-slate-400 hover:text-slate-200" : "text-slate-600 hover:text-slate-900"
@@ -656,13 +655,13 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={manejarCopiarResumen}
-                className={`px-3 py-1.5 ${
-                  tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                } text-xs font-bold rounded-xl border transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm`}
-                title="Copiar horario en formato texto"
+                className={`px-2 py-1 ${
+                  tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200' : 'bg-white border-slate-200 text-slate-700'
+                } text-[11px] font-bold rounded-lg border transition-all flex items-center space-x-1 cursor-pointer`}
+                title="Copiar horario"
               >
-                {mensajeCopiado ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
-                <span>{mensajeCopiado ? "¡Copiado!" : "Copiar"}</span>
+                {mensajeCopiado ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-blue-500" />}
+                <span className="hidden sm:inline">{mensajeCopiado ? "¡Copiado!" : "Copiar"}</span>
               </button>
             )}
 
@@ -671,173 +670,106 @@ export default function HorarioMatricula() {
               <button
                 type="button"
                 onClick={manejarImprimir}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-2xl border border-slate-700 transition-all flex items-center space-x-2 cursor-pointer shadow-sm"
+                className="px-2 py-1 bg-slate-800 text-slate-200 text-[11px] font-bold rounded-lg border border-slate-700 flex items-center space-x-1 cursor-pointer"
+                title="Imprimir"
               >
-                <Printer className="w-4 h-4 text-sky-400" />
-                <span>Imprimir</span>
+                <Printer className="w-3.5 h-3.5 text-sky-400" />
+                <span className="hidden sm:inline">Imprimir</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Tarjetas de Métricas / KPIs */}
+        {/* Fila 2: Conmutador de Vistas + Filtros */}
         {tieneDatos && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-slate-800/80">
-            <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800/80 flex items-center space-x-3 shadow-inner">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
-                <BookOpen className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-lg font-black text-white leading-none">{estadisticasHorario.totalCursos}</div>
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Asignaturas</div>
-              </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800/80">
+            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-0.5 rounded-lg border w-full sm:w-auto`}>
+              <button
+                type="button"
+                onClick={() => setModoVista("grilla")}
+                className={`flex-1 sm:flex-none px-3 py-1 rounded text-[11px] font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
+                  modoVista === "grilla" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <Grid className="w-3.5 h-3.5" />
+                <span>Grilla Semanal</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setModoVista("agenda")}
+                className={`flex-1 sm:flex-none px-3 py-1 rounded text-[11px] font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
+                  modoVista === "agenda" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <List className="w-3.5 h-3.5" />
+                <span>Agenda por Día</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setModoVista("tarjetas")}
+                className={`flex-1 sm:flex-none px-3 py-1 rounded text-[11px] font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
+                  modoVista === "tarjetas" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Cursos</span>
+              </button>
             </div>
 
-            <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800/80 flex items-center space-x-3 shadow-inner">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-lg font-black text-emerald-400 leading-none">~{estadisticasHorario.totalHorasLectivas} hrs</div>
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Carga Semanal</div>
-              </div>
-            </div>
+            {modoVista === "grilla" && (
+              <div className="flex items-center justify-between sm:justify-end space-x-2 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => setOcultarHorasVacias(!ocultarHorasVacias)}
+                  className={`px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer flex items-center space-x-1 ${
+                    ocultarHorasVacias
+                      ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-300"
+                      : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-700"
+                  }`}
+                  title="Oculta automáticamente los bloques vacíos de horas sin clases"
+                >
+                  <Zap className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>{ocultarHorasVacias ? "Ocultar Vacíos: ON" : "Ver Todo"}</span>
+                </button>
 
-            <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800/80 flex items-center space-x-3 shadow-inner">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
-                <Zap className="w-5 h-5" />
+                <button
+                  type="button"
+                  onClick={() => setEsVistaCompacta(!esVistaCompacta)}
+                  className={`px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer flex items-center space-x-1 ${
+                    esVistaCompacta
+                      ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
+                      : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-700"
+                  }`}
+                >
+                  <Sliders className="w-3.5 h-3.5" />
+                  <span>{esVistaCompacta ? "Detallado" : "Compacto"}</span>
+                </button>
               </div>
-              <div>
-                <div className="text-sm font-black text-purple-300 leading-none truncate max-w-[110px]">{estadisticasHorario.diaMasCargado}</div>
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Día Más Cargado</div>
-              </div>
-            </div>
-
-            <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800/80 flex items-center space-x-3 shadow-inner">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-sm font-black text-amber-300 leading-none">{rangoHorarioTexto}</div>
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Rango Horario</div>
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
 
-      {/* Selector de Modo de Vista y Opciones */}
-      {tieneDatos && (
-        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 no-print`}>
-          {/* Conmutador de 3 Vistas */}
-          <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border w-full sm:w-auto`}>
-            <button
-              type="button"
-              onClick={() => setModoVista("grilla")}
-              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "grilla" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Grid className="w-4 h-4" />
-              <span>Grilla Semanal</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setModoVista("agenda")}
-              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "agenda" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <List className="w-4 h-4" />
-              <span>Agenda por Día</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setModoVista("tarjetas")}
-              className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
-                modoVista === "tarjetas" ? "bg-blue-600 text-white shadow-sm" : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              <span>Mis Asignaturas</span>
-            </button>
-          </div>
-
-          {/* Opciones de la grilla (Ocultar Vacías / Compacto / Tip) */}
-          {modoVista === "grilla" && (
-            <div className="flex flex-wrap items-center gap-2.5 text-xs">
-              <button
-                type="button"
-                onClick={() => setOcultarHorasVacias(!ocultarHorasVacias)}
-                className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  ocultarHorasVacias
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-300"
-                    : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white" : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
-                }`}
-                title="Oculta automáticamente las horas vacías sin clases para optimizar espacio"
-              >
-                <Zap className="w-3.5 h-3.5 text-emerald-500" />
-                <span>{ocultarHorasVacias ? "Ocultar Horas Vacías: ON" : "Mostrar Todo (07:00 - 21:00)"}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEsVistaCompacta(!esVistaCompacta)}
-                className={`px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-                  esVistaCompacta
-                    ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
-                    : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white" : "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                <Sliders className="w-3.5 h-3.5" />
-                <span>{esVistaCompacta ? "Vista Detallada" : "Vista Compacta"}</span>
-              </button>
-            </div>
-          )}
-
-          {/* Filtro de día para Vista Agenda */}
-          {modoVista === "agenda" && (
-            <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-1 rounded-xl border overflow-x-auto max-w-full`}>
-              {diasSemana.map((dia) => (
-                <button
-                  key={dia}
-                  type="button"
-                  onClick={() => setDiaFiltroAgenda(dia)}
-                  className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap cursor-pointer ${
-                    diaFiltroAgenda === dia
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : tema === 'dark' ? "text-slate-400 hover:text-slate-200" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  {dia}
-                  {diaHoyNombre === dia && <span className="ml-1.5 text-emerald-400">•</span>}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Mensaje de Estado Vacío (Sin Datos) */}
       {!tieneDatos && (
-        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl p-8 sm:p-12 text-center space-y-4 no-print`}>
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 shadow-sm">
-            <Calendar className="w-8 h-8 sm:w-10 sm:h-10" />
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl p-8 text-center space-y-4 no-print`}>
+          <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-700 mx-auto flex items-center justify-center text-blue-400 shadow-sm">
+            <Calendar className="w-8 h-8" />
           </div>
           <div className="space-y-1">
-            <h3 className={`text-base sm:text-lg font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>Tu Horario está actualmente vacío</h3>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+            <h3 className={`text-base font-bold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>Tu Horario está actualmente vacío</h3>
+            <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
               No se han encontrado registros de matrícula activa para el semestre <strong className="text-blue-500">{semestreVista}</strong>.
             </p>
           </div>
 
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => setModoDemoActivo(true)}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-sm flex items-center space-x-2 cursor-pointer active:scale-95"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-sm flex items-center space-x-2 cursor-pointer active:scale-95"
             >
               <Zap className="w-4 h-4" />
               <span>Ver Horario de Ejemplo (Demo)</span>
@@ -845,7 +777,7 @@ export default function HorarioMatricula() {
 
             <Link
               to="/estudiante/matricula"
-              className={`px-5 py-2.5 rounded-xl ${tema === 'dark' ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'} font-bold text-xs border transition-all flex items-center space-x-2 shadow-sm`}
+              className={`px-4 py-2 rounded-xl ${tema === 'dark' ? 'bg-slate-800 text-slate-200 border-slate-700' : 'bg-slate-100 text-slate-800 border-slate-300'} font-bold text-xs border transition-all flex items-center space-x-2 shadow-sm`}
             >
               <span>Ir a Módulo de Matrícula</span>
               <ArrowRight className="w-4 h-4" />
@@ -856,23 +788,14 @@ export default function HorarioMatricula() {
 
       {/* VISTA 1: GRILLA SEMANAL (CALENDAR GRID) */}
       {tieneDatos && modoVista === "grilla" && (
-        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl overflow-hidden p-2.5 sm:p-6 print-container`}>
-          <div className="md:hidden flex items-center justify-between space-x-1.5 text-[10px] text-slate-400 font-semibold mb-2.5 px-1 no-print">
-            <span className="flex items-center space-x-1">
-              <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-              <span>Desliza lateralmente para ver los días</span>
-            </span>
-            <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20 text-[9px]">
-              📱 Vista Móvil Optimizada
-            </span>
-          </div>
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full border-collapse min-w-[620px] md:min-w-[900px] text-xs print-table">
+        <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-xl overflow-hidden p-1.5 sm:p-4 print-container`}>
+          <div className="w-full overflow-x-auto no-scrollbar">
+            <table className="w-full border-collapse table-fixed text-xs print-table">
               <thead>
                 <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[10px] sm:text-[11px] font-bold uppercase tracking-wider`}>
-                  <th className={`py-2.5 sm:py-3.5 px-2 sm:px-4 text-left w-28 sm:w-36 md:w-44 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
-                    <div className="flex items-center space-x-1.5 text-slate-400">
-                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                  <th className={`py-1.5 sm:py-2.5 px-1 sm:px-3 text-left w-[15%] sm:w-28 md:w-36 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
+                    <div className="flex items-center space-x-1 text-slate-400">
+                      <Clock className="w-3 h-3 text-blue-500" />
                       <span>Hora</span>
                     </div>
                   </th>
@@ -881,18 +804,16 @@ export default function HorarioMatricula() {
                     return (
                       <th
                         key={dia}
-                        className={`py-2.5 sm:py-3 px-1.5 sm:px-3 text-center border-r ${
+                        className={`py-1.5 sm:py-2.5 px-0.5 sm:px-2 text-center w-[17%] border-r ${
                           tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
                         } relative ${
                           esHoy ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-300 font-black" : ""
                         }`}
                       >
-                        <div className="flex items-center justify-center space-x-1">
-                          <span>{dia}</span>
+                        <div className="flex items-center justify-center space-x-0.5">
+                          <span className="truncate">{dia}</span>
                           {esHoy && (
-                            <span className="px-1 py-0.2 rounded text-[7px] sm:text-[8px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-extrabold border border-emerald-500/30">
-                              Hoy
-                            </span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
                           )}
                         </div>
                       </th>
