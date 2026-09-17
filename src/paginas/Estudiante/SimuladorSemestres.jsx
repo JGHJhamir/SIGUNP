@@ -305,15 +305,14 @@ export default function SimuladorSemestres() {
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className={`rounded-2xl border ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } p-5 sm:p-6 md:p-8 space-y-4 transition-colors`}>
+      <div className="rounded-2xl liquid-glass-card glare-hover p-4 sm:p-6 md:p-8 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-500 dark:text-purple-400 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
               <span>SIMULADOR DE CICLOS FUTUROS</span>
             </div>
-            <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Planificación de Semestres
             </h1>
             <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} max-w-lg`}>
@@ -324,8 +323,8 @@ export default function SimuladorSemestres() {
           <Link
             to="/estudiante/malla"
             className={`px-3.5 py-2 ${
-              tema === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
-            } text-xs font-bold rounded-xl border transition-all flex items-center space-x-2 shrink-0 cursor-pointer`}
+              tema === 'dark' ? 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
+            } text-xs font-bold rounded-xl border transition-all flex items-center space-x-2 shrink-0 cursor-pointer liquid-btn`}
           >
             <span>Volver a Malla</span>
             <ChevronRight className="w-4 h-4 text-purple-500" />
@@ -334,9 +333,7 @@ export default function SimuladorSemestres() {
       </div>
 
       {/* Formulario: Crear Semestre */}
-      <div className={`rounded-2xl border ${
-        tema === 'dark' ? 'bg-[#0e1526] border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900 shadow-sm'
-      } p-5 sm:p-6 space-y-6 transition-colors`}>
+      <div className="rounded-2xl liquid-glass-card glare-hover p-4 sm:p-6 space-y-6">
         <h2 className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider border-b ${
           tema === 'dark' ? 'border-slate-800' : 'border-slate-200'
         } pb-3 flex items-center space-x-2`}>
