@@ -260,11 +260,65 @@ export default function MallaCurricular() {
   const nodeRefs = useRef({});
   const [rutasConexionSVG, setRutasConexionSVG] = useState([]);
 
-  // Mobile Cycle Scroll helper for quick canvas navigation
+  // Drag-to-Pan Mouse & Touch Canvas Handlers
+  const [estaArrastrando, setEstaArrastrando] = useState(false);
+  const [posicionInicioArrastre, setPosicionInicioArrastre] = useState({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
+
+  const manejarMouseDownCanvas = (e) => {
+    if (e.button !== 0 || !grafoContainerRef.current) return;
+    if (e.target.closest("button") || e.target.closest(".cursor-pointer")) return;
+    setEstaArrastrando(true);
+    setPosicionInicioArrastre({
+      x: e.clientX,
+      y: e.clientY,
+      scrollLeft: grafoContainerRef.current.scrollLeft,
+      scrollTop: grafoContainerRef.current.scrollTop
+    });
+  };
+
+  const manejarMouseMoveCanvas = (e) => {
+    if (!estaArrastrando || !grafoContainerRef.current) return;
+    e.preventDefault();
+    const dx = e.clientX - posicionInicioArrastre.x;
+    const dy = e.clientY - posicionInicioArrastre.y;
+    grafoContainerRef.current.scrollLeft = posicionInicioArrastre.scrollLeft - dx;
+    grafoContainerRef.current.scrollTop = posicionInicioArrastre.scrollTop - dy;
+    actualizarConexionesGrafo();
+  };
+
+  const finalizarArrastre = () => {
+    setEstaArrastrando(false);
+  };
+
+  const scrollGrafoHorizontal = (deltaX) => {
+    if (grafoContainerRef.current) {
+      grafoContainerRef.current.scrollBy({ left: deltaX, behavior: "smooth" });
+      setTimeout(actualizarConexionesGrafo, 150);
+    }
+  };
+
+  const autoAjustarEscalaPantalla = () => {
+    if (grafoContainerRef.current) {
+      const anchoContenedor = grafoContainerRef.current.clientWidth - 32;
+      const escalaOptima = Math.max(0.35, Math.min(1.0, anchoContenedor / 2400));
+      setEscalaGrafo(Number(escalaOptima.toFixed(2)));
+      grafoContainerRef.current.scrollTo({ left: 0, behavior: "smooth" });
+      setTimeout(actualizarConexionesGrafo, 200);
+    }
+  };
+
+  // Mobile & Desktop Cycle Scroll helper for quick canvas navigation
   const scrollToCicloColumna = (numeroCiclo) => {
     if (grafoContainerRef.current) {
-      const targetX = (numeroCiclo - 1) * 256;
-      grafoContainerRef.current.scrollTo({ left: targetX, behavior: "smooth" });
+      const columnaEl = grafoContainerRef.current.querySelector(`[data-ciclo-columna="${numeroCiclo}"]`);
+      if (columnaEl) {
+        const targetLeft = Math.max(0, columnaEl.offsetLeft * escalaGrafo - 24);
+        grafoContainerRef.current.scrollTo({ left: targetLeft, behavior: "smooth" });
+      } else {
+        const targetX = (numeroCiclo - 1) * 256 * escalaGrafo;
+        grafoContainerRef.current.scrollTo({ left: targetX, behavior: "smooth" });
+      }
+      setTimeout(actualizarConexionesGrafo, 200);
     }
   };
 
@@ -755,11 +809,40 @@ export default function MallaCurricular() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center space-x-1.5 shrink-0">
+            <div className="flex items-center space-x-1.5 shrink-0 overflow-x-auto no-scrollbar py-0.5">
+              <button
+                type="button"
+                onClick={() => scrollGrafoHorizontal(-320)}
+                className="px-2.5 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-300 font-extrabold text-xs hover:bg-blue-600 hover:text-white transition-all flex items-center space-x-1 cursor-pointer shrink-0"
+                title="Deslizar lienzo a la izquierda"
+              >
+                <span>⬅️</span>
+                <span className="hidden sm:inline">Izquierda</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollGrafoHorizontal(320)}
+                className="px-2.5 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-300 font-extrabold text-xs hover:bg-blue-600 hover:text-white transition-all flex items-center space-x-1 cursor-pointer shrink-0"
+                title="Deslizar lienzo a la derecha"
+              >
+                <span className="hidden sm:inline">Derecha</span>
+                <span>➡️</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={autoAjustarEscalaPantalla}
+                className="px-2.5 py-1.5 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all cursor-pointer shrink-0"
+                title="Ajustar escala al ancho de la pantalla"
+              >
+                📐 <span className="hidden sm:inline">Ajustar Pantalla</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setEscalaGrafo((prev) => Math.min(1.4, prev + 0.1))}
-                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
                 title="Aumentar zoom"
               >
                 <ZoomIn className="w-4 h-4" />
@@ -767,8 +850,8 @@ export default function MallaCurricular() {
 
               <button
                 type="button"
-                onClick={() => setEscalaGrafo((prev) => Math.max(0.6, prev - 0.1))}
-                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer"
+                onClick={() => setEscalaGrafo((prev) => Math.max(0.35, prev - 0.1))}
+                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
                 title="Reducir zoom"
               >
                 <ZoomOut className="w-4 h-4" />
@@ -777,7 +860,7 @@ export default function MallaCurricular() {
               <button
                 type="button"
                 onClick={() => setEscalaGrafo(0.95)}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer shrink-0"
               >
                 Reset
               </button>
@@ -785,7 +868,7 @@ export default function MallaCurricular() {
               <button
                 type="button"
                 onClick={() => setEsEscalaPantallaCompleta(!esEscalaPantallaCompleta)}
-                className="p-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white transition-all cursor-pointer"
+                className="p-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white transition-all cursor-pointer shrink-0"
                 title="Pantalla Completa Canvas"
               >
                 {esEscalaPantallaCompleta ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -1138,7 +1221,14 @@ export default function MallaCurricular() {
           <div
             ref={grafoContainerRef}
             onScroll={actualizarConexionesGrafo}
-            className="rounded-3xl liquid-glass-card p-6 overflow-auto relative min-h-[640px] max-h-[75vh] border border-slate-800 shadow-2xl"
+            onMouseDown={manejarMouseDownCanvas}
+            onMouseMove={manejarMouseMoveCanvas}
+            onMouseUp={finalizarArrastre}
+            onMouseLeave={finalizarArrastre}
+            className={`rounded-3xl liquid-glass-card p-4 sm:p-6 overflow-auto relative min-h-[580px] max-h-[75vh] border border-slate-800 shadow-2xl select-none ${
+              estaArrastrando ? "cursor-grabbing" : "cursor-grab"
+            }`}
+            style={{ touchAction: "pan-x pan-y", WebkitOverflowScrolling: "touch" }}
           >
             <div
               className="relative transition-transform duration-200 origin-top-left"
@@ -1213,7 +1303,7 @@ export default function MallaCurricular() {
                   }
 
                   return (
-                    <div key={semestre.ciclo} className="w-56 shrink-0 space-y-4">
+                    <div key={semestre.ciclo} data-ciclo-columna={semestre.numeroCiclo} className="w-56 shrink-0 space-y-4">
                       {/* Header de Columna de Ciclo */}
                       <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-3.5 text-center shadow-xl backdrop-blur-xl">
                         <div className="text-xs font-black text-white uppercase tracking-wider">{semestre.ciclo}</div>

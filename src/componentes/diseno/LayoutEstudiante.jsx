@@ -338,7 +338,7 @@ export default function LayoutEstudiante() {
           </div>
         </header>
 
-        <div className="p-3.5 sm:p-6 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn overflow-x-hidden">
+        <div className="p-3.5 sm:p-6 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn">
           <Outlet />
         </div>
       </main>
