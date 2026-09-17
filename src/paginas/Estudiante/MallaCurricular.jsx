@@ -501,36 +501,15 @@ export default function MallaCurricular() {
   };
 
   useEffect(() => {
-    if (modoVista === "grafo") {
-      const timer = setTimeout(() => {
-        actualizarConexionesGrafo();
-      }, 150);
-      window.addEventListener("resize", actualizarConexionesGrafo);
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener("resize", actualizarConexionesGrafo);
-      };
-    }
-  }, [modoVista, filtroLineaGrafo, escalaGrafo]);
-
-  const toggleCiclo = (ciclo) => {
-    setCiclosExpandidos((prev) => ({
-      ...prev,
-      [ciclo]: !prev[ciclo]
-    }));
-  };
-
-  const expandirTodos = () => {
-    const todos = {};
-    planEstudios.forEach((s) => {
-      todos[s.ciclo] = true;
-    });
-    setCiclosExpandidos(todos);
-  };
-
-  const colapsarTodos = () => {
-    setCiclosExpandidos({});
-  };
+    const timer = setTimeout(() => {
+      actualizarConexionesGrafo();
+    }, 150);
+    window.addEventListener("resize", actualizarConexionesGrafo);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", actualizarConexionesGrafo);
+    };
+  }, [escalaGrafo, disposicionGrafo]);
 
   const totalCreditosAprobados = planEstudios.reduce((acumulado, semestre) => {
     return acumulado + semestre.cursos.reduce((subAcum, curso) => {
