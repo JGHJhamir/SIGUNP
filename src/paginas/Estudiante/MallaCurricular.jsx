@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTema } from "../../contexto/ContextoTema";
 import { supabase } from "../../lib/supabase";
 import {
@@ -7,37 +7,18 @@ import {
   Lock,
   Unlock,
   Sparkles,
-  ChevronDown,
-  ChevronUp,
   AlertCircle,
-  FolderOpen,
-  FolderClosed,
   BookOpen,
-  GitBranch,
-  Network,
-  Zap,
-  ArrowRight,
-  Info,
-  Sliders,
   Check,
   X,
-  Grid,
   Layers,
-  Compass,
-  Link as LinkIcon,
-  Flame,
   Award,
-  Layers3,
-  ExternalLink,
-  ChevronRight,
+  BookMarked,
+  CheckCheck,
   RotateCcw,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
-  Minimize2,
-  Eye,
-  Filter,
-  SlidersHorizontal
+  Zap,
+  Info,
+  Filter
 } from "lucide-react";
 
 // Estructura completa de la carrera de Ingeniería Informática - Plan 2018-1
@@ -173,214 +154,35 @@ const planEstudios = [
   }
 ];
 
-// Definición de Líneas Académicas de Especialidad
-const LINEAS_ACADEMICAS = {
-  programacion: {
-    id: "programacion",
-    nombre: "Línea de Programación y Software",
-    icono: "💻",
-    color: "from-blue-600 to-indigo-600",
-    badge: "bg-blue-500/20 text-blue-300 border-blue-500/40",
-    cursos: ["SI1447", "SI1435", "SI2422", "SI2418", "SI3422", "SI3423", "SI4488", "SI5365", "SI5497", "SI5498"]
-  },
-  datos: {
-    id: "datos",
-    nombre: "Línea de Datos e Inteligencia",
-    icono: "🗄️",
-    color: "from-emerald-600 to-teal-600",
-    badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-    cursos: ["SI1358", "SI2418", "SI3421", "SI3420", "SI4489", "SI4465", "SI5499", "SI5361"]
-  },
-  matematica: {
-    id: "matematica",
-    nombre: "Línea de Ciencias B. y Matemáticas",
-    icono: "📐",
-    color: "from-purple-600 to-violet-600",
-    badge: "bg-purple-500/20 text-purple-300 border-purple-500/40",
-    cursos: ["MA1408", "MA1470", "MA1435", "MA2441", "MA2333", "MA3412", "ES2300", "ES3336", "IO4448", "IO4334"]
-  },
-  hardware: {
-    id: "hardware",
-    nombre: "Línea de Hardware, Redes y Sistemas",
-    icono: "⚡",
-    color: "from-amber-600 to-orange-600",
-    badge: "bg-amber-500/20 text-amber-300 border-amber-500/40",
-    cursos: ["FI1363", "FI2410", "FI2411", "FI3492", "SI3400", "SI4490", "SI4491", "SI5496"]
-  },
-  gestion: {
-    id: "gestion",
-    nombre: "Línea de Gestión y Proyectos",
-    icono: "💼",
-    color: "from-rose-600 to-pink-600",
-    badge: "bg-rose-500/20 text-rose-300 border-rose-500/40",
-    cursos: ["CA2337", "EC2201", "CO2201", "SI2452", "SI4360", "EM4461", "SI5364", "IO5365", "SI5411"]
-  }
-};
-
-// Mapeo exacto de Posición por Columnas del Diagrama Oficial UNP (Cursos Obligatorios)
-const MATRIZ_POSICION_UNP = {
-  // Ciclo I
-  "SI1358": { col: 1 }, "ED1331": { col: 2 }, "MA1470": { col: 3 }, "MA1408": { col: 4 },
-  "SI1447": { col: 5 }, "SI1216": { col: 6 }, "ED1292": { col: 7 }, "ED1297": { col: 8 },
-  // Ciclo II
-  "CS1286": { col: 2 }, "FI1363": { col: 3 }, "MA1435": { col: 4 }, "SI1445": { col: 5 },
-  "SI1435": { col: 6 }, "QU1363": { col: 7 }, "CB1324": { col: 8 },
-  // Ciclo III
-  "ED2278": { col: 1 }, "CS2258": { col: 2 }, "CS2397": { col: 3 }, "FI2410": { col: 4 },
-  "MA2441": { col: 5 }, "CA2337": { col: 6 }, "SI2422": { col: 7 }, "EC2201": { col: 8 },
-  // Ciclo IV
-  "ES2300": { col: 1 }, "CA2101": { col: 2 }, "MA2333": { col: 3 }, "FI2411": { col: 4 },
-  "SI2418": { col: 5 }, "SI2452": { col: 6 }, "CO2201": { col: 7 }, "CS2259": { col: 8 },
-  // Ciclo V
-  "ED3286": { col: 2 }, "FI3492": { col: 3 }, "SI3421": { col: 4 }, "SI3422": { col: 5 },
-  "MA3412": { col: 6 }, "ED3283": { col: 7 },
-  // Ciclo VI
-  "ES3336": { col: 1 }, "ED3285": { col: 2 }, "ED3287": { col: 3 }, "SI3400": { col: 4 },
-  "SI3420": { col: 5 }, "SI3423": { col: 6 }, "ED3284": { col: 7 },
-  // Ciclo VII
-  "IO4448": { col: 1 }, "IO4447": { col: 2 }, "CA4221": { col: 3 }, "SI4490": { col: 4 },
-  "SI4489": { col: 5 }, "SI4386": { col: 6 },
-  // Ciclo VIII
-  "DP4331": { col: 3 }, "SI4491": { col: 4 }, "SI4488": { col: 5 }, "SI4360": { col: 6 },
-  "SI4465": { col: 7 }, "EM4461": { col: 8 },
-  // Ciclo IX
-  "IO5365": { col: 2 }, "SI5441": { col: 3 }, "SI5496": { col: 4 }, "SI5365": { col: 5 },
-  "SI5364": { col: 6 }, "SI5497": { col: 7 },
-  // Ciclo X
-  "SI5367": { col: 2 }, "SI5373": { col: 3 }, "SI5498": { col: 4 }, "SI5368": { col: 5 },
-  "SI5411": { col: 6 }, "SI5499": { col: 7 }, "CO5397": { col: 8 }
-};
-
 export default function MallaCurricular() {
   const { tema } = useTema();
   const [aprobados, setAprobados] = useState([]);
   const [mensajeError, setMensajeError] = useState(null);
-  const [disposicionGrafo, setDisposicionGrafo] = useState("matriz"); // "matriz" | "columnas"
+  const [mensajeExito, setMensajeExito] = useState(null);
   
-  // Estado para la inspección interactiva de cadenas
-  const [cursoHovered, setCursoHovered] = useState(null);
-  const [cursoModalCadena, setCursoModalCadena] = useState(null);
-  const [esEscalaPantallaCompleta, setEsEscalaPantallaCompleta] = useState(false);
-  const [escalaGrafo, setEscalaGrafo] = useState(0.85);
+  // Pestaña de ciclo activa: 1 al 10 o "todos"
+  const [cicloActivo, setCicloActivo] = useState(1);
+  const [busqueda, setBusqueda] = useState("");
 
-  // Canvas Refs for connected SVG lines
-  const grafoContainerRef = useRef(null);
-  const nodeRefs = useRef({});
-  const [rutasConexionSVG, setRutasConexionSVG] = useState([]);
-
-  // Drag-to-Pan Mouse & Touch Canvas Handlers
-  const [estaArrastrando, setEstaArrastrando] = useState(false);
-  const [posicionInicioArrastre, setPosicionInicioArrastre] = useState({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
-
-  const manejarMouseDownCanvas = (e) => {
-    if (e.button !== 0 || !grafoContainerRef.current) return;
-    if (e.target.closest("button") || e.target.closest(".cursor-pointer")) return;
-    setEstaArrastrando(true);
-    setPosicionInicioArrastre({
-      x: e.clientX,
-      y: e.clientY,
-      scrollLeft: grafoContainerRef.current.scrollLeft,
-      scrollTop: grafoContainerRef.current.scrollTop
-    });
-  };
-
-  const manejarMouseMoveCanvas = (e) => {
-    if (!estaArrastrando || !grafoContainerRef.current) return;
-    e.preventDefault();
-    const dx = e.clientX - posicionInicioArrastre.x;
-    const dy = e.clientY - posicionInicioArrastre.y;
-    grafoContainerRef.current.scrollLeft = posicionInicioArrastre.scrollLeft - dx;
-    grafoContainerRef.current.scrollTop = posicionInicioArrastre.scrollTop - dy;
-    actualizarConexionesGrafo();
-  };
-
-  const finalizarArrastre = () => {
-    setEstaArrastrando(false);
-  };
-
-  const scrollGrafoHorizontal = (deltaX) => {
-    if (grafoContainerRef.current) {
-      grafoContainerRef.current.scrollBy({ left: deltaX, behavior: "smooth" });
-      setTimeout(actualizarConexionesGrafo, 150);
-    }
-  };
-
-  const autoAjustarEscalaPantalla = () => {
-    if (grafoContainerRef.current) {
-      const anchoContenedor = grafoContainerRef.current.clientWidth - 32;
-      const escalaOptima = Math.max(0.35, Math.min(1.0, anchoContenedor / 2400));
-      setEscalaGrafo(Number(escalaOptima.toFixed(2)));
-      grafoContainerRef.current.scrollTo({ left: 0, behavior: "smooth" });
-      setTimeout(actualizarConexionesGrafo, 200);
-    }
-  };
-
-  // Mobile & Desktop Cycle Scroll helper for quick canvas navigation
-  const scrollToCicloColumna = (numeroCiclo) => {
-    if (grafoContainerRef.current) {
-      const columnaEl = grafoContainerRef.current.querySelector(`[data-ciclo-columna="${numeroCiclo}"]`);
-      if (columnaEl) {
-        const targetLeft = Math.max(0, columnaEl.offsetLeft * escalaGrafo - 24);
-        grafoContainerRef.current.scrollTo({ left: targetLeft, behavior: "smooth" });
-      } else {
-        const targetX = (numeroCiclo - 1) * 256 * escalaGrafo;
-        grafoContainerRef.current.scrollTo({ left: targetX, behavior: "smooth" });
-      }
-      setTimeout(actualizarConexionesGrafo, 200);
-    }
-  };
-
-  // Flat array of all courses across 10 cycles
+  // Todos los cursos plano
   const todosLosCursos = useMemo(() => {
-    return planEstudios.flatMap((sem) => sem.cursos.map((c) => ({ ...c, cicloNombre: sem.ciclo, numeroCiclo: sem.numeroCiclo })));
+    return planEstudios.flatMap((sem) =>
+      sem.cursos.map((c) => ({
+        ...c,
+        cicloNombre: sem.ciclo,
+        numeroCiclo: sem.numeroCiclo
+      }))
+    );
   }, []);
 
-  // Map of course ID -> course object
+  // Mapeo ID -> Curso
   const mapaCursos = useMemo(() => {
     const mapa = {};
     todosLosCursos.forEach((c) => { mapa[c.id] = c; });
     return mapa;
   }, [todosLosCursos]);
 
-  // Deep Prerequisite Calculation (Antecesores que se requieren)
-  const antecesoresMap = useMemo(() => {
-    const res = {};
-    todosLosCursos.forEach((curso) => {
-      const visitados = new Set();
-      const cola = [...(curso.requisitos || [])];
-      while (cola.length > 0) {
-        const id = cola.shift();
-        if (!visitados.has(id)) {
-          visitados.add(id);
-          const reqs = mapaCursos[id]?.requisitos || [];
-          reqs.forEach((r) => cola.push(r));
-        }
-      }
-      res[curso.id] = Array.from(visitados);
-    });
-    return res;
-  }, [todosLosCursos, mapaCursos]);
-
-  // Deep Unlocked Courses Calculation (Sucesores que este curso abre en ciclos futuros)
-  const sucesoresMap = useMemo(() => {
-    const res = {};
-    todosLosCursos.forEach((curso) => {
-      const visitados = new Set();
-      const cola = [curso.id];
-      while (cola.length > 0) {
-        const actualId = cola.shift();
-        todosLosCursos.forEach((c) => {
-          if (c.requisitos.includes(actualId) && !visitados.has(c.id)) {
-            visitados.add(c.id);
-            cola.push(c.id);
-          }
-        });
-      }
-      res[curso.id] = Array.from(visitados);
-    });
-    return res;
-  }, [todosLosCursos]);
-
+  // Cargar cursos aprobados al iniciar
   useEffect(() => {
     const cargarCursos = async () => {
       const codigoUni = localStorage.getItem("codigoUniversitario");
@@ -397,7 +199,7 @@ export default function MallaCurricular() {
             return;
           }
         } catch (e) {
-          console.warn("Supabase auth error fallback", e);
+          console.warn("Error Supabase fallback local", e);
         }
       }
       const cursosGuardados = localStorage.getItem("cursosAprobados");
@@ -405,13 +207,22 @@ export default function MallaCurricular() {
         try {
           setAprobados(JSON.parse(cursosGuardados));
         } catch (e) {
-          console.error("Error cargando cursos aprobados", e);
+          console.error("Error al cargar cursos aprobados", e);
         }
+      } else {
+        // Fallback por defecto si es usuario nuevo
+        const defaultAprobados = [
+          "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
+          "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
+        ];
+        setAprobados(defaultAprobados);
+        localStorage.setItem("cursosAprobados", JSON.stringify(defaultAprobados));
       }
     };
     cargarCursos();
   }, []);
 
+  // Guardar en localStorage y Supabase
   const guardarAprobados = async (nuevaLista) => {
     setAprobados(nuevaLista);
     localStorage.setItem("cursosAprobados", JSON.stringify(nuevaLista));
@@ -432,74 +243,10 @@ export default function MallaCurricular() {
           await supabase.from("estudiante_cursos_aprobados").insert(payload);
         }
       } catch (e) {
-        console.warn("Error al sincronizar con Supabase", e);
+        console.warn("Error sincronizando Supabase", e);
       }
     }
   };
-
-  // Recalcular conexiones de la capa SVG del Grafo
-  const actualizarConexionesGrafo = () => {
-    if (!grafoContainerRef.current) return;
-    const containerRect = grafoContainerRef.current.getBoundingClientRect();
-    const scrollLeft = grafoContainerRef.current.scrollLeft;
-    const scrollTop = grafoContainerRef.current.scrollTop;
-    const paths = [];
-
-    todosLosCursos.forEach((curso) => {
-      const targetEl = nodeRefs.current[curso.id];
-      if (!targetEl) return;
-      const targetRect = targetEl.getBoundingClientRect();
-
-      curso.requisitos.forEach((reqId) => {
-        const sourceEl = nodeRefs.current[reqId];
-        if (!sourceEl) return;
-        const sourceRect = sourceEl.getBoundingClientRect();
-
-        // Puntos de salida (Origen a la derecha del nodo antecesor)
-        const x1 = (sourceRect.right - containerRect.left + scrollLeft) / escalaGrafo;
-        const y1 = (sourceRect.top + sourceRect.height / 2 - containerRect.top + scrollTop) / escalaGrafo;
-
-        // Puntos de entrada (Destino a la izquierda del nodo objetivo)
-        const x2 = (targetRect.left - containerRect.left + scrollLeft) / escalaGrafo;
-        const y2 = (targetRect.top + targetRect.height / 2 - containerRect.top + scrollTop) / escalaGrafo;
-
-        const dx = Math.max(35, (x2 - x1) / 2);
-        const pathD = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
-
-        paths.push({
-          id: `${reqId}->${curso.id}`,
-          sourceId: reqId,
-          targetId: curso.id,
-          pathD,
-          x1, y1, x2, y2
-        });
-      });
-    });
-
-    setRutasConexionSVG(paths);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      actualizarConexionesGrafo();
-    }, 150);
-    window.addEventListener("resize", actualizarConexionesGrafo);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", actualizarConexionesGrafo);
-    };
-  }, [escalaGrafo, disposicionGrafo]);
-
-  const totalCreditosAprobados = planEstudios.reduce((acumulado, semestre) => {
-    return acumulado + semestre.cursos.reduce((subAcum, curso) => {
-      return subAcum + (aprobados.includes(curso.id) ? curso.creditos : 0);
-    }, 0);
-  }, 0);
-
-  const totalCursosAprobados = aprobados.length;
-  const totalObligatoriosAprobados = planEstudios.reduce((acc, sem) => {
-    return acc + sem.cursos.reduce((sAcc, c) => sAcc + (c.tipo === "O" && aprobados.includes(c.id) ? 1 : 0), 0);
-  }, 0);
 
   const obtenerEstadoCurso = (curso) => {
     if (aprobados.includes(curso.id)) {
@@ -511,89 +258,187 @@ export default function MallaCurricular() {
 
   const manejarClickCurso = (curso) => {
     setMensajeError(null);
+    setMensajeExito(null);
     const estadoActual = obtenerEstadoCurso(curso);
 
     if (estadoActual === "aprobado") {
-      const esPrerrequisitoDeAprobado = planEstudios.some((semestre) =>
-        semestre.cursos.some(
-          (c) => c.requisitos.includes(curso.id) && aprobados.includes(c.id)
-        )
+      // Verificar si es prerrequisito de otro curso aprobado
+      const esPrerrequisitoDeAprobado = todosLosCursos.some(
+        (c) => c.requisitos.includes(curso.id) && aprobados.includes(c.id)
       );
 
       if (esPrerrequisitoDeAprobado) {
-        setMensajeError(`No puedes desaprobar ${curso.nombre} (${curso.id}) porque es requisito obligatorio de otros cursos que ya aprobaste.`);
+        setMensajeError(`No puedes desaprobar ${curso.nombre} (${curso.id}) porque es requisito de otros cursos que ya aprobaste.`);
         return;
       }
 
       guardarAprobados(aprobados.filter((id) => id !== curso.id));
+      setMensajeExito(`Curso ${curso.nombre} desmarcado.`);
     } else if (estadoActual === "disponible") {
       guardarAprobados([...aprobados, curso.id]);
+      setMensajeExito(`¡${curso.nombre} marcado como Aprobado! 🎉`);
     } else {
       const requisitosFaltantes = curso.requisitos.filter((reqId) => !aprobados.includes(reqId));
-      const nombresRequisitos = planEstudios.reduce((acc, sem) => {
-        sem.cursos.forEach((c) => {
-          if (requisitosFaltantes.includes(c.id)) {
-            acc.push(`${c.nombre} (${c.id})`);
-          }
-        });
-        return acc;
-      }, []);
+      const nombresRequisitos = requisitosFaltantes.map(
+        (id) => `${mapaCursos[id]?.nombre || id} (${id})`
+      );
 
       setMensajeError(`Para habilitar ${curso.nombre} primero debes aprobar: ${nombresRequisitos.join(", ")}.`);
     }
   };
 
-  const totalObligatoriosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.length, 0);
-  const totalCreditosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.reduce((sAcc, c) => sAcc + c.creditos, 0), 0);
+  // Marcar Ciclo Completo (Solo asignaturas desbloqueadas/disponibles)
+  const marcarCicloCompleto = (numeroCiclo) => {
+    setMensajeError(null);
+    setMensajeExito(null);
 
-  const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / totalObligatoriosPlan) * 100);
+    const sem = planEstudios.find((s) => s.numeroCiclo === numeroCiclo);
+    if (!sem) return;
+
+    const cursosCiclo = sem.cursos;
+    let aprobadosNuevos = [...aprobados];
+    let aprobadosEnEstaAccion = 0;
+    let bloqueadosOmitidos = 0;
+
+    // Iterar para aprobar en cadena los disponibles del ciclo
+    let cambioOcurrio = true;
+    while (cambioOcurrio) {
+      cambioOcurrio = false;
+      cursosCiclo.forEach((curso) => {
+        if (!aprobadosNuevos.includes(curso.id)) {
+          const sePuedeAprobar = curso.requisitos.every((reqId) => aprobadosNuevos.includes(reqId));
+          if (sePuedeAprobar) {
+            aprobadosNuevos.push(curso.id);
+            aprobadosEnEstaAccion++;
+            cambioOcurrio = true;
+          }
+        }
+      });
+    }
+
+    // Contar cuántos quedaron sin aprobar por estar bloqueados
+    bloqueadosOmitidos = cursosCiclo.filter((c) => !aprobadosNuevos.includes(c.id)).length;
+
+    if (aprobadosEnEstaAccion > 0) {
+      guardarAprobados(aprobadosNuevos);
+      if (bloqueadosOmitidos === 0) {
+        setMensajeExito(`¡Ciclo ${sem.ciclo} marcado como 100% Completo y guardado! 🎉`);
+      } else {
+        setMensajeExito(`Se aprobaron ${aprobadosEnEstaAccion} cursos disponibles del ${sem.ciclo}. (${bloqueadosOmitidos} cursos continúan bloqueados por prerrequisitos previos).`);
+      }
+    } else {
+      if (bloqueadosOmitidos === 0) {
+        setMensajeExito(`Todos los cursos del ${sem.ciclo} ya se encontraban aprobados.`);
+      } else {
+        setMensajeError(`No se pudo aprobar cursos del ${sem.ciclo} porque se encuentran bloqueados por prerrequisitos de ciclos anteriores.`);
+      }
+    }
+  };
+
+  // Desmarcar todo el ciclo activo (si ningún futuro curso los requiere)
+  const desmarcarCicloCompleto = (numeroCiclo) => {
+    setMensajeError(null);
+    setMensajeExito(null);
+
+    const sem = planEstudios.find((s) => s.numeroCiclo === numeroCiclo);
+    if (!sem) return;
+
+    const idsCiclo = sem.cursos.map((c) => c.id);
+    
+    // Verificar si algún curso aprobado fuera de este ciclo depende de los del ciclo
+    const bloqueadosPorPrerrequisito = sem.cursos.filter((curso) => {
+      if (!aprobados.includes(curso.id)) return false;
+      return todosLosCursos.some(
+        (c) => !idsCiclo.includes(c.id) && c.requisitos.includes(curso.id) && aprobados.includes(c.id)
+      );
+    });
+
+    if (bloqueadosPorPrerrequisito.length > 0) {
+      setMensajeError(`No se puede desmarcar todo el ${sem.ciclo} porque algunas asignaturas son requisito de cursos aprobados en ciclos superiores.`);
+      return;
+    }
+
+    const nuevaLista = aprobados.filter((id) => !idsCiclo.includes(id));
+    guardarAprobados(nuevaLista);
+    setMensajeExito(`Se han desmarcado los cursos del ${sem.ciclo}.`);
+  };
+
+  // Totales globales
+  const totalCreditosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.reduce((sAcc, c) => sAcc + c.creditos, 0), 0);
+  const totalObligatoriosPlan = todosLosCursos.length;
+
+  const totalCreditosAprobados = todosLosCursos.reduce((acc, c) => acc + (aprobados.includes(c.id) ? c.creditos : 0), 0);
+  const totalCursosAprobados = aprobados.length;
+
+  const porcentajeObligatorios = Math.round((totalCursosAprobados / totalObligatoriosPlan) * 100);
   const porcentajeProgreso = Math.min(100, Math.round((totalCreditosAprobados / (totalCreditosPlan || 205)) * 100));
 
-  // Determine active highlights for hover / selected course
-  const setAntecesoresActivos = useMemo(() => {
-    if (!cursoHovered) return new Set();
-    return new Set(antecesoresMap[cursoHovered] || []);
-  }, [cursoHovered, antecesoresMap]);
-
-  const setSucesoresActivos = useMemo(() => {
-    if (!cursoHovered) return new Set();
-    return new Set(sucesoresMap[cursoHovered] || []);
-  }, [cursoHovered, sucesoresMap]);
+  // Filtrado de cursos según el ciclo activo y la búsqueda
+  const ciclosAMostrar = useMemo(() => {
+    if (cicloActivo === "todos") {
+      return planEstudios;
+    }
+    return planEstudios.filter((s) => s.numeroCiclo === cicloActivo);
+  }, [cicloActivo]);
 
   return (
     <div className="space-y-6">
 
-      {/* Metric Header Section */}
-      <div className="rounded-2xl liquid-glass-card p-5 sm:p-6 md:p-8 space-y-6 transition-all">
+      {/* Banner Principal de Métricas Resumen */}
+      <div className="rounded-2xl liquid-glass-card glare-hover p-5 sm:p-6 md:p-8 space-y-6 transition-all">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold">
+            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>PLAN DE ESTUDIOS 2018-1 · ING. INFORMÁTICA UNP</span>
+              <span>MALLA CURRICULAR 2018-1 · ING. INFORMÁTICA UNP</span>
             </div>
             <h1 className={`text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-              Malla Curricular & Cadenas de Prerrequisitos
+              Avance Curricular por Ciclos
             </h1>
             <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-              Mapa oficial interactivo por ciclos y cadenas de prerrequisitos. Haz clic en un curso para gestionar tu avance o ver sus relaciones.
+              Selecciona cualquier ciclo para gestionar sus asignaturas, verificar sus prerrequisitos o aprobar el ciclo completo de forma automática.
             </p>
+          </div>
+
+          {/* Buscador Rápido de Cursos */}
+          <div className="relative w-full md:w-64 shrink-0">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Buscar curso o código..."
+              className={`w-full pl-9 pr-4 py-2 rounded-xl text-xs font-medium border transition-all ${
+                tema === 'dark'
+                  ? 'bg-[#090e1a] border-slate-800 text-white placeholder-slate-500 focus:border-blue-500'
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 shadow-xs'
+              }`}
+            />
+            {busqueda && (
+              <button
+                onClick={() => setBusqueda("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Breakdown Metric Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        {/* Tarjetas de Avance */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           
-          {/* Cursos Obligatorios */}
+          {/* Cursos Aprobados */}
           <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-              <span>Asignaturas</span>
+              <span>Cursos Aprobados</span>
               <span className="bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded font-bold border border-blue-500/20 text-[9px]">{porcentajeObligatorios}%</span>
             </div>
             <div className="flex items-baseline justify-between">
               <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalObligatoriosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan} Cursos</span>
+                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan} Cursos</span>
               </div>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
@@ -606,7 +451,7 @@ export default function MallaCurricular() {
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
             <div className="flex justify-between items-center text-[10px] font-bold text-emerald-500 uppercase tracking-wider">
-              <span>Créditos</span>
+              <span>Créditos Acumulados</span>
               <span className="bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded font-bold border border-emerald-500/20 text-[9px]">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
@@ -623,484 +468,313 @@ export default function MallaCurricular() {
           <div className={`p-3.5 sm:p-4 rounded-xl border ${
             tema === 'dark' ? 'bg-[#090e1a]/80 border-slate-800/80' : 'bg-slate-50/80 border-slate-200'
           } space-y-2 liquid-btn`}>
-            <div className="flex justify-between items-center text-[10px] font-bold text-sky-500 uppercase tracking-wider">
-              <span>Progreso Carrera</span>
-              <span className="text-sky-500 font-bold text-[9px]">{porcentajeProgreso}%</span>
+            <div className="flex justify-between items-center text-[10px] font-bold text-purple-500 uppercase tracking-wider">
+              <span>Avance de Carrera</span>
+              <span className="text-purple-500 font-bold text-[9px]">{porcentajeProgreso}%</span>
             </div>
             <div className="flex items-baseline justify-between">
               <div className={`text-xl sm:text-2xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                {totalCursosAprobados} <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>/ {totalObligatoriosPlan}</span>
+                {porcentajeProgreso}% <span className={`text-[11px] font-semibold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Completado</span>
               </div>
             </div>
             <div className={`w-full ${tema === 'dark' ? 'bg-slate-800/80' : 'bg-slate-200'} h-1.5 rounded-full overflow-hidden`}>
-              <div className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
+              <div className="bg-purple-500 h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${porcentajeProgreso}%` }}></div>
             </div>
           </div>
 
         </div>
       </div>
 
-      {/* Error Alert Toast */}
+      {/* Alertas Toasts */}
       {mensajeError && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start space-x-3 text-rose-500 text-xs font-semibold animate-fadeIn shadow-sm">
-          <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
+        <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl flex items-start space-x-3 text-rose-500 text-xs font-semibold animate-fadeIn shadow-xs">
+          <AlertCircle className="w-5 h-5 shrink-0 text-rose-500 mt-0.5" />
           <span className="leading-relaxed">{mensajeError}</span>
         </div>
       )}
 
-      {/* ── GRAFO UNP LIMPIO Y CONTROLES ── */}
-      <div className={`space-y-4 animate-fadeIn ${
-        esEscalaPantallaCompleta ? "fixed inset-2 sm:inset-4 z-50 overflow-auto bg-slate-950 p-4 sm:p-6 rounded-3xl border border-slate-800 shadow-2xl" : ""
-      }`}>
-
-        {/* Toolbar Superior del Canvas */}
-        <div className="rounded-2xl liquid-glass-card p-3.5 sm:p-4 space-y-3">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-            
-            {/* Leyenda Visual */}
-            <div className={`flex items-center gap-3 overflow-x-auto no-scrollbar text-[10px] sm:text-[11px] font-extrabold ${
-              tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
-            } uppercase tracking-wider whitespace-nowrap py-1`}>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-                <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Aprobado</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
-                <span className={tema === 'dark' ? 'text-slate-300' : 'text-slate-800'}>Disponible</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
-                <span className={tema === 'dark' ? 'text-slate-400' : 'text-slate-600'}>Bloqueado</span>
-              </div>
-              <span className={tema === 'dark' ? 'text-slate-700' : 'text-slate-300'}>|</span>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></div>
-                <span className="text-cyan-400 font-bold">⬅️ Requisitos</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></div>
-                <span className="text-purple-400 font-bold">➡️ Cursos Futuros</span>
-              </div>
-            </div>
-
-            {/* Acciones & Navegación del Canvas */}
-            <div className="flex items-center space-x-1.5 shrink-0 overflow-x-auto no-scrollbar py-0.5">
-              <button
-                type="button"
-                onClick={() => scrollGrafoHorizontal(-320)}
-                className="px-2.5 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-300 font-extrabold text-xs hover:bg-blue-600 hover:text-white transition-all flex items-center space-x-1 cursor-pointer shrink-0"
-                title="Deslizar lienzo a la izquierda"
-              >
-                <span>⬅️</span>
-                <span className="hidden sm:inline">Izquierda</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => scrollGrafoHorizontal(320)}
-                className="px-2.5 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-300 font-extrabold text-xs hover:bg-blue-600 hover:text-white transition-all flex items-center space-x-1 cursor-pointer shrink-0"
-                title="Deslizar lienzo a la derecha"
-              >
-                <span className="hidden sm:inline">Derecha</span>
-                <span>➡️</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={autoAjustarEscalaPantalla}
-                className="px-2.5 py-1.5 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-300 text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all cursor-pointer shrink-0"
-                title="Ajustar escala al ancho de la pantalla"
-              >
-                📐 <span className="hidden sm:inline">Ajustar Pantalla</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEscalaGrafo((prev) => Math.min(1.4, prev + 0.1))}
-                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
-                title="Aumentar zoom"
-              >
-                <ZoomIn className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEscalaGrafo((prev) => Math.max(0.35, prev - 0.1))}
-                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer shrink-0"
-                title="Reducir zoom"
-              >
-                <ZoomOut className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEscalaGrafo(0.85)}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer shrink-0"
-              >
-                Reset
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEsEscalaPantallaCompleta(!esEscalaPantallaCompleta)}
-                className="p-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white transition-all cursor-pointer shrink-0"
-                title="Pantalla Completa Canvas"
-              >
-                {esEscalaPantallaCompleta ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Jump por Fila de Ciclo */}
-          <div className="pt-2 border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[10px] font-mono font-black text-slate-400 uppercase shrink-0 mr-1">Ir a Fila:</span>
-            {planEstudios.map((s) => (
-              <button
-                key={s.numeroCiclo}
-                type="button"
-                onClick={() => scrollToCicloColumna(s.numeroCiclo)}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-mono font-bold text-blue-400 hover:text-white shrink-0 active:scale-95 transition-all cursor-pointer"
-              >
-                {s.ciclo}
-              </button>
-            ))}
-          </div>
-        </div>
-
-          {/* Visualizador de Canvas DAG con Capa SVG Conectora */}
-          <div
-            ref={grafoContainerRef}
-            onScroll={actualizarConexionesGrafo}
-            onMouseDown={manejarMouseDownCanvas}
-            onMouseMove={manejarMouseMoveCanvas}
-            onMouseUp={finalizarArrastre}
-            onMouseLeave={finalizarArrastre}
-            className={`rounded-3xl liquid-glass-card p-4 sm:p-6 overflow-auto relative min-h-[620px] max-h-[78vh] border border-slate-800 shadow-2xl select-none ${
-              estaArrastrando ? "cursor-grabbing" : "cursor-grab"
-            }`}
-            style={{ touchAction: "pan-x pan-y", WebkitOverflowScrolling: "touch" }}
-          >
-            <div
-              className="relative transition-transform duration-200 origin-top-left"
-              style={{ transform: `scale(${escalaGrafo})`, width: "max-content", minWidth: disposicionGrafo === "matriz" ? "2100px" : "2400px" }}
-            >
-              {/* Capa SVG Translucida de Conexión de Grafos entre Nodos */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ minWidth: disposicionGrafo === "matriz" ? "2100px" : "2400px", minHeight: "1600px" }}>
-                <defs>
-                  <linearGradient id="neonCyanPurple" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#22d3ee" />
-                    <stop offset="50%" stopColor="#818cf8" />
-                    <stop offset="100%" stopColor="#a855f7" />
-                  </linearGradient>
-
-                  <filter id="glowNeon" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3.5" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                </defs>
-
-                {rutasConexionSVG.map((conn) => {
-                  const esSourceActivo = setAntecesoresActivos.has(conn.sourceId) || conn.sourceId === cursoHovered;
-                  const esTargetActivo = setSucesoresActivos.has(conn.targetId) || setAntecesoresActivos.has(conn.targetId) || conn.targetId === cursoHovered;
-                  const esLineaDeImpacto = (esSourceActivo && esTargetActivo) || (conn.sourceId === cursoHovered) || (conn.targetId === cursoHovered);
-
-                  if (!esLineaDeImpacto && cursoHovered) {
-                    return (
-                      <path
-                        key={conn.id}
-                        d={conn.pathD}
-                        fill="none"
-                        stroke="rgba(148, 163, 184, 0.05)"
-                        strokeWidth="1"
-                      />
-                    );
-                  }
-
-                  return (
-                    <g key={conn.id}>
-                      <path
-                        d={conn.pathD}
-                        fill="none"
-                        stroke={esLineaDeImpacto ? "url(#neonCyanPurple)" : "rgba(148, 163, 184, 0.18)"}
-                        strokeWidth={esLineaDeImpacto ? "3.5" : "1.5"}
-                        filter={esLineaDeImpacto ? "url(#glowNeon)" : undefined}
-                        strokeDasharray={esLineaDeImpacto ? "8 4" : undefined}
-                      />
-                      {esLineaDeImpacto && (
-                        <circle cx={conn.x2} cy={conn.y2} r="4.5" fill="#a855f7" className="animate-ping" />
-                      )}
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* ── DISPOSICIÓN 1: MATRIZ OFICIAL UNP (FILAS = CICLOS I AL X) ── */}
-              {disposicionGrafo === "matriz" ? (
-                <div className="min-w-[2100px] relative z-20 pb-12 pt-2 space-y-4">
-                  {planEstudios.map((semestre) => {
-                    const aprobadosCiclo = semestre.cursos.filter((c) => aprobados.includes(c.id)).length;
-                    
-                    return (
-                      <div
-                        key={semestre.ciclo}
-                        data-ciclo-columna={semestre.numeroCiclo}
-                        className="flex items-stretch space-x-4 min-w-[2100px]"
-                      >
-                        {/* Indicador de Fila de Ciclo en Margen Izquierdo */}
-                        <div className="w-24 shrink-0 bg-slate-950/95 border border-slate-800 rounded-2xl p-3 flex flex-col justify-center items-center text-center shadow-lg backdrop-blur-xl">
-                          <span className="text-sm font-black text-white font-mono uppercase">{semestre.ciclo.replace("Ciclo ", "Ciclo\n")}</span>
-                          <span className="text-[10px] text-blue-400 font-extrabold mt-1">
-                            {aprobadosCiclo}/{semestre.cursos.length}
-                          </span>
-                        </div>
-
-                        {/* 8 Columnas de la Matriz UNP */}
-                        <div className="flex-1 grid grid-cols-8 gap-3">
-                          {[1, 2, 3, 4, 5, 6, 7, 8].map((colIndex) => {
-                            const cursosEnColumna = semestre.cursos.filter((c) => {
-                              const pos = MATRIZ_POSICION_UNP[c.id];
-                              if (pos) return pos.col === colIndex;
-                              const idx = semestre.cursos.indexOf(c);
-                              return (idx % 8) + 1 === colIndex;
-                            });
-
-                            if (cursosEnColumna.length === 0) {
-                              return (
-                                <div key={colIndex} className="p-3 rounded-2xl border border-dashed border-slate-800/40 opacity-20 min-h-[105px] flex items-center justify-center">
-                                  <span className="text-[9px] text-slate-600 font-mono">—</span>
-                                </div>
-                              );
-                            }
-
-                            return (
-                              <div key={colIndex} className="space-y-2">
-                                {cursosEnColumna.map((curso) => {
-                                  const estado = obtenerEstadoCurso(curso);
-                                  const esHovered = cursoHovered === curso.id;
-                                  const esAntecesores = setAntecesoresActivos.has(curso.id);
-                                  const esSucesores = setSucesoresActivos.has(curso.id);
-                                  const cantidadSucesores = (sucesoresMap[curso.id] || []).length;
-                                  const estaOpaco = cursoHovered && !esHovered && !esAntecesores && !esSucesores;
-
-                                  let nodeStyle = "";
-                                  if (esHovered) {
-                                    nodeStyle = "bg-blue-600/40 border-blue-400 ring-4 ring-blue-500/50 scale-[1.04] shadow-2xl shadow-blue-500/40 z-30";
-                                  } else if (esAntecesores) {
-                                    nodeStyle = "bg-cyan-950/90 border-cyan-400 ring-2 ring-cyan-400/80 scale-[1.02] shadow-xl shadow-cyan-500/30 z-20";
-                                  } else if (esSucesores) {
-                                    nodeStyle = "bg-purple-950/90 border-purple-400 ring-2 ring-purple-400/80 scale-[1.02] shadow-xl shadow-purple-500/30 z-20";
-                                  } else if (estado === "aprobado") {
-                                    nodeStyle = "bg-emerald-950/60 border-emerald-500/50 text-emerald-200 hover:border-emerald-400";
-                                  } else if (estado === "disponible") {
-                                    nodeStyle = "bg-blue-950/50 border-blue-500/50 text-blue-200 hover:border-blue-400";
-                                  } else {
-                                    nodeStyle = "bg-slate-950/80 border-slate-800 text-slate-400 opacity-60 hover:opacity-100";
-                                  }
-
-                                  return (
-                                    <div
-                                      key={curso.id}
-                                      ref={(el) => (nodeRefs.current[curso.id] = el)}
-                                      onMouseEnter={() => setCursoHovered(curso.id)}
-                                      onMouseLeave={() => setCursoHovered(null)}
-                                      onClick={() => setCursoModalCadena(curso)}
-                                      className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 relative group overflow-hidden min-h-[105px] flex flex-col justify-between ${nodeStyle} ${
-                                        estaOpaco ? "opacity-25 scale-[0.97] blur-[0.2px]" : ""
-                                      }`}
-                                    >
-                                      <div className="flex items-center justify-between mb-1">
-                                        <span className="text-[10px] font-mono font-black text-slate-200">
-                                          {curso.id}
-                                        </span>
-                                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-md border ${
-                                          estado === "aprobado"
-                                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                                            : estado === "disponible"
-                                            ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
-                                            : "bg-slate-800 text-slate-400 border-slate-700"
-                                        }`}>
-                                          {estado === "aprobado" ? "✓ Aprobado" : estado === "disponible" ? "🔓 Habilitado" : "🔒 Bloqueado"}
-                                        </span>
-                                      </div>
-
-                                      <div className="text-xs font-black text-white leading-snug line-clamp-2 my-1">
-                                        {curso.nombre}
-                                      </div>
-
-                                      <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-                                        <span>{curso.creditos} CR</span>
-                                        {cantidadSucesores > 0 && (
-                                          <span className="text-purple-300 font-bold flex items-center space-x-1 bg-purple-500/20 px-1 py-0.5 rounded border border-purple-500/30">
-                                            <GitBranch className="w-2.5 h-2.5 text-purple-400" />
-                                            <span>Abre {cantidadSucesores}</span>
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-        </div>
-
-      {/* ── INSPECTOR SLIDE DRAWER / SIDE SHEET UNCLUTTERED UX ── */}
-      {cursoModalCadena && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/75 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full sm:max-w-xl h-full liquid-glass-modal border-l border-slate-800 p-4 sm:p-6 md:p-8 space-y-5 shadow-2xl relative overflow-y-auto flex flex-col justify-between">
-            
-            {/* Top Drag Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-slate-700/80 rounded-full mx-auto my-0.5 shrink-0 sm:hidden"></div>
-
-            <div className="space-y-5">
-              {/* Header Drawer */}
-              <div className="flex items-start justify-between border-b border-slate-800 pb-3">
-                <div className="space-y-1 min-w-0 pr-2">
-                  <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[11px] font-bold">
-                    <Network className="w-3 h-3 text-purple-400 shrink-0" />
-                    <span>INSPECTOR DE CADENA</span>
-                  </div>
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-black text-white leading-tight">
-                    <span>{cursoModalCadena.nombre}</span>
-                    <span className="text-xs font-mono text-slate-400 font-bold block sm:inline sm:ml-2">({cursoModalCadena.id})</span>
-                  </h2>
-                  <p className="text-[11px] text-slate-400">
-                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos · Asignatura Obligatoria
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setCursoModalCadena(null)}
-                  className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Botón Acción Rápida de Aprobación */}
-              <div className="bg-slate-950/80 rounded-2xl p-3.5 border border-slate-800 flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="text-xs font-black text-white">Estado de Asignatura</div>
-                  <div className="text-[10px] text-slate-400 truncate">
-                    {aprobados.includes(cursoModalCadena.id) ? "Asignatura superada exitosamente." : "Habilitada para ser cursada."}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    manejarClickCurso(cursoModalCadena);
-                    setTimeout(actualizarConexionesGrafo, 100);
-                  }}
-                  className={`px-3.5 py-2 rounded-xl font-extrabold text-xs transition-all flex items-center space-x-1.5 cursor-pointer shrink-0 shadow-lg ${
-                    aprobados.includes(cursoModalCadena.id)
-                      ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
-                      : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
-                  }`}
-                >
-                  <span>{aprobados.includes(cursoModalCadena.id) ? "Desmarcar" : "Aprobar ✓"}</span>
-                </button>
-              </div>
-
-              {/* Sección 1: Requisitos de Origen */}
-              <div className="space-y-3">
-                <h3 className="text-xs font-black text-cyan-400 uppercase tracking-wider flex items-center space-x-2">
-                  <Compass className="w-4 h-4 text-cyan-400" />
-                  <span>1. Requisitos de Origen ({cursoModalCadena.requisitos.length})</span>
-                </h3>
-
-                {cursoModalCadena.requisitos.length === 0 ? (
-                  <p className="text-xs text-slate-500 font-semibold p-3 bg-slate-950/60 rounded-xl border border-slate-800/80">
-                    Esta asignatura no requiere prerrequisitos previos. Se puede matricular libremente.
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {cursoModalCadena.requisitos.map((reqId) => {
-                      const reqCurso = mapaCursos[reqId];
-                      const estaAprobado = aprobados.includes(reqId);
-                      return (
-                        <div key={reqId} className={`p-2.5 sm:p-3 rounded-xl border text-xs flex items-center justify-between ${
-                          estaAprobado ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300" : "bg-rose-950/40 border-rose-500/40 text-rose-300"
-                        }`}>
-                          <div className="min-w-0 pr-2">
-                            <div className="font-extrabold text-xs truncate">{reqCurso?.nombre || reqId}</div>
-                            <div className="text-[10px] font-mono opacity-80">{reqId} · Ciclo {reqCurso?.cicloNombre || "I"}</div>
-                          </div>
-                          {estaAprobado ? (
-                            <span className="text-[10px] font-black bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30 shrink-0">
-                              ✓ Aprobado
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-black bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30 shrink-0">
-                              🔒 Faltante
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Sección 2: Cursos que Abre en Ciclos Futuros */}
-              <div className="space-y-3">
-                <h3 className="text-xs font-black text-purple-400 uppercase tracking-wider flex items-center space-x-2">
-                  <GitBranch className="w-4 h-4 text-purple-400" />
-                  <span>2. Asignaturas que Habilita en Ciclos Futuros ({(sucesoresMap[cursoModalCadena.id] || []).length})</span>
-                </h3>
-
-                {(sucesoresMap[cursoModalCadena.id] || []).length === 0 ? (
-                  <p className="text-xs text-slate-500 font-semibold p-3 bg-slate-950/60 rounded-xl border border-slate-800/80">
-                    Asignatura terminal del plan de estudios.
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {(sucesoresMap[cursoModalCadena.id] || []).map((sucId) => {
-                      const sucCurso = mapaCursos[sucId];
-                      const estaAprobado = aprobados.includes(sucId);
-                      return (
-                        <div key={sucId} className={`p-2.5 rounded-xl border text-xs flex flex-col justify-between ${
-                          estaAprobado
-                            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
-                            : "bg-purple-950/40 border-purple-500/40 text-purple-300"
-                        }`}>
-                          <div className="font-extrabold text-[11px] truncate">{sucCurso?.nombre || sucId}</div>
-                          <div className="text-[9px] font-mono opacity-80 mt-1 flex justify-between">
-                            <span>{sucId}</span>
-                            <span>Ciclo {sucCurso?.cicloNombre || "Futuro"}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => setCursoModalCadena(null)}
-                className="w-full py-2.5 rounded-xl font-black text-xs bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
-              >
-                Cerrar Inspector
-              </button>
-            </div>
-
-          </div>
+      {mensajeExito && (
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start space-x-3 text-emerald-500 text-xs font-semibold animate-fadeIn shadow-xs">
+          <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-500 mt-0.5" />
+          <span className="leading-relaxed">{mensajeExito}</span>
         </div>
       )}
+
+      {/* Pestañas de Selección de Ciclos (Ciclo I a X + Todos) */}
+      <div className="rounded-2xl liquid-glass-card p-3 sm:p-4 space-y-4">
+        
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800/80">
+          <span className={`text-xs font-extrabold uppercase tracking-wider ${
+            tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
+          } flex items-center space-x-1.5`}>
+            <Layers className="w-4 h-4 text-blue-500" />
+            <span>Seleccionar Ciclo Académico:</span>
+          </span>
+          <span className={`text-[11px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+            {cicloActivo === "todos" ? "Mostrando todos los ciclos" : `Visualizando Ciclo ${cicloActivo}`}
+          </span>
+        </div>
+
+        {/* Scroll Horizontal de Pestañas de Ciclo */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1">
+          {planEstudios.map((sem) => {
+            const esActivo = cicloActivo === sem.numeroCiclo;
+            const aprobadosEnCiclo = sem.cursos.filter((c) => aprobados.includes(c.id)).length;
+            const esCompleto = aprobadosEnCiclo === sem.cursos.length;
+
+            return (
+              <button
+                key={sem.numeroCiclo}
+                type="button"
+                onClick={() => setCicloActivo(sem.numeroCiclo)}
+                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all shrink-0 flex items-center space-x-1.5 cursor-pointer liquid-btn ${
+                  esActivo
+                    ? "bg-blue-600 text-white shadow-md scale-102"
+                    : esCompleto
+                    ? tema === 'dark'
+                      ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
+                      : "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
+                    : tema === 'dark'
+                    ? "bg-[#090e1a]/80 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700"
+                    : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 hover:text-slate-900"
+                }`}
+              >
+                <span>{sem.ciclo}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  esActivo
+                    ? "bg-white/20 text-white"
+                    : esCompleto
+                    ? "bg-emerald-500/20 text-emerald-500"
+                    : "bg-slate-500/20 text-slate-400"
+                }`}>
+                  {esCompleto ? "✓" : `${aprobadosEnCiclo}/${sem.cursos.length}`}
+                </span>
+              </button>
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={() => setCicloActivo("todos")}
+            className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all shrink-0 flex items-center space-x-1 cursor-pointer liquid-btn ${
+              cicloActivo === "todos"
+                ? "bg-blue-600 text-white shadow-md scale-102"
+                : tema === 'dark'
+                ? "bg-[#090e1a]/80 text-slate-400 border border-slate-800 hover:text-white"
+                : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200"
+            }`}
+          >
+            <Filter className="w-3.5 h-3.5" />
+            <span>Ver Todos</span>
+          </button>
+        </div>
+
+      </div>
+
+      {/* Lista de Cursos del Ciclo Activo (Vista Vertical) */}
+      <div className="space-y-6">
+        {ciclosAMostrar.map((semestre) => {
+          const cursosFiltrados = semestre.cursos.filter((c) => {
+            if (!busqueda) return true;
+            const term = busqueda.toLowerCase();
+            return c.nombre.toLowerCase().includes(term) || c.id.toLowerCase().includes(term);
+          });
+
+          if (cursosFiltrados.length === 0) return null;
+
+          const aprobadosCount = semestre.cursos.filter((c) => aprobados.includes(c.id)).length;
+          const esCicloCompleto = aprobadosCount === semestre.cursos.length;
+          const creditosTotalesCiclo = semestre.cursos.reduce((acc, c) => acc + c.creditos, 0);
+
+          return (
+            <div
+              key={semestre.numeroCiclo}
+              className={`p-5 sm:p-6 rounded-2xl liquid-glass-card space-y-4 transition-all`}
+            >
+              {/* Cabecera del Ciclo con Botones de Acción */}
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b ${
+                tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'
+              }`}>
+                <div className="space-y-0.5">
+                  <div className="flex items-center space-x-2">
+                    <h2 className={`text-lg font-extrabold ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                      {semestre.ciclo}
+                    </h2>
+                    {esCicloCompleto && (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1">
+                        <Check className="w-3 h-3" />
+                        <span>Ciclo Completo</span>
+                      </span>
+                    )}
+                  </div>
+                  <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {semestre.cursos.length} Asignaturas · {creditosTotalesCiclo} Créditos Totales ({aprobadosCount}/{semestre.cursos.length} Aprobadas)
+                  </p>
+                </div>
+
+                {/* Acciones para Marcar Ciclo Completo */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => marcarCicloCompleto(semestre.numeroCiclo)}
+                    className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-xs flex items-center space-x-1.5 cursor-pointer active:scale-95"
+                    title="Aprobar asignaturas con prerrequisitos cumplidos en este ciclo"
+                  >
+                    <CheckCheck className="w-4 h-4" />
+                    <span>Marcar Ciclo Completo</span>
+                  </button>
+
+                  {aprobadosCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => desmarcarCicloCompleto(semestre.numeroCiclo)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center space-x-1 cursor-pointer active:scale-95 ${
+                        tema === 'dark'
+                          ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
+                      }`}
+                      title="Desmarcar todas las asignaturas de este ciclo"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Desmarcar Ciclo</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Lista Vertical de Cursos */}
+              <div className="space-y-3">
+                {cursosFiltrados.map((curso) => {
+                  const estado = obtenerEstadoCurso(curso);
+                  const estaAprobado = estado === "aprobado";
+                  const estaDisponible = estado === "disponible";
+
+                  return (
+                    <div
+                      key={curso.id}
+                      onClick={() => manejarClickCurso(curso)}
+                      className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer liquid-btn hover-scale-pop ${
+                        estaAprobado
+                          ? tema === 'dark'
+                            ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-100 hover:border-emerald-500/50"
+                            : "bg-emerald-50/90 border-emerald-200 text-slate-900 hover:border-emerald-300"
+                          : estaDisponible
+                          ? tema === 'dark'
+                            ? "bg-blue-950/20 border-blue-500/30 text-white hover:border-blue-500/50"
+                            : "bg-blue-50/80 border-blue-200 text-slate-900 hover:border-blue-300"
+                          : tema === 'dark'
+                          ? "bg-[#090e1a]/50 border-slate-800/60 text-slate-400 hover:border-slate-700 opacity-75"
+                          : "bg-slate-100/70 border-slate-200 text-slate-500 hover:border-slate-300 opacity-75"
+                      }`}
+                    >
+                      <div className="flex items-start space-x-3 flex-1">
+                        {/* Estado Icono */}
+                        <div className="shrink-0 mt-0.5">
+                          {estaAprobado && (
+                            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                              <CheckCircle2 className="w-5 h-5" />
+                            </div>
+                          )}
+                          {estaDisponible && (
+                            <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                              <Unlock className="w-4 h-4" />
+                            </div>
+                          )}
+                          {!estaAprobado && !estaDisponible && (
+                            <div className="w-8 h-8 rounded-xl bg-slate-500/10 text-slate-500 border border-slate-500/20 flex items-center justify-center">
+                              <Lock className="w-4 h-4" />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Nombre y Detalles */}
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
+                              estaAprobado
+                                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                                : estaDisponible
+                                ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                                : "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+                            }`}>
+                              {curso.id}
+                            </span>
+
+                            <span className={`text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+                              {curso.creditos} Créditos
+                            </span>
+                          </div>
+
+                          <h3 className={`text-sm sm:text-base font-bold ${
+                            estaAprobado
+                              ? tema === 'dark' ? 'text-emerald-300' : 'text-emerald-950'
+                              : estaDisponible
+                              ? tema === 'dark' ? 'text-white' : 'text-slate-900'
+                              : tema === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                          }`}>
+                            {curso.nombre}
+                          </h3>
+
+                          {/* Prerrequisitos */}
+                          {curso.requisitos.length > 0 ? (
+                            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                              <span className="text-[10px] font-bold text-slate-500">Prerrequisitos:</span>
+                              {curso.requisitos.map((reqId) => {
+                                const reqAprobado = aprobados.includes(reqId);
+                                const nombreReq = mapaCursos[reqId]?.nombre || reqId;
+                                return (
+                                  <span
+                                    key={reqId}
+                                    className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded text-[9px] font-bold ${
+                                      reqAprobado
+                                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                        : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                                    }`}
+                                  >
+                                    <span>{reqId}</span>
+                                    <span>{reqAprobado ? "✓" : "🔒"}</span>
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div className="text-[10px] font-semibold text-slate-500">
+                              Sin prerrequisitos (Libre matrícula)
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Botón de Acción Directa */}
+                      <div className="shrink-0 self-end sm:self-center pt-2 sm:pt-0">
+                        {estaAprobado && (
+                          <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold inline-flex items-center space-x-1">
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Aprobado</span>
+                          </span>
+                        )}
+                        {estaDisponible && (
+                          <span className="px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold inline-flex items-center space-x-1 hover:bg-blue-500 transition-colors shadow-xs">
+                            <Unlock className="w-3.5 h-3.5" />
+                            <span>Aprobar</span>
+                          </span>
+                        )}
+                        {!estaAprobado && !estaDisponible && (
+                          <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 text-xs font-bold inline-flex items-center space-x-1">
+                            <Lock className="w-3.5 h-3.5" />
+                            <span>Bloqueado</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
+          );
+        })}
+      </div>
 
     </div>
   );
