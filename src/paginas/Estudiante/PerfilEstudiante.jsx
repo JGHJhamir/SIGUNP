@@ -200,6 +200,11 @@ export default function PerfilEstudiante() {
       localStorage.setItem("emailEstudiante", emailLimpio || "");
       localStorage.setItem("facultadEstudiante", facultad);
       localStorage.setItem("escuelaEstudiante", escuela);
+      if (escuela.toLowerCase().includes("contab") || escuela.toLowerCase().includes("financier")) {
+        localStorage.setItem("carreraActiva", "contabilidad");
+      } else {
+        localStorage.setItem("carreraActiva", "informatica");
+      }
 
       setMensajePerfil({
         tipo: "success",

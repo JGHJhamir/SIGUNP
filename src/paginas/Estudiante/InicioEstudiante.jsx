@@ -1,162 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useTema } from "../../contexto/ContextoTema";
-import {
-  Award,
-  BookOpen,
-  Calendar,
-  Layers,
-  Sparkles,
-  CheckCircle2,
-  Info,
-  ChevronRight,
-  GraduationCap,
-  Sliders,
-  UserCheck,
-  ArrowUpRight,
-  Clock,
-  BookMarked
-} from "lucide-react";
-
-const planEstudiosCompleto = [
-  { id: "ED1292", creditos: 2, ciclo: 1 },
-  { id: "SI1447", creditos: 4, ciclo: 1 },
-  { id: "ED1331", creditos: 3, ciclo: 1 },
-  { id: "MA1470", creditos: 4, ciclo: 1 },
-  { id: "SI1358", creditos: 3, ciclo: 1 },
-  { id: "SI1216", creditos: 2, ciclo: 1 },
-  { id: "MA1408", creditos: 4, ciclo: 1 },
-  { id: "ED1297", creditos: 2, ciclo: 1 },
-  { id: "CB1324", creditos: 3, ciclo: 2 },
-  { id: "MA1435", creditos: 4, ciclo: 2 },
-  { id: "FI1363", creditos: 3, ciclo: 2 },
-  { id: "SI1445", creditos: 4, ciclo: 2 },
-  { id: "CS1286", creditos: 2, ciclo: 2 },
-  { id: "SI1435", creditos: 4, ciclo: 2 },
-  { id: "QU1363", creditos: 3, ciclo: 2 },
-  { id: "CA2337", creditos: 3, ciclo: 3 },
-  { id: "MA2441", creditos: 4, ciclo: 3 },
-  { id: "EC2201", creditos: 2, ciclo: 3 },
-  { id: "FI2410", creditos: 4, ciclo: 3 },
-  { id: "SI2422", creditos: 4, ciclo: 3 },
-  { id: "CS2397", creditos: 3, ciclo: 3 },
-  { id: "CS2258", creditos: 2, ciclo: 3 },
-  { id: "ED2278", creditos: 2, ciclo: 3 },
-  { id: "CA2101", creditos: 1, ciclo: 4 },
-  { id: "MA2333", creditos: 3, ciclo: 4 },
-  { id: "ES2300", creditos: 3, ciclo: 4 },
-  { id: "SI2418", creditos: 4, ciclo: 4 },
-  { id: "FI2411", creditos: 4, ciclo: 4 },
-  { id: "SI2452", creditos: 4, ciclo: 4 },
-  { id: "CO2201", creditos: 2, ciclo: 4 },
-  { id: "CS2259", creditos: 2, ciclo: 4 },
-  { id: "SI3422", creditos: 4, ciclo: 5 },
-  { id: "MA3412", creditos: 4, ciclo: 5 },
-  { id: "FI3492", creditos: 4, ciclo: 5 },
-  { id: "ED3286", creditos: 2, ciclo: 5 },
-  { id: "ED3283", creditos: 2, ciclo: 5 },
-  { id: "SI3421", creditos: 4, ciclo: 5 },
-  { id: "SI3331", creditos: 3, ciclo: 5 },
-  { id: "SI3334", creditos: 3, ciclo: 5 },
-  { id: "SI3423", creditos: 4, ciclo: 6 },
-  { id: "SI3400", creditos: 4, ciclo: 6 },
-  { id: "SI3420", creditos: 4, ciclo: 6 },
-  { id: "ED3287", creditos: 2, ciclo: 6 },
-  { id: "ES3336", creditos: 3, ciclo: 6 },
-  { id: "ED3284", creditos: 2, ciclo: 6 },
-  { id: "ED3285", creditos: 2, ciclo: 6 },
-  { id: "SI3337", creditos: 3, ciclo: 6 },
-  { id: "SI3336", creditos: 3, ciclo: 6 },
-  { id: "AA3303", creditos: 3, ciclo: 6 },
-  { id: "SI3335", creditos: 3, ciclo: 6 },
-  { id: "IO4447", creditos: 4, ciclo: 7 },
-  { id: "CA4221", creditos: 2, ciclo: 7 },
-  { id: "IO4448", creditos: 4, ciclo: 7 },
-  { id: "SI4386", creditos: 3, ciclo: 7 },
-  { id: "SI4489", creditos: 4, ciclo: 7 },
-  { id: "SI4490", creditos: 4, ciclo: 7 },
-  { id: "SI4388", creditos: 3, ciclo: 7 },
-  { id: "IO4334", creditos: 3, ciclo: 7 },
-  { id: "SI4387", creditos: 3, ciclo: 7 },
-  { id: "IO4332", creditos: 3, ciclo: 7 },
-  { id: "DP4331", creditos: 3, ciclo: 8 },
-  { id: "SI4488", creditos: 4, ciclo: 8 },
-  { id: "EM4461", creditos: 4, ciclo: 8 },
-  { id: "SI4360", creditos: 3, ciclo: 8 },
-  { id: "SI4491", creditos: 4, ciclo: 8 },
-  { id: "SI4465", creditos: 4, ciclo: 8 },
-  { id: "SI5364", creditos: 3, ciclo: 9 },
-  { id: "IO5365", creditos: 3, ciclo: 9 },
-  { id: "SI5497", creditos: 4, ciclo: 9 },
-  { id: "SI5496", creditos: 4, ciclo: 9 },
-  { id: "SI5441", creditos: 4, ciclo: 9 },
-  { id: "SI5365", creditos: 3, ciclo: 9 },
-  { id: "SI5370", creditos: 3, ciclo: 9 },
-  { id: "II5314", creditos: 3, ciclo: 9 },
-  { id: "SI5369", creditos: 3, ciclo: 9 },
-  { id: "CO5397", creditos: 3, ciclo: 10 },
-  { id: "SI5367", creditos: 3, ciclo: 10 },
-  { id: "SI5411", creditos: 4, ciclo: 10 },
-  { id: "SI5499", creditos: 4, ciclo: 10 },
-  { id: "SI5498", creditos: 4, ciclo: 10 },
-  { id: "SI5368", creditos: 3, ciclo: 10 },
-  { id: "SI5373", creditos: 3, ciclo: 10 },
-  { id: "SI5361", creditos: 3, ciclo: 10 },
-  { id: "II5345", creditos: 3, ciclo: 10 },
-  { id: "II5344", creditos: 3, ciclo: 10 },
-  { id: "SI5371", creditos: 3, ciclo: 10 }
-];
-
-const NOMBRES_CURSOS = {
-  "ED1292": "Actividades Culturales y Deportivas I",
-  "SI1447": "Algoritmos y Programación",
-  "ED1331": "Expresión Oral y Escrita",
-  "MA1470": "Matemática Básica I",
-  "SI1358": "Metodología de la Investigación Científica",
-  "SI1216": "Introducción a la Ingeniería de Sistemas e Informática",
-  "MA1408": "Cálculo I",
-  "ED1297": "Métodos de Estudio",
-  "CB1324": "Biología General",
-  "MA1435": "Cálculo II",
-  "FI1363": "Física I",
-  "SI1445": "Programación Orientada a Objetos",
-  "CS1286": "Filosofía",
-  "SI1435": "Matemática Discreta",
-  "QU1363": "Química General",
-  "CA2337": "Ecología y Protección del Medio Ambiente",
-  "MA2441": "Álgebra Lineal",
-  "EC2201": "Realidad Nacional",
-  "FI2410": "Física General",
-  "SI2422": "Teoría de Sistemas",
-  "CS2397": "Realidad Nacional y Regional",
-  "CS2258": "Sociología",
-  "ED2278": "Taller de Arte",
-  "CA2101": "Actividad de Responsabilidad Social Universitaria",
-  "MA2333": "Álgebra Lineal",
-  "ES2300": "Estadística General",
-  "SI2418": "Estructura de Datos",
-  "FI2411": "Física II",
-  "SI2452": "Ingeniería de Procesos de Negocios",
-  "CO2201": "Introducción a la Contabilidad",
-  "CS2259": "Psicología General",
-  "SI3422": "Análisis y Diseño de Sistemas I",
-  "MA3412": "Cálculo III",
-  "FI3492": "Circuitos Eléctricos y Electrónicos",
-  "ED3286": "Discapacidad y Derechos Humanos",
-  "ED3283": "Inglés I",
-  "SI3421": "Modelado de Datos",
-  "SI3331": "Aplicaciones Avanzadas con Hojas de Cálculo",
-  "SI3334": "Introducción a los Entornos Operativos",
-  "SI3423": "Análisis y Diseño de Sistemas II",
-  "SI3400": "Arquitectura de Computadores",
-  "SI3420": "Base de Datos",
-  "ED3287": "Defensa Nacional",
-  "ES3336": "Inferencia y Probabilidades",
-  "ED3284": "Inglés II",
-  "ED3285": "Taller de Redacción Científica",
-  "SI3337": "Análisis de Algoritmos",
-  "SI3336": "Gráficos por Computadoras"
-};
+import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -165,13 +7,38 @@ export default function InicioEstudiante() {
   const [cursosAprobados, setCursosAprobados] = useState([]);
   const [cursosInscritos, setCursosInscritos] = useState([]);
 
+  const planActual = obtenerPlanEstudiosActual();
+  const nombreCarrera = obtenerNombreCarreraActual();
+
+  const planEstudiosCompleto = useMemo(() => {
+    return planActual.flatMap((sem) =>
+      sem.cursos.map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        creditos: c.creditos,
+        ciclo: sem.numeroCiclo
+      }))
+    );
+  }, [planActual]);
+
+  const mapaNombresCursos = useMemo(() => {
+    const mapa = {};
+    planEstudiosCompleto.forEach((c) => { mapa[c.id] = c.nombre; });
+    return mapa;
+  }, [planEstudiosCompleto]);
+
+  const totalCreditosPlan = useMemo(() => {
+    return planEstudiosCompleto.reduce((acc, c) => acc + c.creditos, 0);
+  }, [planEstudiosCompleto]);
+
+  const totalCursosPlan = planEstudiosCompleto.length;
+
   useEffect(() => {
     let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
     if (!aprobados || aprobados.length === 0) {
       aprobados = [
         "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
-        "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363",
-        "CA2337", "MA2441", "EC2201", "FI2410", "SI2422", "CS2397", "CS2258", "ED2278"
+        "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
       ];
       localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
     }
@@ -191,7 +58,7 @@ export default function InicioEstudiante() {
     .reduce((acc, c) => acc + c.creditos, 0);
 
   const totalObligatoriosAprobados = cursosAprobados.length;
-  const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / 63) * 100);
+  const porcentajeObligatorios = Math.round((totalObligatoriosAprobados / (totalCursosPlan || 1)) * 100);
 
   const calcularCicloEstimado = () => {
     if (cursosAprobados.length === 0) return "Ciclo I";
@@ -401,8 +268,8 @@ export default function InicioEstudiante() {
             {/* Lista de Cursos Inscritos */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
               {cursosInscritos.map((codigoCurso, index) => {
-                const infoCurso = planEstudiosCompleto.find((c) => c.id === codigoCurso) || { creditos: 4, ciclo: 4 };
-                const nombreCurso = NOMBRES_CURSOS[codigoCurso] || codigoCurso;
+                const infoCurso = planEstudiosCompleto.find((c) => c.id === codigoCurso) || { creditos: 4, ciclo: 4, nombre: codigoCurso };
+                const nombreCurso = infoCurso.nombre || mapaNombresCursos[codigoCurso] || codigoCurso;
 
                 // Variación sutil de color de borde según índice
                 const coloresBorde = [

@@ -8,11 +8,11 @@ import {
   Check,
   Info
 } from "lucide-react";
+import { obtenerPlanEstudiosActual, obtenerNombreCarreraActual } from "../../datos/planesEstudio";
 
 const CURSOS_APROBADOS_DEFECTO = [
   "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
-  "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363",
-  "CA2337", "MA2441", "EC2201", "FI2410", "SI2422", "CS2397", "CS2258", "ED2278"
+  "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363"
 ];
 
 const MATRICULA_DEMO_DEFECTO = {
@@ -28,89 +28,6 @@ const MATRICULA_DEMO_DEFECTO = {
     fechaGuardado: new Date().toISOString()
   }
 };
-
-// Plan completo con número de ciclo incluido en cada curso
-const planEstudiosCompleto = [
-  // ── Ciclo I ──
-  { id: "ED1292", nombre: "Actividad Deportiva", creditos: 2, ciclo: 1, requisitos: [] },
-  { id: "SI1447", nombre: "Algoritmos", creditos: 4, ciclo: 1, requisitos: [] },
-  { id: "ED1331", nombre: "Comunicación", creditos: 3, ciclo: 1, requisitos: [] },
-  { id: "MA1470", nombre: "Geometría Analítica", creditos: 4, ciclo: 1, requisitos: [] },
-  { id: "SI1358", nombre: "Herramientas Ofimáticas para la Vida Universitaria", creditos: 3, ciclo: 1, requisitos: [] },
-  { id: "SI1216", nombre: "Introducción a la Ingeniería Informática", creditos: 2, ciclo: 1, requisitos: [] },
-  { id: "MA1408", nombre: "Matemática Básica", creditos: 4, ciclo: 1, requisitos: [] },
-  { id: "ED1297", nombre: "Metodología de los Estudios Superiores Universitarios", creditos: 2, ciclo: 1, requisitos: [] },
-  // ── Ciclo II ──
-  { id: "CB1324", nombre: "Biología y Educación Ambiental", creditos: 3, ciclo: 2, requisitos: [] },
-  { id: "MA1435", nombre: "Cálculo I", creditos: 4, ciclo: 2, requisitos: ["MA1408", "MA1470"] },
-  { id: "FI1363", nombre: "Concepción Física del Universo", creditos: 3, ciclo: 2, requisitos: [] },
-  { id: "SI1445", nombre: "Estructuras Discretas", creditos: 4, ciclo: 2, requisitos: ["SI1447"] },
-  { id: "CS1286", nombre: "Filosofía y Ética", creditos: 2, ciclo: 2, requisitos: [] },
-  { id: "SI1435", nombre: "Programación I", creditos: 4, ciclo: 2, requisitos: ["SI1216", "SI1447"] },
-  { id: "QU1363", nombre: "Química General", creditos: 3, ciclo: 2, requisitos: [] },
-  // ── Ciclo III ──
-  { id: "CA2337", nombre: "Administración", creditos: 3, ciclo: 3, requisitos: [] },
-  { id: "MA2441", nombre: "Cálculo II", creditos: 4, ciclo: 3, requisitos: ["MA1435"] },
-  { id: "EC2201", nombre: "Economía General", creditos: 2, ciclo: 3, requisitos: [] },
-  { id: "FI2410", nombre: "Física I", creditos: 4, ciclo: 3, requisitos: ["FI1363", "MA1435"] },
-  { id: "SI2422", nombre: "Programación II", creditos: 4, ciclo: 3, requisitos: ["SI1435"] },
-  { id: "CS2397", nombre: "Realidad Nacional y Regional", creditos: 3, ciclo: 3, requisitos: [] },
-  { id: "CS2258", nombre: "Sociología", creditos: 2, ciclo: 3, requisitos: [] },
-  { id: "ED2278", nombre: "Taller de Arte", creditos: 2, ciclo: 3, requisitos: [] },
-  // ── Ciclo IV ──
-  { id: "CA2101", nombre: "Actividad de Responsabilidad Social Universitaria", creditos: 1, ciclo: 4, requisitos: ["CS2258"] },
-  { id: "MA2333", nombre: "Álgebra Lineal", creditos: 3, ciclo: 4, requisitos: ["MA1435"] },
-  { id: "ES2300", nombre: "Estadística General", creditos: 3, ciclo: 4, requisitos: ["SI1358"] },
-  { id: "SI2418", nombre: "Estructura de Datos", creditos: 4, ciclo: 4, requisitos: ["SI1435", "SI1445"] },
-  { id: "FI2411", nombre: "Física II", creditos: 4, ciclo: 4, requisitos: ["FI2410"] },
-  { id: "SI2452", nombre: "Ingeniería de Procesos de Negocios", creditos: 4, ciclo: 4, requisitos: ["CA2337"] },
-  { id: "CO2201", nombre: "Introducción a la Contabilidad", creditos: 2, ciclo: 4, requisitos: [] },
-  { id: "CS2259", nombre: "Psicología General", creditos: 2, ciclo: 4, requisitos: [] },
-  // ── Ciclo V ──
-  { id: "SI3422", nombre: "Análisis y Diseño de Sistemas I", creditos: 4, ciclo: 5, requisitos: ["SI2452"] },
-  { id: "MA3412", nombre: "Cálculo III", creditos: 4, ciclo: 5, requisitos: ["MA2441"] },
-  { id: "FI3492", nombre: "Circuitos Eléctricos y Electrónicos", creditos: 4, ciclo: 5, requisitos: ["FI2411"] },
-  { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", creditos: 2, ciclo: 5, requisitos: ["CS2397"] },
-  { id: "ED3283", nombre: "Inglés I", creditos: 2, ciclo: 5, requisitos: [] },
-  { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, ciclo: 5, requisitos: ["SI2418"] },
-  // ── Ciclo VI ──
-  { id: "SI3423", nombre: "Análisis y Diseño de Sistemas II", creditos: 4, ciclo: 6, requisitos: ["SI3422"] },
-  { id: "SI3400", nombre: "Arquitectura de Computadores", creditos: 4, ciclo: 6, requisitos: ["FI3492"] },
-  { id: "SI3420", nombre: "Base de Datos", creditos: 4, ciclo: 6, requisitos: ["SI3421"] },
-  { id: "ED3287", nombre: "Defensa Nacional", creditos: 2, ciclo: 6, requisitos: ["CS2397"] },
-  { id: "ES3336", nombre: "Inferencia y Probabilidades", creditos: 3, ciclo: 6, requisitos: ["ES2300"] },
-  { id: "ED3284", nombre: "Inglés II", creditos: 2, ciclo: 6, requisitos: ["ED3283"] },
-  { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, ciclo: 6, requisitos: ["ED1331"] },
-  // ── Ciclo VII ──
-  { id: "IO4447", nombre: "Diseños de Investigación para Ingeniería", creditos: 4, ciclo: 7, requisitos: ["ED3285", "ES3336"] },
-  { id: "CA4221", nombre: "Emprendedurismo", creditos: 2, ciclo: 7, requisitos: [] },
-  { id: "IO4448", nombre: "Investigación de Operaciones", creditos: 4, ciclo: 7, requisitos: ["ES3336", "MA2333"] },
-  { id: "SI4386", nombre: "Programación Visual", creditos: 3, ciclo: 7, requisitos: ["SI2422"] },
-  { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", creditos: 4, ciclo: 7, requisitos: ["SI3420"] },
-  { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, ciclo: 7, requisitos: ["SI2418", "SI3400"] },
-  // ── Ciclo VIII ──
-  { id: "DP4331", nombre: "Derecho Informático", creditos: 3, ciclo: 8, requisitos: ["CS1286", "ED3286"] },
-  { id: "SI4488", nombre: "Ingeniería de Software", creditos: 4, ciclo: 8, requisitos: ["SI3423", "SI4489"] },
-  { id: "EM4461", nombre: "Microeconomía", creditos: 4, ciclo: 8, requisitos: ["EC2201"] },
-  { id: "SI4360", nombre: "Organización y Administración Informática", creditos: 3, ciclo: 8, requisitos: ["SI3423"] },
-  { id: "SI4491", nombre: "Redes", creditos: 4, ciclo: 8, requisitos: ["SI4490"] },
-  { id: "SI4465", nombre: "Sistemas de Información Gerencial", creditos: 4, ciclo: 8, requisitos: ["SI4489"] },
-  // ── Ciclo IX ──
-  { id: "SI5364", nombre: "Elaboración de Proyectos Informáticos", creditos: 3, ciclo: 9, requisitos: ["SI4360"] },
-  { id: "IO5365", nombre: "Metodología para el Proyecto de Investigación", creditos: 3, ciclo: 9, requisitos: ["IO4447", "SI4488"] },
-  { id: "SI5497", nombre: "Procesos de Desarrollo de Software", creditos: 4, ciclo: 9, requisitos: ["SI3423"] },
-  { id: "SI5496", nombre: "Seguridad de la Información", creditos: 4, ciclo: 9, requisitos: ["SI4491"] },
-  { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", creditos: 4, ciclo: 9, requisitos: ["DP4331", "SI4488"] },
-  { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, ciclo: 9, requisitos: ["SI4488"] },
-  // ── Ciclo X ──
-  { id: "CO5397", nombre: "Contabilidad de Costos y Presupuestos", creditos: 3, ciclo: 10, requisitos: ["CO2201", "EM4461"] },
-  { id: "SI5367", nombre: "Desarrollo de la Investigación Informática", creditos: 3, ciclo: 10, requisitos: ["IO5365"] },
-  { id: "SI5411", nombre: "Gestión en Informática", creditos: 4, ciclo: 10, requisitos: ["SI5364"] },
-  { id: "SI5499", nombre: "Inteligencia de Negocios", creditos: 4, ciclo: 10, requisitos: ["SI4465"] },
-  { id: "SI5498", nombre: "Sistemas Orientados a Servicios", creditos: 4, ciclo: 10, requisitos: ["SI5365"] },
-  { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", creditos: 3, ciclo: 10, requisitos: ["SI5365"] },
-  { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, ciclo: 10, requisitos: ["IO5365"] }
-];
 
 const NOMBRES_CICLO = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -153,6 +70,21 @@ export default function Matricula() {
   const [conflictos, setConflictos] = useState([]);
   const [notificacion, setNotificacion] = useState(null);
   const [filtroCiclo, setFiltroCiclo] = useState("todos");
+
+  const planActual = obtenerPlanEstudiosActual();
+  const nombreCarrera = obtenerNombreCarreraActual();
+
+  const planEstudiosCompleto = useMemo(() => {
+    return planActual.flatMap((sem) =>
+      sem.cursos.map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        creditos: c.creditos,
+        ciclo: sem.numeroCiclo,
+        requisitos: c.requisitos || []
+      }))
+    );
+  }, [planActual]);
 
   useEffect(() => {
     let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");

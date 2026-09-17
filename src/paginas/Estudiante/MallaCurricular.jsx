@@ -26,139 +26,11 @@ import {
   Workflow,
   ShieldCheck
 } from "lucide-react";
-
-// Estructura completa de la carrera de Ingeniería Informática - Plan 2018-1
-const planEstudios = [
-  {
-    ciclo: "Ciclo I",
-    numeroCiclo: 1,
-    cursos: [
-      { id: "ED1292", nombre: "Actividad Deportiva", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "SI1447", nombre: "Algoritmos", creditos: 4, tipo: "O", requisitos: [] },
-      { id: "ED1331", nombre: "Comunicación", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "MA1470", nombre: "Geometría Analítica", creditos: 4, tipo: "O", requisitos: [] },
-      { id: "SI1358", nombre: "Herramientas Ofimáticas para la Vida Universitaria", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "SI1216", nombre: "Introducción a la Ingeniería Informática", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "MA1408", nombre: "Matemática Básica", creditos: 4, tipo: "O", requisitos: [] },
-      { id: "ED1297", nombre: "Metodología de los Estudios Superiores Universitarios", creditos: 2, tipo: "O", requisitos: [] }
-    ]
-  },
-  {
-    ciclo: "Ciclo II",
-    numeroCiclo: 2,
-    cursos: [
-      { id: "CB1324", nombre: "Biología y Educación Ambiental", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "MA1435", nombre: "Cálculo I", creditos: 4, tipo: "O", requisitos: ["MA1408", "MA1470"] },
-      { id: "FI1363", nombre: "Concepción Física del Universo", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "SI1445", nombre: "Estructuras Discretas", creditos: 4, tipo: "O", requisitos: ["SI1447"] },
-      { id: "CS1286", nombre: "Filosofía y Ética", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "SI1435", nombre: "Programación I", creditos: 4, tipo: "O", requisitos: ["SI1216", "SI1447"] },
-      { id: "QU1363", nombre: "Química General", creditos: 3, tipo: "O", requisitos: [] }
-    ]
-  },
-  {
-    ciclo: "Ciclo III",
-    numeroCiclo: 3,
-    cursos: [
-      { id: "CA2337", nombre: "Administración", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "MA2441", nombre: "Cálculo II", creditos: 4, tipo: "O", requisitos: ["MA1435"] },
-      { id: "EC2201", nombre: "Economía General", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "FI2410", nombre: "Física I", creditos: 4, tipo: "O", requisitos: ["FI1363", "MA1435"] },
-      { id: "SI2422", nombre: "Programación II", creditos: 4, tipo: "O", requisitos: ["SI1435"] },
-      { id: "CS2397", nombre: "Realidad Nacional y Regional", creditos: 3, tipo: "O", requisitos: [] },
-      { id: "CS2258", nombre: "Sociología", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "ED2278", nombre: "Taller de Arte", creditos: 2, tipo: "O", requisitos: [] }
-    ]
-  },
-  {
-    ciclo: "Ciclo IV",
-    numeroCiclo: 4,
-    cursos: [
-      { id: "CA2101", nombre: "Actividad de Responsabilidad Social Universitaria", creditos: 1, tipo: "O", requisitos: ["CS2258"] },
-      { id: "MA2333", nombre: "Álgebra Lineal", creditos: 3, tipo: "O", requisitos: ["MA1435"] },
-      { id: "ES2300", nombre: "Estadística General", creditos: 3, tipo: "O", requisitos: ["SI1358"] },
-      { id: "SI2418", nombre: "Estructura de Datos", creditos: 4, tipo: "O", requisitos: ["SI1435", "SI1445"] },
-      { id: "FI2411", nombre: "Física II", creditos: 4, tipo: "O", requisitos: ["FI2410"] },
-      { id: "SI2452", nombre: "Ingeniería de Procesos de Negocios", creditos: 4, tipo: "O", requisitos: ["CA2337"] },
-      { id: "CO2201", nombre: "Introducción a la Contabilidad", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "CS2259", nombre: "Psicología General", creditos: 2, tipo: "O", requisitos: [] }
-    ]
-  },
-  {
-    ciclo: "Ciclo V",
-    numeroCiclo: 5,
-    cursos: [
-      { id: "SI3422", nombre: "Análisis y Diseño de Sistemas I", creditos: 4, tipo: "O", requisitos: ["SI2452"] },
-      { id: "MA3412", nombre: "Cálculo III", creditos: 4, tipo: "O", requisitos: ["MA2441"] },
-      { id: "FI3492", nombre: "Circuitos Eléctricos y Electrónicos", creditos: 4, tipo: "O", requisitos: ["FI2411"] },
-      { id: "ED3286", nombre: "Discapacidad y Derechos Humanos", creditos: 2, tipo: "O", requisitos: ["CS2397"] },
-      { id: "ED3283", nombre: "Inglés I", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "SI3421", nombre: "Modelado de Datos", creditos: 4, tipo: "O", requisitos: ["SI2418"] }
-    ]
-  },
-  {
-    ciclo: "Ciclo VI",
-    numeroCiclo: 6,
-    cursos: [
-      { id: "SI3423", nombre: "Análisis y Diseño de Sistemas II", creditos: 4, tipo: "O", requisitos: ["SI3422"] },
-      { id: "SI3400", nombre: "Arquitectura de Computadores", creditos: 4, tipo: "O", requisitos: ["FI3492"] },
-      { id: "SI3420", nombre: "Base de Datos", creditos: 4, tipo: "O", requisitos: ["SI3421"] },
-      { id: "ED3287", nombre: "Defensa Nacional", creditos: 2, tipo: "O", requisitos: ["CS2397"] },
-      { id: "ES3336", nombre: "Inferencia y Probabilidades", creditos: 3, tipo: "O", requisitos: ["ES2300"] },
-      { id: "ED3284", nombre: "Inglés II", creditos: 2, tipo: "O", requisitos: ["ED3283"] },
-      { id: "ED3285", nombre: "Taller de Redacción Científica", creditos: 2, tipo: "O", requisitos: ["ED1331"] }
-    ]
-  },
-  {
-    ciclo: "Ciclo VII",
-    numeroCiclo: 7,
-    cursos: [
-      { id: "IO4447", nombre: "Diseños de Investigación para Ingeniería", creditos: 4, tipo: "O", requisitos: ["ED3285", "ES3336"] },
-      { id: "CA4221", nombre: "Emprendedurismo", creditos: 2, tipo: "O", requisitos: [] },
-      { id: "IO4448", nombre: "Investigación de Operaciones", creditos: 4, tipo: "O", requisitos: ["ES3336", "MA2333"] },
-      { id: "SI4386", nombre: "Programación Visual", creditos: 3, tipo: "O", requisitos: ["SI2422"] },
-      { id: "SI4489", nombre: "Sistema de Administración de Base de Datos", creditos: 4, tipo: "O", requisitos: ["SI3420"] },
-      { id: "SI4490", nombre: "Sistemas Operativos", creditos: 4, tipo: "O", requisitos: ["SI2418", "SI3400"] }
-    ]
-  },
-  {
-    ciclo: "Ciclo VIII",
-    numeroCiclo: 8,
-    cursos: [
-      { id: "DP4331", nombre: "Derecho Informático", creditos: 3, tipo: "O", requisitos: ["CS1286", "ED3286"] },
-      { id: "SI4488", nombre: "Ingeniería de Software", creditos: 4, tipo: "O", requisitos: ["SI3423", "SI4489"] },
-      { id: "EM4461", nombre: "Microeconomía", creditos: 4, tipo: "O", requisitos: ["EC2201"] },
-      { id: "SI4360", nombre: "Organización y Administración Informática", creditos: 3, tipo: "O", requisitos: ["SI3423"] },
-      { id: "SI4491", nombre: "Redes", creditos: 4, tipo: "O", requisitos: ["SI4490"] },
-      { id: "SI4465", nombre: "Sistemas de Información Gerencial", creditos: 4, tipo: "O", requisitos: ["SI4489"] }
-    ]
-  },
-  {
-    ciclo: "Ciclo IX",
-    numeroCiclo: 9,
-    cursos: [
-      { id: "SI5364", nombre: "Elaboración de Proyectos Informáticos", creditos: 3, tipo: "O", requisitos: ["SI4360"] },
-      { id: "IO5365", nombre: "Metodología para el Proyecto de Investigación", creditos: 3, tipo: "O", requisitos: ["IO4447", "SI4488"] },
-      { id: "SI5497", nombre: "Procesos de Desarrollo de Software", creditos: 4, tipo: "O", requisitos: ["SI3423"] },
-      { id: "SI5496", nombre: "Seguridad de la Información", creditos: 4, tipo: "O", requisitos: ["SI4491"] },
-      { id: "SI5441", nombre: "Sistemas de Control y Auditoría Informática", creditos: 4, tipo: "O", requisitos: ["DP4331", "SI4488"] },
-      { id: "SI5365", nombre: "Tecnología y Desarrollo Web", creditos: 3, tipo: "O", requisitos: ["SI4488"] }
-    ]
-  },
-  {
-    ciclo: "Ciclo X",
-    numeroCiclo: 10,
-    cursos: [
-      { id: "CO5397", nombre: "Contabilidad de Costos y Presupuestos", creditos: 3, tipo: "O", requisitos: ["CO2201", "EM4461"] },
-      { id: "SI5367", nombre: "Desarrollo de la Investigación Informática", creditos: 3, tipo: "O", requisitos: ["IO5365"] },
-      { id: "SI5411", nombre: "Gestión en Informática", creditos: 4, tipo: "O", requisitos: ["SI5364"] },
-      { id: "SI5499", nombre: "Inteligencia de Negocios", creditos: 4, tipo: "O", requisitos: ["SI4465"] },
-      { id: "SI5498", nombre: "Sistemas Orientados a Servicios", creditos: 4, tipo: "O", requisitos: ["SI5365"] },
-      { id: "SI5368", nombre: "Tecnología y Desarrollo Móvil", creditos: 3, tipo: "O", requisitos: ["SI5365"] },
-      { id: "SI5373", nombre: "Trabajo de Investigación", creditos: 3, tipo: "O", requisitos: ["IO5365"] }
-    ]
-  }
-];
+import {
+  obtenerPlanEstudiosActual,
+  obtenerNombreCarreraActual,
+  CARRERAS_DISPONIBLES
+} from "../../datos/planesEstudio";
 
 export default function MallaCurricular() {
   const { tema } = useTema();
@@ -166,6 +38,36 @@ export default function MallaCurricular() {
   const [mensajeError, setMensajeError] = useState(null);
   const [mensajeExito, setMensajeExito] = useState(null);
   
+  // Carrera Activa (Ingeniería Informática / Ciencias Contables)
+  const [carreraKey, setCarreraKey] = useState(() => {
+    const esc = (localStorage.getItem("escuelaEstudiante") || "").toLowerCase();
+    const car = (localStorage.getItem("carreraActiva") || "").toLowerCase();
+    if (esc.includes("contab") || esc.includes("financier") || car.includes("contab") || car.includes("financier")) {
+      return "contabilidad";
+    }
+    return "informatica";
+  });
+
+  const planEstudios = useMemo(() => {
+    const cObj = CARRERAS_DISPONIBLES.find((c) => c.key === carreraKey);
+    return cObj ? cObj.plan : obtenerPlanEstudiosActual();
+  }, [carreraKey]);
+
+  const nombreCarrera = useMemo(() => {
+    const cObj = CARRERAS_DISPONIBLES.find((c) => c.key === carreraKey);
+    return cObj ? cObj.nombre.toUpperCase() + " · UNP" : obtenerNombreCarreraActual();
+  }, [carreraKey]);
+
+  const cambiarCarrera = (nuevaKey) => {
+    setCarreraKey(nuevaKey);
+    localStorage.setItem("carreraActiva", nuevaKey);
+    const cObj = CARRERAS_DISPONIBLES.find((c) => c.key === nuevaKey);
+    if (cObj) {
+      localStorage.setItem("escuelaEstudiante", cObj.nombre);
+      localStorage.setItem("facultadEstudiante", cObj.facultad);
+    }
+  };
+
   // Pestaña de ciclo activa: 1 al 10 o "todos"
   const [cicloActivo, setCicloActivo] = useState(1);
   const [busqueda, setBusqueda] = useState("");
@@ -405,11 +307,29 @@ export default function MallaCurricular() {
 
       {/* Banner Principal de Métricas Resumen (Compacto) */}
       <div className="rounded-2xl liquid-glass-card glare-hover p-3.5 sm:p-4 md:p-5 space-y-3 sm:space-y-4 transition-all">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <div className="space-y-0.5">
-            <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-[10px] sm:text-xs font-bold">
-              <Sparkles className="w-3 h-3" />
-              <span>PLAN DE ESTUDIOS 2018-1 · ING. INFORMÁTICA UNP</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 dark:text-blue-400 text-[10px] sm:text-xs font-bold">
+                <Sparkles className="w-3 h-3" />
+                <span>{nombreCarrera}</span>
+              </div>
+              {/* Selector Rápido de Carrera */}
+              <div className="inline-flex items-center p-0.5 rounded-lg bg-slate-200/60 dark:bg-slate-800/60 border border-slate-300/50 dark:border-slate-700/50">
+                {CARRERAS_DISPONIBLES.map((c) => (
+                  <button
+                    key={c.key}
+                    onClick={() => cambiarCarrera(c.key)}
+                    className={`px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold transition-all ${
+                      carreraKey === c.key
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs'
+                        : tema === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {c.key === 'informatica' ? 'Informática' : 'Contabilidad'}
+                  </button>
+                ))}
+              </div>
             </div>
             <h1 className={`text-base sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Avance Curricular por Ciclos
