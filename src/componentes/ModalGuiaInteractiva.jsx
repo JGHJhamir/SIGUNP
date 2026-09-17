@@ -109,9 +109,9 @@ export default function ModalGuiaInteractiva({ abierto, alCerrar }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
-      <div className={`relative w-full max-w-lg rounded-3xl liquid-glass-card glare-hover p-6 sm:p-7 shadow-2xl transition-all border ${
-        tema === 'dark' ? 'border-slate-700/80 bg-[#090e1a]/90 text-white' : 'border-white/80 bg-white/90 text-slate-900'
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn">
+      <div className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl liquid-glass-card glare-hover p-5 sm:p-7 shadow-2xl transition-all border ${
+        tema === 'dark' ? 'border-slate-700/80 bg-[#090e1a]/95 text-white' : 'border-white/90 bg-white/95 text-slate-900'
       }`}>
         
         {/* Botón Cerrar */}
