@@ -123,9 +123,23 @@ export default function InicioEstudiante() {
   const [notifLeidas, setNotifLeidas] = useState({});
 
   useEffect(() => {
-    const aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "[]");
-    const inscritos = JSON.parse(localStorage.getItem("cursosInscritos") || "[]");
+    let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
+    if (!aprobados || aprobados.length === 0) {
+      aprobados = [
+        "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
+        "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363",
+        "CA2337", "MA2441", "EC2201", "FI2410", "SI2422", "CS2397", "CS2258", "ED2278"
+      ];
+      localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
+    }
     setCursosAprobados(aprobados);
+
+    let inscritos = JSON.parse(localStorage.getItem("cursosInscritos") || "null");
+    if (!inscritos || inscritos.length === 0) {
+      const matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "{}");
+      inscritos = matriculas["2026-II"]?.cursos || ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"];
+      localStorage.setItem("cursosInscritos", JSON.stringify(inscritos));
+    }
     setCursosInscritos(inscritos);
   }, []);
 

@@ -182,13 +182,13 @@ const semestresDisponibles = ["2026-II", "2027-I", "2027-II", "2028-I"];
 // Datos Demo por omisión en caso de no tener matrícula guardada
 const matriculaDemoEjemplo = {
   "2026-II": {
-    cursos: ["SI2422", "MA2441", "FI2410", "CS2397", "ED2278"],
+    cursos: ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"],
     grupos: {
-      "SI2422": "grupo01",
-      "MA2441": "grupo04",
-      "FI2410": "grupo05",
-      "CS2397": "grupo08",
-      "ED2278": "grupo09"
+      "SI2418": "grupo01",
+      "MA2333": "grupo04",
+      "ES2300": "grupo05",
+      "FI2411": "grupo08",
+      "SI2452": "grupo09"
     }
   }
 };
@@ -329,12 +329,14 @@ export default function HorarioMatricula() {
   const diaHoyNombre = diaHoyIndex >= 1 && diaHoyIndex <= 5 ? diasSemana[diaHoyIndex - 1] : null;
 
   useEffect(() => {
-    const matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "{}");
-    if (Object.keys(matriculas).length > 0) {
-      setMatriculasPorSemestre(matriculas);
-      const semestreConDatos = semestresDisponibles.find((s) => matriculas[s]?.cursos?.length > 0);
-      if (semestreConDatos) setSemestreVista(semestreConDatos);
+    let matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "null");
+    if (!matriculas || Object.keys(matriculas).length === 0) {
+      matriculas = matriculaDemoEjemplo;
+      localStorage.setItem("matriculasPorSemestre", JSON.stringify(matriculas));
     }
+    setMatriculasPorSemestre(matriculas);
+    const semestreConDatos = semestresDisponibles.find((s) => matriculas[s]?.cursos?.length > 0);
+    if (semestreConDatos) setSemestreVista(semestreConDatos);
   }, []);
 
   const datosSemestreActual = useMemo(() => {

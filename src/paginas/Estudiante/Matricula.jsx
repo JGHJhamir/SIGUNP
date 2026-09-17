@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useTema } from "../../contexto/ContextoTema";
 import {
   Sparkles,
   CheckCircle2,
@@ -13,6 +14,26 @@ const ELECTIVOS_SET = new Set([
   "SI4388", "IO4334", "SI4387", "IO4332", "SI5370", "II5314",
   "SI5369", "SI5361", "II5345", "II5344", "SI5371"
 ]);
+
+const CURSOS_APROBADOS_DEFECTO = [
+  "ED1292", "SI1447", "ED1331", "MA1470", "SI1358", "SI1216", "MA1408", "ED1297",
+  "CB1324", "MA1435", "FI1363", "SI1445", "CS1286", "SI1435", "QU1363",
+  "CA2337", "MA2441", "EC2201", "FI2410", "SI2422", "CS2397", "CS2258", "ED2278"
+];
+
+const MATRICULA_DEMO_DEFECTO = {
+  "2026-II": {
+    cursos: ["SI2418", "MA2333", "ES2300", "FI2411", "SI2452"],
+    grupos: {
+      "SI2418": "grupo01",
+      "MA2333": "grupo04",
+      "ES2300": "grupo05",
+      "FI2411": "grupo08",
+      "SI2452": "grupo09"
+    },
+    fechaGuardado: new Date().toISOString()
+  }
+};
 
 // Plan completo con número de ciclo incluido en cada curso
 const planEstudiosCompleto = [
@@ -146,6 +167,7 @@ const paletaColores = [
 ];
 
 export default function Matricula() {
+  const { tema } = useTema();
   const [semestreSeleccionado, setSemestreSeleccionado] = useState("2026-II");
   const [borradorCursos, setBorradorCursos] = useState([]);
   const [borradorGrupos, setBorradorGrupos] = useState({});
@@ -156,9 +178,19 @@ export default function Matricula() {
   const [filtroCiclo, setFiltroCiclo] = useState("todos");
 
   useEffect(() => {
-    const aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "[]");
+    let aprobados = JSON.parse(localStorage.getItem("cursosAprobados") || "null");
+    if (!aprobados || aprobados.length === 0) {
+      aprobados = CURSOS_APROBADOS_DEFECTO;
+      localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
+    }
     setCursosAprobados(aprobados);
-    const matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "{}");
+
+    let matriculas = JSON.parse(localStorage.getItem("matriculasPorSemestre") || "null");
+    if (!matriculas || Object.keys(matriculas).length === 0) {
+      matriculas = MATRICULA_DEMO_DEFECTO;
+      localStorage.setItem("matriculasPorSemestre", JSON.stringify(matriculas));
+      localStorage.setItem("cursosInscritos", JSON.stringify(MATRICULA_DEMO_DEFECTO["2026-II"].cursos));
+    }
     setMatriculasPorSemestre(matriculas);
   }, []);
 
@@ -192,7 +224,7 @@ export default function Matricula() {
   }, [cursosAprobados]);
 
   const ciclosConCursos = useMemo(() => {
-    const ciclos = [...new Set(catalogoDisponible.map((c) => c.ciclo))].sort();
+    const ciclos = [...new Set(catalogoDisponible.map((c) => c.ciclo))].sort((a, b) => a - b);
     return ciclos;
   }, [catalogoDisponible]);
 
@@ -229,6 +261,7 @@ export default function Matricula() {
     };
     setMatriculasPorSemestre(nuevasMatriculas);
     localStorage.setItem("matriculasPorSemestre", JSON.stringify(nuevasMatriculas));
+    localStorage.setItem("cursosInscritos", JSON.stringify(borradorCursos));
     setNotificacion({ tipo: "success", texto: `¡Matrícula ${semestreSeleccionado} guardada con éxito! Tu horario se actualizó.` });
     setTimeout(() => setNotificacion(null), 4000);
   };
