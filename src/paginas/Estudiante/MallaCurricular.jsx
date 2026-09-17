@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useTema } from "../../contexto/ContextoTema";
 import { supabase } from "../../lib/supabase";
 import {
@@ -30,7 +30,12 @@ import {
   Layers3,
   ExternalLink,
   ChevronRight,
-  RotateCcw
+  RotateCcw,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Minimize2,
+  Eye
 } from "lucide-react";
 
 // Estructura completa de la carrera de Ingeniería Informática - Plan 2018-1
@@ -239,11 +244,18 @@ export default function MallaCurricular() {
   const [cursoHovered, setCursoHovered] = useState(null);
   const [cursoModalCadena, setCursoModalCadena] = useState(null);
   const [filtroLineaGrafo, setFiltroLineaGrafo] = useState("todas");
+  const [esEscalaPantallaCompleta, setEsEscalaPantallaCompleta] = useState(false);
+  const [escalaGrafo, setEscalaGrafo] = useState(0.95);
 
   const [ciclosExpandidos, setCiclosExpandidos] = useState({
     "Ciclo I": true,
     "Ciclo II": true
   });
+
+  // Canvas Refs for connected SVG lines
+  const grafoContainerRef = useRef(null);
+  const nodeRefs = useRef({});
+  const [rutasConexionSVG, setRutasConexionSVG] = useState([]);
 
   // Flat array of all courses across 10 cycles
   const todosLosCursos = useMemo(() => {
@@ -351,6 +363,61 @@ export default function MallaCurricular() {
       }
     }
   };
+
+  // Recalcular conexiones de la capa SVG del Grafo
+  const actualizarConexionesGrafo = () => {
+    if (!grafoContainerRef.current) return;
+    const containerRect = grafoContainerRef.current.getBoundingClientRect();
+    const scrollLeft = grafoContainerRef.current.scrollLeft;
+    const scrollTop = grafoContainerRef.current.scrollTop;
+    const paths = [];
+
+    todosLosCursos.forEach((curso) => {
+      const targetEl = nodeRefs.current[curso.id];
+      if (!targetEl) return;
+      const targetRect = targetEl.getBoundingClientRect();
+
+      curso.requisitos.forEach((reqId) => {
+        const sourceEl = nodeRefs.current[reqId];
+        if (!sourceEl) return;
+        const sourceRect = sourceEl.getBoundingClientRect();
+
+        // Puntos de salida (Origen a la derecha del nodo antecesor)
+        const x1 = (sourceRect.right - containerRect.left + scrollLeft) / escalaGrafo;
+        const y1 = (sourceRect.top + sourceRect.height / 2 - containerRect.top + scrollTop) / escalaGrafo;
+
+        // Puntos de entrada (Destino a la izquierda del nodo objetivo)
+        const x2 = (targetRect.left - containerRect.left + scrollLeft) / escalaGrafo;
+        const y2 = (targetRect.top + targetRect.height / 2 - containerRect.top + scrollTop) / escalaGrafo;
+
+        const dx = Math.max(35, (x2 - x1) / 2);
+        const pathD = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+        paths.push({
+          id: `${reqId}->${curso.id}`,
+          sourceId: reqId,
+          targetId: curso.id,
+          pathD,
+          x1, y1, x2, y2
+        });
+      });
+    });
+
+    setRutasConexionSVG(paths);
+  };
+
+  useEffect(() => {
+    if (modoVista === "grafo") {
+      const timer = setTimeout(() => {
+        actualizarConexionesGrafo();
+      }, 150);
+      window.addEventListener("resize", actualizarConexionesGrafo);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("resize", actualizarConexionesGrafo);
+      };
+    }
+  }, [modoVista, filtroLineaGrafo, escalaGrafo]);
 
   const toggleCiclo = (ciclo) => {
     setCiclosExpandidos((prev) => ({
@@ -500,7 +567,10 @@ export default function MallaCurricular() {
 
               <button
                 type="button"
-                onClick={() => setModoVista("grafo")}
+                onClick={() => {
+                  setModoVista("grafo");
+                  setTimeout(actualizarConexionesGrafo, 200);
+                }}
                 className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 cursor-pointer ${
                   modoVista === "grafo"
                     ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-lg shadow-purple-600/20"
@@ -683,9 +753,42 @@ export default function MallaCurricular() {
               </div>
             </>
           ) : (
-            <div className="flex items-center space-x-2 text-xs text-purple-400 font-bold bg-purple-500/10 border border-purple-500/20 px-3 py-1.5 rounded-xl">
-              <Network className="w-4 h-4 text-purple-400" />
-              <span>Pasa el cursor o haz clic en cualquier nodo para resaltar su cadena de prerrequisitos</span>
+            <div className="flex items-center space-x-2">
+              {/* Controls for Pan & Zoom Grafo Canvas */}
+              <button
+                type="button"
+                onClick={() => setEscalaGrafo((prev) => Math.min(1.4, prev + 0.1))}
+                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer"
+                title="Aumentar zoom"
+              >
+                <ZoomIn className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEscalaGrafo((prev) => Math.max(0.6, prev - 0.1))}
+                className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer"
+                title="Reducir zoom"
+              >
+                <ZoomOut className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEscalaGrafo(0.95)}
+                className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:text-white transition-all cursor-pointer"
+              >
+                Reset Zoom
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEsEscalaPantallaCompleta(!esEscalaPantallaCompleta)}
+                className="p-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white transition-all cursor-pointer"
+                title="Pantalla Completa Canvas"
+              >
+                {esEscalaPantallaCompleta ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </button>
             </div>
           )}
         </div>
@@ -942,19 +1045,30 @@ export default function MallaCurricular() {
         </div>
       )}
 
-      {/* ── VISTA 2: GRAFO INTERACTIVO DE CADENAS Y FLUJO DE CURSOS ── */}
+      {/* ── VISTA 2: GRAFO INTERACTIVO DE CADENAS Y ARBOL DE CONEXIONES SVG ── */}
       {modoVista === "grafo" && (
-        <div className="space-y-5 animate-fadeIn">
+        <div className={`space-y-5 animate-fadeIn ${
+          esEscalaPantallaCompleta ? "fixed inset-4 z-50 overflow-auto bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl" : ""
+        }`}>
 
           {/* Selector de Línea Académica de Especialidad */}
-          <div className="rounded-2xl liquid-glass-card p-4 space-y-3">
-            <span className="text-xs font-black text-slate-300 uppercase tracking-wider block">
-              Filtrar por Línea de Especialidad o Cadena del Conocimiento
-            </span>
+          <div className="rounded-2xl liquid-glass-card p-4 space-y-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-black text-slate-200 uppercase tracking-wider block">
+                Filtrar por Línea de Especialidad / Cadena de Conocimiento
+              </span>
+              <span className="text-[11px] text-slate-400 block mt-0.5">
+                Las líneas SVG conectan los cursos requeridos con sus sucesores a través de los 10 ciclos.
+              </span>
+            </div>
+
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => setFiltroLineaGrafo("todas")}
+                onClick={() => {
+                  setFiltroLineaGrafo("todas");
+                  setTimeout(actualizarConexionesGrafo, 100);
+                }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${
                   filtroLineaGrafo === "todas"
                     ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/20"
@@ -970,7 +1084,10 @@ export default function MallaCurricular() {
                   <button
                     key={linea.id}
                     type="button"
-                    onClick={() => setFiltroLineaGrafo(linea.id)}
+                    onClick={() => {
+                      setFiltroLineaGrafo(linea.id);
+                      setTimeout(actualizarConexionesGrafo, 100);
+                    }}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer flex items-center space-x-1.5 ${
                       esActiva
                         ? `bg-gradient-to-r ${linea.color} text-white border-transparent shadow-lg`
@@ -985,103 +1102,172 @@ export default function MallaCurricular() {
             </div>
           </div>
 
-          {/* Visualizador de Flujo Horizontal por Columnas de Ciclos (DAG Flow Columns) */}
-          <div className="rounded-3xl liquid-glass-card p-4 sm:p-6 overflow-x-auto no-scrollbar relative min-h-[520px]">
-            <div className="flex space-x-6 min-w-[1400px] pb-4">
-              {planEstudios.map((semestre) => {
-                let cursosCiclo = semestre.cursos;
-                
-                // Aplicar filtro por Línea Académica si no es "todas"
-                if (filtroLineaGrafo !== "todas") {
-                  const codigosLinea = LINEAS_ACADEMICAS[filtroLineaGrafo]?.cursos || [];
-                  cursosCiclo = cursosCiclo.filter((c) => codigosLinea.includes(c.id));
-                }
+          {/* Visualizador de Canvas DAG con Capa SVG Conectora */}
+          <div
+            ref={grafoContainerRef}
+            onScroll={actualizarConexionesGrafo}
+            className="rounded-3xl liquid-glass-card p-6 overflow-auto relative min-h-[640px] max-h-[75vh] border border-slate-800 shadow-2xl"
+          >
+            <div
+              className="relative transition-transform duration-200 origin-top-left"
+              style={{ transform: `scale(${escalaGrafo})`, width: "max-content", minWidth: "2400px" }}
+            >
+              {/* Capa SVG Translucida de Conexión de Grafos entre Nodos */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ minWidth: "2400px", minHeight: "1200px" }}>
+                <defs>
+                  <linearGradient id="neonCyanPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#22d3ee" />
+                    <stop offset="50%" stopColor="#818cf8" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                  </linearGradient>
 
-                return (
-                  <div key={semestre.ciclo} className="w-56 shrink-0 space-y-3">
-                    {/* Header de Columna de Ciclo */}
-                    <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-3 text-center shadow-inner">
-                      <div className="text-xs font-black text-white">{semestre.ciclo}</div>
-                      <div className="text-[10px] text-slate-400 font-bold mt-0.5">
-                        {semestre.cursos.filter((c) => aprobados.includes(c.id)).length}/{semestre.cursos.length} Aprobados
+                  <linearGradient id="neonGreenBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                  </linearGradient>
+
+                  <filter id="glowNeon" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                {rutasConexionSVG.map((conn) => {
+                  const esSourceActivo = setAntecesoresActivos.has(conn.sourceId) || conn.sourceId === cursoHovered;
+                  const esTargetActivo = setSucesoresActivos.has(conn.targetId) || setAntecesoresActivos.has(conn.targetId) || conn.targetId === cursoHovered;
+                  const esLineaDeImpacto = (esSourceActivo && esTargetActivo) || (conn.sourceId === cursoHovered) || (conn.targetId === cursoHovered);
+
+                  if (!esLineaDeImpacto && cursoHovered) {
+                    return (
+                      <path
+                        key={conn.id}
+                        d={conn.pathD}
+                        fill="none"
+                        stroke="rgba(148, 163, 184, 0.05)"
+                        strokeWidth="1"
+                      />
+                    );
+                  }
+
+                  return (
+                    <g key={conn.id}>
+                      <path
+                        d={conn.pathD}
+                        fill="none"
+                        stroke={esLineaDeImpacto ? "url(#neonCyanPurple)" : "rgba(148, 163, 184, 0.18)"}
+                        strokeWidth={esLineaDeImpacto ? "3.5" : "1.5"}
+                        filter={esLineaDeImpacto ? "url(#glowNeon)" : undefined}
+                        strokeDasharray={esLineaDeImpacto ? "8 4" : undefined}
+                      />
+                      {esLineaDeImpacto && (
+                        <circle cx={conn.x2} cy={conn.y2} r="4.5" fill="#a855f7" className="animate-ping" />
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {/* Columnas de los 10 Ciclos Académicos */}
+              <div className="flex space-x-8 min-w-[2400px] relative z-20 pb-12 pt-2">
+                {planEstudios.map((semestre) => {
+                  let cursosCiclo = semestre.cursos;
+                  
+                  if (filtroLineaGrafo !== "todas") {
+                    const codigosLinea = LINEAS_ACADEMICAS[filtroLineaGrafo]?.cursos || [];
+                    cursosCiclo = cursosCiclo.filter((c) => codigosLinea.includes(c.id));
+                  }
+
+                  return (
+                    <div key={semestre.ciclo} className="w-56 shrink-0 space-y-4">
+                      {/* Header de Columna de Ciclo */}
+                      <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-3.5 text-center shadow-xl backdrop-blur-xl">
+                        <div className="text-xs font-black text-white uppercase tracking-wider">{semestre.ciclo}</div>
+                        <div className="text-[10px] text-slate-400 font-bold mt-1">
+                          {semestre.cursos.filter((c) => aprobados.includes(c.id)).length}/{semestre.cursos.length} Aprobados
+                        </div>
+                      </div>
+
+                      {/* Lista de Nodos del Ciclo */}
+                      <div className="space-y-3">
+                        {cursosCiclo.length === 0 ? (
+                          <div className="p-4 rounded-2xl border border-dashed border-slate-800/80 text-center text-[10px] text-slate-500">
+                            Sin cursos en esta línea
+                          </div>
+                        ) : (
+                          cursosCiclo.map((curso) => {
+                            const estado = obtenerEstadoCurso(curso);
+                            const esHovered = cursoHovered === curso.id;
+                            const esAntecesores = setAntecesoresActivos.has(curso.id);
+                            const esSucesores = setSucesoresActivos.has(curso.id);
+                            const cantidadSucesores = (sucesoresMap[curso.id] || []).length;
+                            const estaOpaco = cursoHovered && !esHovered && !esAntecesores && !esSucesores;
+
+                            let nodeStyle = "";
+                            if (esHovered) {
+                              nodeStyle = "bg-blue-600/40 border-blue-400 ring-4 ring-blue-500/50 scale-[1.05] shadow-2xl shadow-blue-500/40 z-30";
+                            } else if (esAntecesores) {
+                              nodeStyle = "bg-cyan-950/90 border-cyan-400 ring-2 ring-cyan-400/80 scale-[1.02] shadow-xl shadow-cyan-500/30 z-20";
+                            } else if (esSucesores) {
+                              nodeStyle = "bg-purple-950/90 border-purple-400 ring-2 ring-purple-400/80 scale-[1.02] shadow-xl shadow-purple-500/30 z-20";
+                            } else if (estado === "aprobado") {
+                              nodeStyle = "bg-emerald-950/60 border-emerald-500/50 text-emerald-200 hover:border-emerald-400";
+                            } else if (estado === "disponible") {
+                              nodeStyle = "bg-blue-950/50 border-blue-500/50 text-blue-200 hover:border-blue-400";
+                            } else {
+                              nodeStyle = "bg-slate-950/80 border-slate-800 text-slate-400 opacity-60 hover:opacity-100";
+                            }
+
+                            return (
+                              <div
+                                key={curso.id}
+                                ref={(el) => (nodeRefs.current[curso.id] = el)}
+                                onMouseEnter={() => setCursoHovered(curso.id)}
+                                onMouseLeave={() => setCursoHovered(null)}
+                                onClick={() => setCursoModalCadena(curso)}
+                                className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 relative group overflow-hidden ${nodeStyle} ${
+                                  estaOpaco ? "opacity-25 scale-[0.97] blur-[0.2px]" : ""
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-1.5">
+                                  <span className="text-[10px] font-mono font-black text-slate-200">
+                                    {curso.id}
+                                  </span>
+                                  <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
+                                    estado === "aprobado"
+                                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                                      : estado === "disponible"
+                                      ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
+                                      : "bg-slate-800 text-slate-400 border-slate-700"
+                                  }`}>
+                                    {estado === "aprobado" ? "✓ Aprobado" : estado === "disponible" ? "🔓 Habilitado" : "🔒 Bloqueado"}
+                                  </span>
+                                </div>
+
+                                <div className="text-xs font-black text-white leading-snug line-clamp-2">
+                                  {curso.nombre}
+                                </div>
+
+                                <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
+                                  <span>{curso.creditos} CR</span>
+                                  {cantidadSucesores > 0 && (
+                                    <span className="text-purple-300 font-bold flex items-center space-x-1 bg-purple-500/20 px-1.5 py-0.5 rounded border border-purple-500/30">
+                                      <GitBranch className="w-2.5 h-2.5 text-purple-400" />
+                                      <span>Abre {cantidadSucesores}</span>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
                       </div>
                     </div>
-
-                    {/* Lista de Nodos del Ciclo */}
-                    <div className="space-y-2.5">
-                      {cursosCiclo.length === 0 ? (
-                        <div className="p-4 rounded-2xl border border-dashed border-slate-800 text-center text-[10px] text-slate-500">
-                          Sin cursos en esta línea
-                        </div>
-                      ) : (
-                        cursosCiclo.map((curso) => {
-                          const estado = obtenerEstadoCurso(curso);
-                          const esHovered = cursoHovered === curso.id;
-                          const esAntecesores = setAntecesoresActivos.has(curso.id);
-                          const esSucesores = setSucesoresActivos.has(curso.id);
-                          const cantidadSucesores = (sucesoresMap[curso.id] || []).length;
-
-                          let nodeStyle = "";
-                          if (esHovered) {
-                            nodeStyle = "bg-blue-600/30 border-blue-400 ring-2 ring-blue-500 scale-[1.03] shadow-lg shadow-blue-500/30";
-                          } else if (esAntecesores) {
-                            nodeStyle = "bg-cyan-950/70 border-cyan-400 ring-2 ring-cyan-400/80 scale-[1.02] shadow-lg shadow-cyan-500/20";
-                          } else if (esSucesores) {
-                            nodeStyle = "bg-purple-950/70 border-purple-400 ring-2 ring-purple-400/80 scale-[1.02] shadow-lg shadow-purple-500/20";
-                          } else if (estado === "aprobado") {
-                            nodeStyle = "bg-emerald-950/50 border-emerald-500/50 text-emerald-200 hover:border-emerald-400";
-                          } else if (estado === "disponible") {
-                            nodeStyle = "bg-blue-950/40 border-blue-500/40 text-blue-200 hover:border-blue-400";
-                          } else {
-                            nodeStyle = "bg-slate-950/60 border-slate-800 text-slate-400 opacity-60 hover:opacity-100";
-                          }
-
-                          return (
-                            <div
-                              key={curso.id}
-                              onMouseEnter={() => setCursoHovered(curso.id)}
-                              onMouseLeave={() => setCursoHovered(null)}
-                              onClick={() => setCursoModalCadena(curso)}
-                              className={`p-3.5 rounded-2xl border cursor-pointer transition-all duration-200 relative group overflow-hidden ${nodeStyle}`}
-                            >
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-mono font-black text-slate-300">
-                                  {curso.id}
-                                </span>
-                                <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${
-                                  estado === "aprobado"
-                                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
-                                    : estado === "disponible"
-                                    ? "bg-blue-500/20 text-blue-300 border-blue-500/30"
-                                    : "bg-slate-800 text-slate-400 border-slate-700"
-                                }`}>
-                                  {estado === "aprobado" ? "✓ Aprobado" : estado === "disponible" ? "🔓 Habilitado" : "🔒 Bloqueado"}
-                                </span>
-                              </div>
-
-                              <div className="text-xs font-extrabold text-white leading-snug line-clamp-2">
-                                {curso.nombre}
-                              </div>
-
-                              <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-slate-400">
-                                <span>{curso.creditos} CR</span>
-                                {cantidadSucesores > 0 && (
-                                  <span className="text-purple-300 font-bold flex items-center space-x-1">
-                                    <GitBranch className="w-2.5 h-2.5 text-purple-400" />
-                                    <span>Abre {cantidadSucesores}</span>
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
+
         </div>
       )}
 
@@ -1172,6 +1358,7 @@ export default function MallaCurricular() {
                   type="button"
                   onClick={() => {
                     manejarClickCurso(cursoModalCadena);
+                    setTimeout(actualizarConexionesGrafo, 100);
                   }}
                   className="w-full py-2.5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30"
                 >
