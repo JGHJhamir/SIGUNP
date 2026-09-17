@@ -570,8 +570,8 @@ export default function HorarioMatricula() {
       <style>{`
         @media print {
           @page {
-            size: A4 landscape;
-            margin: 8mm;
+            size: A4 portrait;
+            margin: 6mm;
           }
           body * {
             visibility: hidden !important;
@@ -603,7 +603,7 @@ export default function HorarioMatricula() {
             border: 1px solid #475569 !important;
             color: #0f172a !important;
             background: white !important;
-            padding: 4px !important;
+            padding: 3px !important;
           }
           .print-container div {
             box-shadow: none !important;
@@ -713,7 +713,7 @@ export default function HorarioMatricula() {
           </div>
         </div>
 
-        {/* Fila 2: Conmutador de Vistas + Filtros */}
+        {/* Fila 2: Conmutador de Vistas + Opciones */}
         {tieneDatos && (
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800/80">
             <div className={`flex ${tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'} p-0.5 rounded-lg border w-full sm:w-auto`}>
@@ -752,21 +752,7 @@ export default function HorarioMatricula() {
             </div>
 
             {modoVista === "grilla" && (
-              <div className="flex items-center justify-between sm:justify-end space-x-2 text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => setOcultarHorasVacias(!ocultarHorasVacias)}
-                  className={`px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer flex items-center space-x-1 ${
-                    ocultarHorasVacias
-                      ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-300"
-                      : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-700"
-                  }`}
-                  title="Oculta automáticamente los bloques vacíos de horas sin clases"
-                >
-                  <Zap className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>{ocultarHorasVacias ? "Ocultar Vacíos: ON" : "Ver Todo"}</span>
-                </button>
-
+              <div className="flex items-center justify-end space-x-2 text-[11px]">
                 <button
                   type="button"
                   onClick={() => setEsVistaCompacta(!esVistaCompacta)}
