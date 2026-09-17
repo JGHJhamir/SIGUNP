@@ -514,7 +514,7 @@ export default function HorarioMatricula() {
           {datos.nombre}
         </div>
 
-        {!esVistaCompacta && !esSubHora && (
+        {!esSubHora && (
           <div className={`text-[8px] sm:text-[9px] font-mono mt-0.5 sm:mt-1 flex items-center justify-center space-x-1 ${
             tema === 'dark' ? 'text-slate-300/80' : 'text-slate-700/80'
           }`}>
@@ -750,23 +750,6 @@ export default function HorarioMatricula() {
                 <span>Cursos</span>
               </button>
             </div>
-
-            {modoVista === "grilla" && (
-              <div className="flex items-center justify-end space-x-2 text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => setEsVistaCompacta(!esVistaCompacta)}
-                  className={`px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer flex items-center space-x-1 ${
-                    esVistaCompacta
-                      ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
-                      : tema === 'dark' ? "bg-slate-950/60 border-slate-800 text-slate-400" : "bg-slate-100 border-slate-200 text-slate-700"
-                  }`}
-                >
-                  <Sliders className="w-3.5 h-3.5" />
-                  <span>{esVistaCompacta ? "Detallado" : "Compacto"}</span>
-                </button>
-              </div>
-            )}
           </div>
         )}
       </div>
