@@ -35,7 +35,9 @@ import {
   ZoomOut,
   Maximize2,
   Minimize2,
-  Eye
+  Eye,
+  Filter,
+  SlidersHorizontal
 } from "lucide-react";
 
 // Estructura completa de la carrera de Ingeniería Informática - Plan 2018-1
@@ -239,6 +241,7 @@ export default function MallaCurricular() {
   const [busqueda, setBusqueda] = useState("");
   const [criterioOrden, setCriterioOrden] = useState("alfabetico");
   const [modoVista, setModoVista] = useState("acordeon"); // "acordeon" | "grafo"
+  const [filtroEstadoQuick, setFiltroEstadoQuick] = useState("todos"); // "todos" | "disponibles" | "llave" | "aprobados"
   
   // Estado para la inspección interactiva de cadenas
   const [cursoHovered, setCursoHovered] = useState(null);
@@ -676,7 +679,7 @@ export default function MallaCurricular() {
         </div>
       )}
 
-      {/* Toolbar & Controles */}
+      {/* Toolbar & Controles con Filtros de Estado */}
       <div className="rounded-2xl liquid-glass-card p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 transition-all">
         
         {/* Search Input */}
@@ -686,7 +689,7 @@ export default function MallaCurricular() {
             type="text"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Buscar por asignatura o código (ej. Algoritmos)..."
+            placeholder="Buscar asignatura (ej. Algoritmos, Cálculo)..."
             className={`w-full pl-10 pr-4 py-2 rounded-xl text-xs font-medium outline-none transition-all ${
               tema === 'dark'
                 ? 'bg-[#090e1a] border-slate-800 text-slate-200 focus:border-blue-500'
@@ -695,8 +698,32 @@ export default function MallaCurricular() {
           />
         </div>
 
-        {/* Dynamic Controls based on view mode */}
-        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+        {/* Dynamic Quick Status Filters */}
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+          <div className={`flex ${
+            tema === 'dark' ? 'bg-[#090e1a] border-slate-800' : 'bg-slate-100 border-slate-200'
+          } p-1 rounded-xl border overflow-x-auto no-scrollbar`}>
+            {[
+              { id: "todos", etiqueta: "Todos" },
+              { id: "disponibles", etiqueta: "🔓 Disponibles hoy" },
+              { id: "llave", etiqueta: "⚡ Cursos Llave" },
+              { id: "aprobados", etiqueta: "✓ Aprobados" }
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFiltroEstadoQuick(f.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap ${
+                  filtroEstadoQuick === f.id
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                {f.etiqueta}
+              </button>
+            ))}
+          </div>
+
           {modoVista === "acordeon" ? (
             <>
               <button
@@ -724,37 +751,9 @@ export default function MallaCurricular() {
                 <FolderClosed className="w-3.5 h-3.5 text-slate-400" />
                 <span>Colapsar</span>
               </button>
-
-              <div className={`flex ${
-                tema === 'dark' ? 'bg-[#090e1a] border-white/10' : 'bg-slate-100 border-slate-200'
-              } p-1 rounded-xl border`}>
-                <button
-                  type="button"
-                  onClick={() => setCriterioOrden("alfabetico")}
-                  className={`px-3 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
-                    criterioOrden === "alfabetico"
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                      : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  A-Z
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCriterioOrden("creditos")}
-                  className={`px-3 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
-                    criterioOrden === "creditos"
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
-                      : tema === 'dark' ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  Créditos
-                </button>
-              </div>
             </>
           ) : (
             <div className="flex items-center space-x-2">
-              {/* Controls for Pan & Zoom Grafo Canvas */}
               <button
                 type="button"
                 onClick={() => setEscalaGrafo((prev) => Math.min(1.4, prev + 0.1))}
@@ -829,7 +828,7 @@ export default function MallaCurricular() {
             const aprobadosEnCiclo = semestre.cursos.filter((c) => aprobados.includes(c.id)).length;
             const totalCursosCiclo = semestre.cursos.length;
 
-            // Search filtering
+            // Search and Status filtering
             let cursosFiltrados = semestre.cursos;
             if (busqueda.trim()) {
               const termino = busqueda.toLowerCase();
@@ -838,7 +837,15 @@ export default function MallaCurricular() {
               );
             }
 
-            if (busqueda.trim() && cursosFiltrados.length === 0) {
+            if (filtroEstadoQuick === "disponibles") {
+              cursosFiltrados = cursosFiltrados.filter((c) => obtenerEstadoCurso(c) === "disponible");
+            } else if (filtroEstadoQuick === "aprobados") {
+              cursosFiltrados = cursosFiltrados.filter((c) => obtenerEstadoCurso(c) === "aprobado");
+            } else if (filtroEstadoQuick === "llave") {
+              cursosFiltrados = cursosFiltrados.filter((c) => (sucesoresMap[c.id] || []).length >= 3);
+            }
+
+            if (cursosFiltrados.length === 0) {
               return null;
             }
 
@@ -1121,11 +1128,6 @@ export default function MallaCurricular() {
                     <stop offset="100%" stopColor="#a855f7" />
                   </linearGradient>
 
-                  <linearGradient id="neonGreenBlue" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#10b981" />
-                    <stop offset="100%" stopColor="#3b82f6" />
-                  </linearGradient>
-
                   <filter id="glowNeon" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur stdDeviation="3.5" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -1177,6 +1179,14 @@ export default function MallaCurricular() {
                     cursosCiclo = cursosCiclo.filter((c) => codigosLinea.includes(c.id));
                   }
 
+                  if (filtroEstadoQuick === "disponibles") {
+                    cursosCiclo = cursosCiclo.filter((c) => obtenerEstadoCurso(c) === "disponible");
+                  } else if (filtroEstadoQuick === "aprobados") {
+                    cursosCiclo = cursosCiclo.filter((c) => obtenerEstadoCurso(c) === "aprobado");
+                  } else if (filtroEstadoQuick === "llave") {
+                    cursosCiclo = cursosCiclo.filter((c) => (sucesoresMap[c.id] || []).length >= 3);
+                  }
+
                   return (
                     <div key={semestre.ciclo} className="w-56 shrink-0 space-y-4">
                       {/* Header de Columna de Ciclo */}
@@ -1191,7 +1201,7 @@ export default function MallaCurricular() {
                       <div className="space-y-3">
                         {cursosCiclo.length === 0 ? (
                           <div className="p-4 rounded-2xl border border-dashed border-slate-800/80 text-center text-[10px] text-slate-500">
-                            Sin cursos en esta línea
+                            Sin cursos en este filtro
                           </div>
                         ) : (
                           cursosCiclo.map((curso) => {
@@ -1271,87 +1281,44 @@ export default function MallaCurricular() {
         </div>
       )}
 
-      {/* ── MODAL INSPECTOR DE CADENA Y RAMAS DE CURSO ── */}
+      {/* ── INSPECTOR SLIDE DRAWER / SIDE SHEET UNCLUTTERED UX ── */}
       {cursoModalCadena && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-3xl liquid-glass-modal rounded-3xl border border-slate-800 p-6 md:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/75 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-xl h-full liquid-glass-modal border-l border-slate-800 p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto flex flex-col justify-between">
             
-            {/* Header Modal */}
-            <div className="flex items-start justify-between border-b border-slate-800 pb-4">
-              <div className="space-y-1">
-                <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
-                  <Network className="w-3.5 h-3.5 text-purple-400" />
-                  <span>CADENA Y ANÁLISIS DE IMPACTO ACADÉMICO</span>
-                </div>
-                <h2 className="text-xl md:text-2xl font-black text-white flex items-center space-x-2">
-                  <span>{cursoModalCadena.nombre}</span>
-                  <span className="text-sm font-mono text-slate-400 font-bold">({cursoModalCadena.id})</span>
-                </h2>
-                <p className="text-xs text-slate-400">
-                  Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos Lectivos · {cursoModalCadena.tipo === "E" ? "Asignatura Electiva" : "Asignatura Obligatoria"}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setCursoModalCadena(null)}
-                className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* 3 Stage Chain Flow Diagram */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-              
-              {/* Etapa 1: Antecesores (Requisitos previos) */}
-              <div className="bg-slate-950/80 rounded-2xl p-4 border border-cyan-500/30 space-y-3 shadow-inner">
-                <div className="flex items-center space-x-2 text-xs font-black text-cyan-400 border-b border-slate-800 pb-2">
-                  <Compass className="w-4 h-4" />
-                  <span>1. Requisitos Previos ({cursoModalCadena.requisitos.length})</span>
-                </div>
-
-                {cursoModalCadena.requisitos.length === 0 ? (
-                  <p className="text-xs text-slate-500 font-semibold py-4 text-center">
-                    Sin prerrequisitos (Se cursa libremente).
-                  </p>
-                ) : (
-                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                    {cursoModalCadena.requisitos.map((reqId) => {
-                      const reqCurso = mapaCursos[reqId];
-                      const estaAprobado = aprobados.includes(reqId);
-                      return (
-                        <div key={reqId} className={`p-2.5 rounded-xl border text-xs flex items-center justify-between ${
-                          estaAprobado ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300" : "bg-rose-950/40 border-rose-500/40 text-rose-300"
-                        }`}>
-                          <div className="min-w-0 pr-2">
-                            <div className="font-extrabold text-[11px] truncate">{reqCurso?.nombre || reqId}</div>
-                            <div className="text-[9px] font-mono opacity-80">{reqId} · Ciclo {reqCurso?.cicloNombre || "I"}</div>
-                          </div>
-                          {estaAprobado ? <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" /> : <Lock className="w-4 h-4 shrink-0 text-rose-400" />}
-                        </div>
-                      );
-                    })}
+            <div className="space-y-6">
+              {/* Header Drawer */}
+              <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold">
+                    <Network className="w-3.5 h-3.5 text-purple-400" />
+                    <span>INSPECTOR DE CADENA DE CONOCIMIENTO</span>
                   </div>
-                )}
-              </div>
-
-              {/* Etapa 2: Curso Seleccionado (Nodo Central) */}
-              <div className="bg-gradient-to-br from-blue-950/90 via-slate-950 to-indigo-950/90 rounded-2xl p-4 border border-blue-500/50 space-y-3 shadow-xl text-center flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono font-black text-blue-400 uppercase tracking-widest block mb-1">Nodo Activo</span>
-                  <h3 className="text-sm font-black text-white">{cursoModalCadena.nombre}</h3>
-                  <div className="text-xs font-mono font-bold text-slate-300 mt-1">{cursoModalCadena.id}</div>
+                  <h2 className="text-xl md:text-2xl font-black text-white flex items-center space-x-2">
+                    <span>{cursoModalCadena.nombre}</span>
+                    <span className="text-sm font-mono text-slate-400 font-bold">({cursoModalCadena.id})</span>
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Ciclo {cursoModalCadena.numeroCiclo || "I-X"} · {cursoModalCadena.creditos} Créditos Lectivos · {cursoModalCadena.tipo === "E" ? "Asignatura Electiva" : "Asignatura Obligatoria"}
+                  </p>
                 </div>
 
-                <div className="py-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-black inline-flex items-center space-x-1 border ${
-                    aprobados.includes(cursoModalCadena.id)
-                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                      : "bg-blue-500/20 text-blue-300 border-blue-500/40"
-                  }`}>
-                    {aprobados.includes(cursoModalCadena.id) ? "✓ Asignatura Aprobada" : "🔓 Pendiente de Aprobar"}
-                  </span>
+                <button
+                  type="button"
+                  onClick={() => setCursoModalCadena(null)}
+                  className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Botón Acción Rápida de Aprobación */}
+              <div className="bg-slate-950/80 rounded-2xl p-4 border border-slate-800 flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-xs font-black text-white">Estado de la Asignatura</div>
+                  <div className="text-[11px] text-slate-400">
+                    {aprobados.includes(cursoModalCadena.id) ? "Asignatura superada exitosamente." : "Habilitada para ser cursada en tu plan de estudios."}
+                  </div>
                 </div>
 
                 <button
@@ -1360,39 +1327,49 @@ export default function MallaCurricular() {
                     manejarClickCurso(cursoModalCadena);
                     setTimeout(actualizarConexionesGrafo, 100);
                   }}
-                  className="w-full py-2.5 rounded-xl font-extrabold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30"
+                  className={`px-4 py-2.5 rounded-xl font-extrabold text-xs transition-all flex items-center space-x-2 cursor-pointer shrink-0 shadow-lg ${
+                    aprobados.includes(cursoModalCadena.id)
+                      ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
+                      : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
+                  }`}
                 >
-                  <span>{aprobados.includes(cursoModalCadena.id) ? "Marcar como Pendiente" : "Marcar como Aprobado ✓"}</span>
+                  <span>{aprobados.includes(cursoModalCadena.id) ? "Desmarcar Aprobado" : "Marcar Aprobado ✓"}</span>
                 </button>
               </div>
 
-              {/* Etapa 3: Sucesores (Ramas Futuras) */}
-              <div className="bg-slate-950/80 rounded-2xl p-4 border border-purple-500/30 space-y-3 shadow-inner">
-                <div className="flex items-center space-x-2 text-xs font-black text-purple-400 border-b border-slate-800 pb-2">
-                  <GitBranch className="w-4 h-4" />
-                  <span>3. Desbloquea en Futuro ({(sucesoresMap[cursoModalCadena.id] || []).length})</span>
-                </div>
+              {/* Sección 1: Requisitos de Origen */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-black text-cyan-400 uppercase tracking-wider flex items-center space-x-2">
+                  <Compass className="w-4 h-4 text-cyan-400" />
+                  <span>1. Requisitos de Origen ({cursoModalCadena.requisitos.length})</span>
+                </h3>
 
-                {(sucesoresMap[cursoModalCadena.id] || []).length === 0 ? (
-                  <p className="text-xs text-slate-500 font-semibold py-4 text-center">
-                    Curso terminal o electivo (No tiene cursos dependientes).
+                {cursoModalCadena.requisitos.length === 0 ? (
+                  <p className="text-xs text-slate-500 font-semibold p-3 bg-slate-950/60 rounded-xl border border-slate-800/80">
+                    Esta asignatura no requiere prerrequisitos previos. Se puede matricular libremente.
                   </p>
                 ) : (
-                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                    {(sucesoresMap[cursoModalCadena.id] || []).map((sucId) => {
-                      const sucCurso = mapaCursos[sucId];
-                      const estaAprobado = aprobados.includes(sucId);
+                  <div className="space-y-2">
+                    {cursoModalCadena.requisitos.map((reqId) => {
+                      const reqCurso = mapaCursos[reqId];
+                      const estaAprobado = aprobados.includes(reqId);
                       return (
-                        <div key={sucId} className={`p-2.5 rounded-xl border text-xs flex items-center justify-between ${
-                          estaAprobado
-                            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
-                            : "bg-purple-950/40 border-purple-500/40 text-purple-300"
+                        <div key={reqId} className={`p-3 rounded-xl border text-xs flex items-center justify-between ${
+                          estaAprobado ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300" : "bg-rose-950/40 border-rose-500/40 text-rose-300"
                         }`}>
-                          <div className="min-w-0 pr-2">
-                            <div className="font-extrabold text-[11px] truncate">{sucCurso?.nombre || sucId}</div>
-                            <div className="text-[9px] font-mono opacity-80">{sucId} · Ciclo {sucCurso?.cicloNombre || "Futuro"}</div>
+                          <div>
+                            <div className="font-extrabold text-xs">{reqCurso?.nombre || reqId}</div>
+                            <div className="text-[10px] font-mono opacity-80">{reqId} · Ciclo {reqCurso?.cicloNombre || "I"}</div>
                           </div>
-                          {estaAprobado ? <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" /> : <Unlock className="w-4 h-4 shrink-0 text-purple-400" />}
+                          {estaAprobado ? (
+                            <span className="text-[10px] font-black bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">
+                              ✓ Aprobado
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-black bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30">
+                              🔒 Faltante
+                            </span>
+                          )}
                         </div>
                       );
                     })}
@@ -1400,6 +1377,49 @@ export default function MallaCurricular() {
                 )}
               </div>
 
+              {/* Sección 2: Cursos que Abre en Ciclos Futuros */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-black text-purple-400 uppercase tracking-wider flex items-center space-x-2">
+                  <GitBranch className="w-4 h-4 text-purple-400" />
+                  <span>2. Asignaturas que Habilita en Ciclos Futuros ({(sucesoresMap[cursoModalCadena.id] || []).length})</span>
+                </h3>
+
+                {(sucesoresMap[cursoModalCadena.id] || []).length === 0 ? (
+                  <p className="text-xs text-slate-500 font-semibold p-3 bg-slate-950/60 rounded-xl border border-slate-800/80">
+                    Asignatura terminal del plan de estudios.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {(sucesoresMap[cursoModalCadena.id] || []).map((sucId) => {
+                      const sucCurso = mapaCursos[sucId];
+                      const estaAprobado = aprobados.includes(sucId);
+                      return (
+                        <div key={sucId} className={`p-2.5 rounded-xl border text-xs flex flex-col justify-between ${
+                          estaAprobado
+                            ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
+                            : "bg-purple-950/40 border-purple-500/40 text-purple-300"
+                        }`}>
+                          <div className="font-extrabold text-[11px] truncate">{sucCurso?.nombre || sucId}</div>
+                          <div className="text-[9px] font-mono opacity-80 mt-1 flex justify-between">
+                            <span>{sucId}</span>
+                            <span>Ciclo {sucCurso?.cicloNombre || "Futuro"}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => setCursoModalCadena(null)}
+                className="w-full py-3 rounded-2xl font-black text-xs bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+              >
+                Cerrar Inspector
+              </button>
             </div>
 
           </div>
