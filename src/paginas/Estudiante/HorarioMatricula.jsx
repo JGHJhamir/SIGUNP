@@ -576,28 +576,66 @@ export default function HorarioMatricula() {
     guardarHorarioSemestre(nuevosHorarios);
   };
 
-  // Filtrado de filas vacías
+  // Filtrado de filas vacías (elimina bloques sin cursos y recesos vacíos)
   const estructuraHorarioFiltrada = useMemo(() => {
     if (!ocultarHorasVacias || !tieneDatos) return estructuraHorarioClases;
 
-    const indicesOcupados = [];
-    estructuraHorarioClases.forEach((fila, idx) => {
+    // 1. Identificar qué bloques de clase tienen al menos un curso matriculado en cualquier día
+    const bloquesConClase = new Set();
+    estructuraHorarioClases.forEach((fila) => {
       if (fila.tipoFila === "clase") {
-        const tieneClase =
+        const tieneClase = Boolean(
           mapaGrupoActual[fila.diaLunes] ||
           mapaGrupoActual[fila.diaMartes] ||
           mapaGrupoActual[fila.diaMiercolesPrimeraHora] ||
           mapaGrupoActual[fila.diaMiercolesSegundaHora] ||
           mapaGrupoActual[fila.diaJueves] ||
-          mapaGrupoActual[fila.diaViernes];
-        if (tieneClase) indicesOcupados.push(idx);
+          mapaGrupoActual[fila.diaViernes]
+        );
+        if (tieneClase) {
+          bloquesConClase.add(fila.identificadorFila);
+        }
       }
     });
 
-    if (indicesOcupados.length === 0) return estructuraHorarioClases;
-    const primerIndice = Math.min(...indicesOcupados);
-    const ultimoIndice = Math.max(...indicesOcupados);
-    return estructuraHorarioClases.slice(primerIndice, ultimoIndice + 1);
+    if (bloquesConClase.size === 0) return estructuraHorarioClases;
+
+    // 2. Filtrar descartando filas de clase vacías y recesos que no separan dos bloques ocupados inmediatos
+    const filasFiltradas = [];
+    estructuraHorarioClases.forEach((fila, idx) => {
+      if (fila.tipoFila === "clase") {
+        if (bloquesConClase.has(fila.identificadorFila)) {
+          filasFiltradas.push(fila);
+        }
+      } else {
+        // Es un receso o almuerzo: incluir solo si la clase previa y posterior inmediata están activas
+        let tieneClaseAntes = false;
+        for (let i = idx - 1; i >= 0; i--) {
+          if (estructuraHorarioClases[i].tipoFila === "clase") {
+            if (bloquesConClase.has(estructuraHorarioClases[i].identificadorFila)) {
+              tieneClaseAntes = true;
+            }
+            break;
+          }
+        }
+
+        let tieneClaseDespues = false;
+        for (let i = idx + 1; i < estructuraHorarioClases.length; i++) {
+          if (estructuraHorarioClases[i].tipoFila === "clase") {
+            if (bloquesConClase.has(estructuraHorarioClases[i].identificadorFila)) {
+              tieneClaseDespues = true;
+            }
+            break;
+          }
+        }
+
+        if (tieneClaseAntes && tieneClaseDespues) {
+          filasFiltradas.push(fila);
+        }
+      }
+    });
+
+    return filasFiltradas.length > 0 ? filasFiltradas : estructuraHorarioClases;
   }, [ocultarHorasVacias, mapaGrupoActual, tieneDatos]);
 
   // Copiar Resumen
