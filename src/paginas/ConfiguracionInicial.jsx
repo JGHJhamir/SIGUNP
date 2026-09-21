@@ -19,7 +19,7 @@ import {
   X
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
-import { obtenerPlanEstudiosActual, obtenerElectivosActuales } from "../datos/planesEstudio";
+import { obtenerPlanEstudiosActual, obtenerElectivosActuales, obtenerNombreCarreraActual } from "../datos/planesEstudio";
 import { supabase } from "../lib/supabase";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -28,7 +28,12 @@ export default function ConfiguracionInicial() {
   const navigate = useNavigate();
   const { tema, alternarTema } = useTema();
 
-  const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
+  const escuela = (localStorage.getItem("escuelaEstudiante") || "").toLowerCase();
+  const carActiva = (localStorage.getItem("carreraActiva") || "").toLowerCase();
+  const esContabilidad = escuela.includes("contab") || escuela.includes("financier") || carActiva.includes("contab") || carActiva.includes("financier");
+  const carreraKey = esContabilidad ? "contabilidad" : "informatica";
+  
+  const nombreCarrera = obtenerNombreCarreraActual();
   const planActual = obtenerPlanEstudiosActual();
   const electivosActuales = obtenerElectivosActuales();
   
@@ -215,6 +220,10 @@ export default function ConfiguracionInicial() {
   };
 
   // Métricas de progreso
+  const totalCreditosPlan = useMemo(() => {
+    return todosLosCursos.reduce((acc, c) => acc + c.creditos, 0) || 205;
+  }, [todosLosCursos]);
+
   const creditosAprobados = todosLosCursos
     .filter((c) => aprobados.includes(c.id))
     .reduce((acc, c) => acc + c.creditos, 0);
@@ -222,7 +231,7 @@ export default function ConfiguracionInicial() {
   const obligatoriosAprobadosCount = cursosObligatorios.filter((c) => aprobados.includes(c.id)).length;
   const electivosAprobadosCount = cursosElectivosObj.filter((c) => aprobados.includes(c.id)).length;
   const porcentajeObligatorios = Math.round((obligatoriosAprobadosCount / (cursosObligatorios.length || 1)) * 100);
-  const porcentajeAvance = Math.min(100, Math.round((creditosAprobados / 205) * 100));
+  const porcentajeAvance = Math.min(100, Math.round((creditosAprobados / totalCreditosPlan) * 100));
 
   const irSiguientePestana = () => {
     setMensajeError(null);
@@ -319,7 +328,7 @@ export default function ConfiguracionInicial() {
               tema === 'dark' ? 'text-slate-400 bg-slate-950/60 border-slate-800' : 'text-slate-600 bg-slate-100 border-slate-200'
             } font-semibold px-3 py-1.5 rounded-lg border`}>
               <GraduationCap className="w-4 h-4 text-blue-500" />
-              <span>Plan 2018-1 · Ing. Informática</span>
+              <span>{nombreCarrera}</span>
             </div>
           </div>
         </div>
@@ -363,7 +372,7 @@ export default function ConfiguracionInicial() {
               <Award className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xl font-black text-emerald-500 dark:text-emerald-400">{creditosAprobados} <span className="text-xs font-bold text-slate-400">/ 205</span></div>
+              <div className="text-xl font-black text-emerald-500 dark:text-emerald-400">{creditosAprobados} <span className="text-xs font-bold text-slate-400">/ {totalCreditosPlan}</span></div>
               <div className={`text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider`}>Créditos (CR)</div>
             </div>
           </div>
@@ -562,7 +571,7 @@ export default function ConfiguracionInicial() {
         <div className={`flex flex-col sm:flex-row items-center justify-between border-t ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pt-6 gap-4 mt-6`}>
           <div className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} text-center sm:text-left font-medium`}>
             <span className={`${tema === 'dark' ? 'text-white' : 'text-slate-900'} font-black`}>{aprobados.length}</span> / {todosLosCursos.length} asignaturas marcadas (
-            <span className="text-emerald-500 dark:text-emerald-400 font-bold">{creditosAprobados} / 205 CR</span>)
+            <span className="text-emerald-500 dark:text-emerald-400 font-bold">{creditosAprobados} / {totalCreditosPlan} CR</span>)
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2.5 w-full sm:w-auto">
