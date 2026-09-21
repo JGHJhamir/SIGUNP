@@ -279,6 +279,26 @@ export const CARRERAS_DISPONIBLES = [
   }
 ];
 
+export const cursosElectivosInformatica = [
+  { id: "EI01", nombre: "Inteligencia Artificial y Aprendizaje Automático", creditos: 4, tipo: "E", requisitos: ["SI3420", "ES3336"] },
+  { id: "EI02", nombre: "Computación Gráfica y Realidad Virtual", creditos: 4, tipo: "E", requisitos: ["SI4386"] },
+  { id: "EI03", nombre: "Cloud Computing y Arquitectura de Microservicios", creditos: 4, tipo: "E", requisitos: ["SI4491"] },
+  { id: "EI04", nombre: "Ciberseguridad y Criptografía Aplicada", creditos: 4, tipo: "E", requisitos: ["SI5496"] },
+  { id: "EI05", nombre: "Desarrollo de Videojuegos y Motores 3D", creditos: 4, tipo: "E", requisitos: ["SI4386"] },
+  { id: "EI06", nombre: "Internet de las Cosas (IoT) y Sistemas Embebidos", creditos: 4, tipo: "E", requisitos: ["SI3400"] },
+  { id: "EI07", nombre: "Big Data & Ciencia de Datos", creditos: 4, tipo: "E", requisitos: ["SI4489", "ES3336"] },
+  { id: "EI08", nombre: "Robótica Móvil y Automatización Industrial", creditos: 4, tipo: "E", requisitos: ["FI3492"] }
+];
+
+export const cursosElectivosContabilidad = [
+  { id: "EL01", nombre: "Auditoría Forense y Prevención del Fraude", creditos: 3, tipo: "E", requisitos: [] },
+  { id: "EL02", nombre: "Finanzas Internacionales y Mercado de Divisas", creditos: 3, tipo: "E", requisitos: [] },
+  { id: "EL03", nombre: "Tributación Avanzada y Planeamiento Fiscal", creditos: 3, tipo: "E", requisitos: [] },
+  { id: "EL04", nombre: "Contabilidad de Costos Avanzada para Toma de Decisiones", creditos: 3, tipo: "E", requisitos: [] },
+  { id: "EL05", nombre: "Mercado de Capitales y Portafolio de Inversión", creditos: 3, tipo: "E", requisitos: [] },
+  { id: "EL06", nombre: "NIIF e Instrumentos Financieros Complejos", creditos: 3, tipo: "E", requisitos: [] }
+];
+
 export function obtenerPlanEstudiosActual() {
   const escuela = (localStorage.getItem("escuelaEstudiante") || "").toLowerCase();
   const carreraSeleccionada = (localStorage.getItem("carreraActiva") || "").toLowerCase();
@@ -293,6 +313,22 @@ export function obtenerPlanEstudiosActual() {
   }
   
   return planEstudiosInformatica;
+}
+
+export function obtenerElectivosActuales() {
+  const escuela = (localStorage.getItem("escuelaEstudiante") || "").toLowerCase();
+  const carreraSeleccionada = (localStorage.getItem("carreraActiva") || "").toLowerCase();
+
+  if (
+    escuela.includes("contab") ||
+    escuela.includes("financier") ||
+    carreraSeleccionada.includes("contab") ||
+    carreraSeleccionada.includes("financier")
+  ) {
+    return cursosElectivosContabilidad;
+  }
+
+  return cursosElectivosInformatica;
 }
 
 export function obtenerNombreCarreraActual() {

@@ -15,7 +15,7 @@ import {
   Moon
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
-import { obtenerPlanEstudiosActual } from "../datos/planesEstudio";
+import { obtenerPlanEstudiosActual, obtenerElectivosActuales } from "../datos/planesEstudio";
 import { supabase } from "../lib/supabase";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -26,15 +26,27 @@ export default function ConfiguracionInicial() {
 
   const carreraKey = (localStorage.getItem("carreraActiva") || "").toLowerCase().includes("contab") ? "contabilidad" : "informatica";
   const planActual = obtenerPlanEstudiosActual();
+  const electivosActuales = obtenerElectivosActuales();
   
-  const cursosReales = planActual.flatMap((sem) =>
+  const cursosObligatorios = planActual.flatMap((sem) =>
     sem.cursos.map((c) => ({
       id: c.id,
       nombre: c.nombre,
       ciclo: NOMBRES_CICLO[sem.numeroCiclo - 1] || `Ciclo ${sem.numeroCiclo}`,
-      creditos: c.creditos
+      creditos: c.creditos,
+      tipo: "O"
     }))
   );
+
+  const cursosElectivosObj = electivosActuales.map((e) => ({
+    id: e.id,
+    nombre: e.nombre,
+    ciclo: "ELECTIVOS",
+    creditos: e.creditos,
+    tipo: "E"
+  }));
+
+  const todosLosCursos = [...cursosObligatorios, ...cursosElectivosObj];
 
   const [aprobados, setAprobados] = useState(() => {
     const storageKeyAprobados = `cursosAprobados_${carreraKey}`;
@@ -51,8 +63,8 @@ export default function ConfiguracionInicial() {
   const [cicloActivo, setCicloActivo] = useState("I");
   const tutorialPrevioCompletado = localStorage.getItem("tutorialCompletado") === "true";
 
-  // Lista de 10 Pestañas: Ciclo I al X
-  const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+  // Lista de 11 Pestañas: Ciclo I al X + Electivos
+  const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "ELECTIVOS"];
 
   const toggleCurso = (id) => {
     setAprobados((prev) =>
@@ -90,8 +102,8 @@ export default function ConfiguracionInicial() {
     navigate("/estudiante/inicio");
   };
 
-  // Cursos del ciclo activo
-  const cursosDelCiclo = cursosReales.filter((c) => c.ciclo === cicloActivo);
+  // Cursos del ciclo activo o sección electivos
+  const cursosDelCiclo = todosLosCursos.filter((c) => c.ciclo === cicloActivo);
 
   const todosAprobadosEnCiclo =
     cursosDelCiclo.length > 0 &&
@@ -110,12 +122,13 @@ export default function ConfiguracionInicial() {
   };
 
   // Métricas de progreso
-  const creditosAprobados = cursosReales
+  const creditosAprobados = todosLosCursos
     .filter((c) => aprobados.includes(c.id))
     .reduce((acc, c) => acc + c.creditos, 0);
 
-  const obligatoriosAprobados = aprobados.length;
-  const porcentajeObligatorios = Math.round((obligatoriosAprobados / 63) * 100);
+  const obligatoriosAprobadosCount = cursosObligatorios.filter((c) => aprobados.includes(c.id)).length;
+  const electivosAprobadosCount = cursosElectivosObj.filter((c) => aprobados.includes(c.id)).length;
+  const porcentajeObligatorios = Math.round((obligatoriosAprobadosCount / (cursosObligatorios.length || 1)) * 100);
   const porcentajeAvance = Math.min(100, Math.round((creditosAprobados / 205) * 100));
 
   const irSiguientePestana = () => {
@@ -274,15 +287,15 @@ export default function ConfiguracionInicial() {
 
         </div>
 
-        {/* ── BARRA DE 10 PESTAÑAS (Ciclo I al X) ── */}
+        {/* ── BARRA DE 11 PESTAÑAS (Ciclo I al X + Electivos) ── */}
         <div className={`flex space-x-1.5 mb-6 border-b ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pb-0 overflow-x-auto no-scrollbar`}>
           {ciclos.map((ciclo) => {
             const estaActivo = cicloActivo === ciclo;
 
-            const aprobadosEnCiclo = cursosReales.filter(
+            const aprobadosEnCiclo = todosLosCursos.filter(
               (c) => c.ciclo === ciclo && aprobados.includes(c.id)
             ).length;
-            const totalEnCiclo = cursosReales.filter((c) => c.ciclo === ciclo).length;
+            const totalEnCiclo = todosLosCursos.filter((c) => c.ciclo === ciclo).length;
 
             return (
               <button
@@ -291,13 +304,15 @@ export default function ConfiguracionInicial() {
                 onClick={() => setCicloActivo(ciclo)}
                 className={`px-4 py-3 text-xs font-extrabold rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer ${
                   estaActivo
-                    ? "text-blue-500 dark:text-blue-400 border-blue-500 bg-blue-500/10 shadow-inner"
+                    ? ciclo === "ELECTIVOS"
+                      ? "text-purple-400 border-purple-500 bg-purple-500/10 shadow-inner"
+                      : "text-blue-500 dark:text-blue-400 border-blue-500 bg-blue-500/10 shadow-inner"
                     : tema === 'dark'
                     ? "text-slate-400 border-transparent hover:text-slate-200 hover:bg-slate-800/40"
                     : "text-slate-500 border-transparent hover:text-slate-900 hover:bg-slate-100"
                 }`}
               >
-                Ciclo {ciclo}
+                {ciclo === "ELECTIVOS" ? "⚡ ELECTIVOS" : `Ciclo ${ciclo}`}
                 {aprobadosEnCiclo > 0 && (
                   <span className="ml-2 text-[9px] bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded-full font-black">
                     {aprobadosEnCiclo}/{totalEnCiclo}
@@ -314,7 +329,11 @@ export default function ConfiguracionInicial() {
           <div className="flex justify-between items-center px-1">
             <span className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-wider flex items-center space-x-2`}>
               <SlidersHorizontal className="w-3.5 h-3.5 text-blue-500" />
-              <span>Asignaturas del Ciclo {cicloActivo} ({cursosDelCiclo.length} cursos)</span>
+              <span>
+                {cicloActivo === "ELECTIVOS"
+                  ? `Cursos Electivos Disponibles (${cursosDelCiclo.length} cursos)`
+                  : `Asignaturas del Ciclo ${cicloActivo} (${cursosDelCiclo.length} cursos)`}
+              </span>
             </span>
 
             <button

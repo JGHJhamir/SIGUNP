@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import {
   obtenerPlanEstudiosActual,
+  obtenerElectivosActuales,
   obtenerNombreCarreraActual,
   CARRERAS_DISPONIBLES
 } from "../../datos/planesEstudio";
@@ -286,11 +287,25 @@ export default function MallaCurricular() {
     setMensajeExito(`Se han desmarcado los cursos del ${sem.ciclo}.`);
   };
 
+  const electivosActuales = useMemo(() => {
+    return obtenerElectivosActuales();
+  }, [carreraKey]);
+
+  // Cursos obligatorios + electivos combinados
+  const todosLosCursosConElectivos = useMemo(() => {
+    const electivosFormatted = electivosActuales.map((e) => ({
+      ...e,
+      cicloNombre: "⚡ Cursos Electivos",
+      numeroCiclo: 99
+    }));
+    return [...todosLosCursos, ...electivosFormatted];
+  }, [todosLosCursos, electivosActuales]);
+
   // Totales globales
   const totalCreditosPlan = planEstudios.reduce((acc, sem) => acc + sem.cursos.reduce((sAcc, c) => sAcc + c.creditos, 0), 0);
-  const totalObligatoriosPlan = todosLosCursos.length;
+  const totalObligatoriosPlan = todosLosCursosConElectivos.length;
 
-  const totalCreditosAprobados = todosLosCursos.reduce((acc, c) => acc + (aprobados.includes(c.id) ? c.creditos : 0), 0);
+  const totalCreditosAprobados = todosLosCursosConElectivos.reduce((acc, c) => acc + (aprobados.includes(c.id) ? c.creditos : 0), 0);
   const totalCursosAprobados = aprobados.length;
 
   const porcentajeObligatorios = Math.round((totalCursosAprobados / totalObligatoriosPlan) * 100);
@@ -298,11 +313,20 @@ export default function MallaCurricular() {
 
   // Filtrado de cursos según el ciclo activo y la búsqueda
   const ciclosAMostrar = useMemo(() => {
+    const objetoElectivos = {
+      ciclo: "⚡ Cursos Electivos Especializados",
+      numeroCiclo: 99,
+      cursos: electivosActuales
+    };
+
     if (cicloActivo === "todos") {
-      return planEstudios;
+      return [...planEstudios, objetoElectivos];
+    }
+    if (cicloActivo === "electivos") {
+      return [objetoElectivos];
     }
     return planEstudios.filter((s) => s.numeroCiclo === cicloActivo);
-  }, [cicloActivo]);
+  }, [cicloActivo, planEstudios, electivosActuales]);
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -490,6 +514,21 @@ export default function MallaCurricular() {
               </button>
             );
           })}
+
+          <button
+            type="button"
+            onClick={() => setCicloActivo("electivos")}
+            className={`px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold transition-all shrink-0 flex items-center space-x-1 cursor-pointer liquid-btn ${
+              cicloActivo === "electivos"
+                ? "bg-purple-600 text-white shadow-xs scale-102"
+                : tema === 'dark'
+                ? "bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25"
+                : "bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100"
+            }`}
+          >
+            <Sparkles className="w-3 h-3 text-purple-400" />
+            <span>⚡ Electivos</span>
+          </button>
 
           <button
             type="button"
