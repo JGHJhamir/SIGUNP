@@ -376,16 +376,16 @@ export default function HorarioMatricula() {
 
   const tieneDatos = Object.keys(mapaGrupoActual).length > 0;
 
-  // Cursos disponibles/pendientes para organizar según Avance Académico (Malla Curricular)
-  // Excluye automáticamente los cursos que el estudiante YA APROBÓ en su Malla.
+  // Cursos disponibles para organizar según Avance Académico (Malla Curricular)
+  // Únicamente se muestran los cursos NO APROBADOS cuyos REQUISITOS YA FUERON CUMPLIDOS (Cursos Disponibles/Aperturables).
   const cursosParaOrganizar = useMemo(() => {
     return todosLosCursos
-      .filter((c) => !aprobados.includes(c.id)) // EXCLUIR CURSOS YA APROBADOS
-      .map((c) => {
+      .filter((c) => {
+        const noAprobado = !aprobados.includes(c.id);
         const requisitosCumplidos = c.requisitos.every((reqId) => aprobados.includes(reqId));
-        const estado = requisitosCumplidos ? "disponible" : "bloqueado";
-        return { ...c, estado };
-      });
+        return noAprobado && requisitosCumplidos;
+      })
+      .map((c) => ({ ...c, estado: "disponible" }));
   }, [todosLosCursos, aprobados]);
 
   // ── GUARDAR EN SUPABASE Y LOCALSTORAGE ──
@@ -1037,16 +1037,13 @@ export default function HorarioMatricula() {
                       className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
                         enSemestre
                           ? "bg-blue-600/15 border-blue-500/40 text-white"
-                          : curso.estado === "disponible"
-                          ? "bg-slate-900/60 border-slate-800 hover:border-slate-700"
-                          : "bg-slate-950/40 border-slate-900 opacity-60"
+                          : "bg-slate-900/60 border-slate-800 hover:border-slate-700"
                       }`}
                     >
                       <div className="flex items-center space-x-3">
                         <input
                           type="checkbox"
                           checked={enSemestre}
-                          disabled={curso.estado === "bloqueado"}
                           onChange={() => toggleCursoEnSemestre(curso.id)}
                           className="w-4 h-4 rounded border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
                         />
@@ -1079,8 +1076,8 @@ export default function HorarioMatricula() {
                           </select>
                         </div>
                       ) : (
-                        <span className="text-xs font-bold text-slate-500">
-                          {curso.estado === "disponible" ? "Disponible" : "Bloqueado"}
+                        <span className="text-xs font-bold text-emerald-400/90 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                          Disponible
                         </span>
                       )}
                     </div>
