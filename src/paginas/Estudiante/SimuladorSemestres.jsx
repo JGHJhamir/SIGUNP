@@ -284,7 +284,7 @@ export default function SimuladorSemestres() {
           <span>Crear Nuevo Semestre en la Simulación</span>
         </h2>
 
-        <form onSubmit={manejarCrearSemestre} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <form onSubmit={manejarCrearSemestre} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 items-end">
           <div>
             <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-2`}>Año Académico</label>
             <input

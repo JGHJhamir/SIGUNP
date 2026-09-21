@@ -241,40 +241,40 @@ export default function PerfilEstudiante() {
     <div className="space-y-6">
       
       {/* Encabezado del Perfil */}
-      <div className="p-6 md:p-8 rounded-3xl liquid-glass-card relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl animate-scale-in glare-hover">
-        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-center sm:text-left z-10">
-          <div className="relative">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-blue-600 via-sky-400 to-purple-600 p-1 shadow-2xl flex items-center justify-center hover-pop">
-              <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-2xl text-white">
+      <div className="p-4 sm:p-6 md:p-8 rounded-3xl liquid-glass-card relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6 shadow-2xl animate-scale-in glare-hover">
+        <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-5 text-center sm:text-left z-10 w-full md:w-auto">
+          <div className="relative shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-blue-600 via-sky-400 to-purple-600 p-1 shadow-2xl flex items-center justify-center hover-pop">
+              <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-xl sm:text-2xl text-white">
                 {nombres.charAt(0)}{apellidos.charAt(0)}
               </div>
             </div>
-            <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-slate-950 rounded-full animate-pulse-subtle"></span>
+            <span className="absolute bottom-0 right-0 w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 border-2 border-slate-950 rounded-full animate-pulse-subtle"></span>
           </div>
 
-          <div>
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-500 dark:text-blue-400 text-[11px] font-extrabold mb-1.5 shadow-sm">
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>{escuela || "Ingeniería Informática"}</span>
+          <div className="min-w-0">
+            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-500 dark:text-blue-400 text-[10px] sm:text-[11px] font-extrabold mb-1 shadow-sm max-w-full truncate">
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{escuela || "Ingeniería Informática"}</span>
             </div>
-            <h1 className={`text-2xl sm:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+            <h1 className={`text-xl sm:text-2xl md:text-3xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight leading-tight`}>
               {nombres} {apellidos}
             </h1>
-            <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-semibold mt-0.5`}>
+            <p className={`text-[11px] sm:text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} font-semibold mt-0.5`}>
               {facultad || "Facultad de Ingeniería Industrial"} · UNP
             </p>
           </div>
         </div>
 
-        <div className={`p-3.5 sm:p-4 rounded-2xl ${
+        <div className={`p-3 sm:p-4 rounded-2xl ${
           tema === 'dark' ? 'bg-[#090e1a]/90 border-slate-700/80 shadow-2xl' : 'bg-white/95 border-slate-200 shadow-lg'
-        } border space-y-2.5 shrink-0 z-10 hover-pop-subtle min-w-[200px]`}>
+        } border space-y-2 shrink-0 z-10 hover-pop-subtle w-full md:w-auto min-w-0 sm:min-w-[200px]`}>
           <div className="flex items-center space-x-2.5 text-xs">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-sm">
-              <GraduationCap className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-sm">
+              <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[9px] font-black text-emerald-500 uppercase tracking-wider">Código UNP</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[8.5px] sm:text-[9px] font-black text-emerald-500 uppercase tracking-wider">Código UNP</div>
               <div className={`font-mono text-xs font-black truncate ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 {codigoUni || "Sin registrar"}
               </div>
@@ -282,11 +282,11 @@ export default function PerfilEstudiante() {
           </div>
 
           <div className="flex items-center space-x-2.5 text-xs">
-            <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0 shadow-sm">
-              <IdCard className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0 shadow-sm">
+              <IdCard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[9px] font-black text-sky-500 uppercase tracking-wider">DNI</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[8.5px] sm:text-[9px] font-black text-sky-500 uppercase tracking-wider">DNI</div>
               <div className={`font-mono text-xs font-black truncate ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 {dni || "Sin registrar"}
               </div>
@@ -294,12 +294,12 @@ export default function PerfilEstudiante() {
           </div>
 
           <div className="flex items-center space-x-2.5 text-xs">
-            <div className="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-sm">
-              <Mail className="w-4 h-4" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-sm">
+              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[9px] font-black text-purple-500 uppercase tracking-wider">Correo</div>
-              <div className={`font-mono text-xs font-black truncate max-w-[150px] ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+            <div className="min-w-0 flex-1">
+              <div className="text-[8.5px] sm:text-[9px] font-black text-purple-500 uppercase tracking-wider">Correo</div>
+              <div className={`font-mono text-xs font-black truncate ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                 {email || "Sin registrar"}
               </div>
             </div>
@@ -307,11 +307,11 @@ export default function PerfilEstudiante() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
         {/* ── SECCIÓN 1: EDITAR DATOS DEL PERFIL (2 COLS) ── */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="p-5 sm:p-8 rounded-3xl liquid-glass-card glare-hover space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <div className="p-4 sm:p-6 md:p-8 rounded-3xl liquid-glass-card glare-hover space-y-5">
             
             <div className={`flex items-center justify-between border-b ${
               tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'

@@ -224,62 +224,62 @@ export default function LayoutEstudiante() {
       </aside>
 
       {/* Header en Móvil - Liquid Glass Estilo iPhone */}
-      <header className={`md:hidden w-full iphone-glass-header px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
-        <div className="flex items-center space-x-3">
-          <div className={`w-9 h-9 rounded-xl ${tema === 'dark' ? 'bg-slate-950 border-blue-500/40' : 'bg-white border-blue-500/30'} p-0.5 border flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop`}>
+      <header className={`md:hidden w-full iphone-glass-header px-3.5 py-2 flex items-center justify-between sticky top-0 z-50 transition-colors`}>
+        <div className="flex items-center space-x-2.5 min-w-0">
+          <div className={`w-8 h-8 rounded-xl ${tema === 'dark' ? 'bg-slate-950 border-blue-500/40' : 'bg-white border-blue-500/30'} p-0.5 border flex items-center justify-center shadow-md shrink-0 overflow-hidden hover-pop`}>
             <img src="/sigunp-logo.png" alt="SIGUNP" style={{ clipPath: 'circle(49% at 50% 50%)' }} className="w-full h-full object-cover rounded-full" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center space-x-1.5">
-              <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight leading-none`}>SIGUNP</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle"></span>
+              <span className={`text-xs font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'} tracking-tight leading-none truncate`}>SIGUNP</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-subtle shrink-0"></span>
             </div>
-            <span className="text-[10px] text-blue-500 dark:text-blue-400 font-extrabold block mt-0.5 tracking-wide">{itemActivo.etiqueta}</span>
+            <span className="text-[9.5px] text-blue-500 dark:text-blue-400 font-extrabold block mt-0.5 tracking-wide truncate">{itemActivo.etiqueta}</span>
           </div>
         </div>
 
-        <div className="flex items-center space-x-1.5">
+        <div className="flex items-center space-x-1 shrink-0">
           <Link
             to="/estudiante/perfil"
             title="Mi Perfil"
-            className="p-2 rounded-xl text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 active:scale-90 border border-blue-500/20 transition-all cursor-pointer hover-pop"
+            className="p-1.5 rounded-xl text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 active:scale-90 border border-blue-500/20 transition-all cursor-pointer hover-pop"
           >
-            <User className="w-4 h-4" />
+            <User className="w-3.5 h-3.5" />
           </Link>
 
           <button
             type="button"
             onClick={alternarTema}
-            className={`p-2 rounded-xl border transition-all cursor-pointer hover-pop active:scale-90 ${
+            className={`p-1.5 rounded-xl border transition-all cursor-pointer hover-pop active:scale-90 ${
               tema === 'dark' ? "bg-slate-800/80 border-white/10 text-amber-400 shadow-sm" : "bg-white border-slate-200 text-indigo-600 shadow-sm"
             }`}
             title="Alternar Modo Claro / Oscuro"
           >
-            {tema === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {tema === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
           </button>
 
           <button
             type="button"
             onClick={manejarReconfigurar}
             title="Reconfigurar Malla"
-            className="p-2 rounded-xl text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 active:scale-90 border border-amber-500/20 transition-all cursor-pointer hover-pop"
+            className="p-1.5 rounded-xl text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 active:scale-90 border border-amber-500/20 transition-all cursor-pointer hover-pop"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
           
           <button
             type="button"
             onClick={manejarCerrarSesion}
             title="Cerrar Sesión"
-            className="p-2 rounded-xl text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 active:scale-90 border border-rose-500/20 transition-all cursor-pointer hover-pop"
+            className="p-1.5 rounded-xl text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 active:scale-90 border border-rose-500/20 transition-all cursor-pointer hover-pop"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
           </button>
         </div>
       </header>
 
       {/* Contenido Principal */}
-      <main className={`flex-1 flex flex-col min-w-0 pb-28 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-transparent' : 'bg-transparent'} relative z-10 transition-colors`}>
+      <main className={`flex-1 flex flex-col min-w-0 pb-24 md:pb-0 overflow-y-auto ${tema === 'dark' ? 'bg-transparent' : 'bg-transparent'} relative z-10 transition-colors`}>
         {/* Top App Bar Header Desktop */}
         <header className="hidden md:flex items-center justify-between px-8 py-3.5 liquid-glass border-b sticky top-0 z-20 transition-colors">
           <div className="flex items-center space-x-2 text-xs">
@@ -331,14 +331,14 @@ export default function LayoutEstudiante() {
           </div>
         </header>
 
-        <div className="p-3.5 sm:p-6 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn">
+        <div className="p-3 sm:p-5 md:p-8 max-w-7xl w-full mx-auto animate-fadeIn">
           <Outlet />
         </div>
       </main>
 
       {/* Floating Bottom Dock Móvil - Liquid Glass Estilo iPhone / iOS 18 (WhatsApp Floating Pill) */}
-      <nav className="md:hidden fixed bottom-3 left-3 right-3 iphone-glass-dock rounded-[32px] p-2 z-50 flex flex-col items-center justify-between shadow-2xl transition-all">
-        <div className="w-full flex items-center justify-around space-x-1">
+      <nav className="md:hidden fixed bottom-2 left-2 right-2 iphone-glass-dock rounded-[26px] p-1.5 z-50 flex flex-col items-center justify-between shadow-2xl transition-all">
+        <div className="w-full flex items-center justify-around space-x-0.5">
           {menuItems.map((item) => {
             const estaActivo = localizacion.pathname === item.ruta;
             const esPerfil = item.ruta === "/estudiante/perfil";
@@ -347,7 +347,7 @@ export default function LayoutEstudiante() {
               <Link
                 key={item.ruta}
                 to={item.ruta}
-                className={`flex flex-col items-center justify-center py-2 px-1 rounded-[24px] iphone-tab-item flex-1 min-w-0 transition-all duration-300 relative ${
+                className={`flex flex-col items-center justify-center py-1.5 px-0.5 rounded-[18px] iphone-tab-item flex-1 min-w-0 transition-all duration-300 relative ${
                   estaActivo
                     ? "iphone-active-pill font-extrabold text-white scale-[1.02]"
                     : tema === 'dark'
@@ -355,26 +355,26 @@ export default function LayoutEstudiante() {
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                {/* Badge para el elemento activo (ej. notificaciones o estado activo) */}
+                {/* Badge para el elemento activo */}
                 {estaActivo && !esPerfil && (
-                  <span className="absolute top-1.5 right-2 w-2 h-2 rounded-full bg-emerald-400 animate-pulse-subtle shadow-sm"></span>
+                  <span className="absolute top-1 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-subtle shadow-sm"></span>
                 )}
 
-                {/* Avatar para pestaña Perfil estilo la imagen del usuario */}
+                {/* Avatar para pestaña Perfil */}
                 {esPerfil ? (
                   <div className="relative shrink-0 mb-0.5">
-                    <div className={`w-6 h-6 rounded-full ${estaActivo ? 'ring-2 ring-blue-400' : 'border border-slate-500/40'} bg-slate-800 flex items-center justify-center text-[10px] font-black text-white overflow-hidden`}>
+                    <div className={`w-5.5 h-5.5 rounded-full ${estaActivo ? 'ring-2 ring-blue-400' : 'border border-slate-500/40'} bg-slate-800 flex items-center justify-center text-[9px] font-black text-white overflow-hidden`}>
                       {localStorage.getItem("nombreEstudiante") ? localStorage.getItem("nombreEstudiante").charAt(0) : "E"}
                     </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-slate-900"></span>
+                    <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-slate-900"></span>
                   </div>
                 ) : (
                   <div className={`shrink-0 transition-transform duration-300 ${estaActivo ? "scale-110 text-white" : "scale-100 opacity-80"}`}>
-                    {React.cloneElement(item.icono, { className: "w-5 h-5" })}
+                    {React.cloneElement(item.icono, { className: "w-4.5 h-4.5" })}
                   </div>
                 )}
 
-                <span className={`text-[10px] font-bold tracking-tight truncate w-full text-center mt-0.5 ${estaActivo ? "text-white font-black" : ""}`}>
+                <span className={`text-[9.5px] font-bold tracking-tight truncate w-full text-center mt-0.5 ${estaActivo ? "text-white font-black" : ""}`}>
                   {item.etiquetaCorta}
                 </span>
               </Link>

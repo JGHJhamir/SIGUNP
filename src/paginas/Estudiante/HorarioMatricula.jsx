@@ -868,8 +868,11 @@ export default function HorarioMatricula() {
       {/* ── VISTA 1: GRILLA SEMANAL ── */}
       {tieneDatos && modoVista === "grilla" && (
         <div className={`border ${tema === 'dark' ? 'bg-[#0e1526] border-slate-800' : 'bg-white border-slate-200 shadow-sm'} rounded-2xl overflow-hidden p-3 sm:p-4 print-container`}>
+          <div className="block sm:hidden text-[10px] font-bold text-blue-500 dark:text-blue-400 text-center pb-2 tracking-tight">
+            ← Desliza horizontalmente para ver la grilla completa de Lunes a Viernes →
+          </div>
           <div className="w-full overflow-x-auto">
-            <table className="w-full border-collapse min-w-[700px] text-xs">
+            <table className="w-full border-collapse min-w-[650px] text-xs">
               <thead>
                 <tr className={`border-b ${tema === 'dark' ? 'border-slate-800 text-slate-400 bg-[#090e1a]' : 'border-slate-200 text-slate-700 bg-slate-100'} text-[10px] sm:text-[11px] font-bold uppercase tracking-wider`}>
                   <th className={`py-2.5 px-3 text-left w-32 border-r ${tema === 'dark' ? 'border-slate-800' : 'border-slate-200'}`}>
