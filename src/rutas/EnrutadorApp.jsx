@@ -9,7 +9,6 @@ import InicioEstudiante from "../paginas/Estudiante/InicioEstudiante";
 import HorarioMatricula from "../paginas/Estudiante/HorarioMatricula";
 import MallaCurricular from "../paginas/Estudiante/MallaCurricular";
 import SimuladorSemestres from "../paginas/Estudiante/SimuladorSemestres";
-import Matricula from "../paginas/Estudiante/Matricula";
 import PerfilEstudiante from "../paginas/Estudiante/PerfilEstudiante";
 
 // Módulo Administrador
@@ -121,7 +120,6 @@ export default function EnrutadorApp() {
           <Route path="horario" element={<HorarioMatricula />} />
           <Route path="malla" element={<MallaCurricular />} />
           <Route path="simulador" element={<SimuladorSemestres />} />
-          <Route path="matricula" element={<Matricula />} />
           <Route path="perfil" element={<PerfilEstudiante />} />
         </Route>
 

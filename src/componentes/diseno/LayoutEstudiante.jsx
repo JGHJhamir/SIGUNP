@@ -57,13 +57,6 @@ export default function LayoutEstudiante() {
       icono: <Sliders className="w-4 h-4" />
     },
     {
-      ruta: "/estudiante/matricula",
-      etiqueta: "Matrícula",
-      etiquetaCorta: "Matrícula",
-      descripcion: "Inscripción de grupos",
-      icono: <GraduationCap className="w-4 h-4" />
-    },
-    {
       ruta: "/estudiante/perfil",
       etiqueta: "Mi Perfil",
       etiquetaCorta: "Perfil",

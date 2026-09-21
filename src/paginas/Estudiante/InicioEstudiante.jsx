@@ -398,9 +398,9 @@ export default function InicioEstudiante() {
                 <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all hidden sm:block" />
               </Link>
 
-              {/* Pre-Matrícula */}
+              {/* Organizar Cursos */}
               <Link
-                to="/estudiante/matricula"
+                to="/estudiante/horario"
                 className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-3.5 rounded-xl border transition-all group liquid-btn hover-scale-pop active:scale-95 ${
                   tema === 'dark'
                     ? 'bg-[#090e1a]/80 border-slate-800/80 hover:border-amber-500/40'
@@ -413,10 +413,10 @@ export default function InicioEstudiante() {
                   </div>
                   <div>
                     <div className={`text-xs font-bold ${tema === 'dark' ? 'text-slate-100' : 'text-slate-900'} group-hover:text-amber-500 transition-colors`}>
-                      Pre-Matrícula
+                      Organizar Horario
                     </div>
                     <div className={`text-[9px] sm:text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} hidden sm:block`}>
-                      Selección de cursos
+                      Semestres, grupos y aulas
                     </div>
                   </div>
                 </div>
