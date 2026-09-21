@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Sparkles,
@@ -12,7 +12,11 @@ import {
   SlidersHorizontal,
   GraduationCap,
   Sun,
-  Moon
+  Moon,
+  Lock,
+  Unlock,
+  AlertCircle,
+  X
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
 import { obtenerPlanEstudiosActual, obtenerElectivosActuales } from "../datos/planesEstudio";
@@ -28,25 +32,37 @@ export default function ConfiguracionInicial() {
   const planActual = obtenerPlanEstudiosActual();
   const electivosActuales = obtenerElectivosActuales();
   
-  const cursosObligatorios = planActual.flatMap((sem) =>
-    sem.cursos.map((c) => ({
-      id: c.id,
-      nombre: c.nombre,
-      ciclo: NOMBRES_CICLO[sem.numeroCiclo - 1] || `Ciclo ${sem.numeroCiclo}`,
-      creditos: c.creditos,
-      tipo: "O"
-    }))
-  );
+  const cursosObligatorios = useMemo(() => {
+    return planActual.flatMap((sem) =>
+      sem.cursos.map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        ciclo: NOMBRES_CICLO[sem.numeroCiclo - 1] || `Ciclo ${sem.numeroCiclo}`,
+        creditos: c.creditos,
+        tipo: "O",
+        requisitos: c.requisitos || []
+      }))
+    );
+  }, [planActual]);
 
-  const cursosElectivosObj = electivosActuales.map((e) => ({
-    id: e.id,
-    nombre: e.nombre,
-    ciclo: "ELECTIVOS",
-    creditos: e.creditos,
-    tipo: "E"
-  }));
+  const cursosElectivosObj = useMemo(() => {
+    return electivosActuales.map((e) => ({
+      id: e.id,
+      nombre: e.nombre,
+      ciclo: "ELECTIVOS",
+      creditos: e.creditos,
+      tipo: "E",
+      requisitos: e.requisitos || []
+    }));
+  }, [electivosActuales]);
 
-  const todosLosCursos = [...cursosObligatorios, ...cursosElectivosObj];
+  const todosLosCursos = useMemo(() => [...cursosObligatorios, ...cursosElectivosObj], [cursosObligatorios, cursosElectivosObj]);
+
+  const mapaCursos = useMemo(() => {
+    const mapa = {};
+    todosLosCursos.forEach((c) => { mapa[c.id] = c; });
+    return mapa;
+  }, [todosLosCursos]);
 
   const [aprobados, setAprobados] = useState(() => {
     const storageKeyAprobados = `cursosAprobados_${carreraKey}`;
@@ -60,16 +76,51 @@ export default function ConfiguracionInicial() {
     }
     return [];
   });
+  
   const [cicloActivo, setCicloActivo] = useState("I");
+  const [mensajeError, setMensajeError] = useState(null);
+  const [mensajeExito, setMensajeExito] = useState(null);
+  
   const tutorialPrevioCompletado = localStorage.getItem("tutorialCompletado") === "true";
 
   // Lista de 11 Pestañas: Ciclo I al X + Electivos
   const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "ELECTIVOS"];
 
-  const toggleCurso = (id) => {
-    setAprobados((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  const toggleCurso = (curso) => {
+    setMensajeError(null);
+    setMensajeExito(null);
+
+    const estaAprobado = aprobados.includes(curso.id);
+
+    if (estaAprobado) {
+      // Verificar si es prerrequisito de alguna asignatura actualmente aprobada
+      const esPrerrequisitoDeAprobado = todosLosCursos.some(
+        (c) => (c.requisitos || []).includes(curso.id) && aprobados.includes(c.id)
+      );
+
+      if (esPrerrequisitoDeAprobado) {
+        setMensajeError(`No puedes desmarcar "${curso.nombre}" (${curso.id}) porque es requisito de otras asignaturas que ya tienes marcadas como aprobadas.`);
+        return;
+      }
+
+      setAprobados((prev) => prev.filter((id) => id !== curso.id));
+      setMensajeExito(`Se desmarcó "${curso.nombre}".`);
+    } else {
+      // Verificar prerrequisitos faltantes
+      const requisitosFaltantes = (curso.requisitos || []).filter((reqId) => !aprobados.includes(reqId));
+
+      if (requisitosFaltantes.length > 0) {
+        const nombresFaltantes = requisitosFaltantes.map((id) => {
+          const cObj = mapaCursos[id];
+          return cObj ? `${cObj.nombre} (${id})` : id;
+        });
+        setMensajeError(`🔒 "${curso.nombre}" está bloqueado. Primero debes aprobar su cadena de prerrequisitos: ${nombresFaltantes.join(", ")}.`);
+        return;
+      }
+
+      setAprobados((prev) => [...prev, curso.id]);
+      setMensajeExito(`¡"${curso.nombre}" marcado como Aprobado! 🎉`);
+    }
   };
 
   const manejarConfirmar = async () => {
@@ -110,14 +161,56 @@ export default function ConfiguracionInicial() {
     cursosDelCiclo.every((c) => aprobados.includes(c.id));
 
   const toggleTodoElCiclo = () => {
-    const idsCiclo = cursosDelCiclo.map((c) => c.id);
+    setMensajeError(null);
+    setMensajeExito(null);
+
     if (todosAprobadosEnCiclo) {
-      setAprobados((prev) => prev.filter((id) => !idsCiclo.includes(id)));
-    } else {
-      setAprobados((prev) => {
-        const filtrados = prev.filter((id) => !idsCiclo.includes(id));
-        return [...filtrados, ...idsCiclo];
+      const idsCiclo = cursosDelCiclo.map((c) => c.id);
+      const bloqueadosPorRequisito = cursosDelCiclo.filter((curso) => {
+        if (!aprobados.includes(curso.id)) return false;
+        return todosLosCursos.some(
+          (c) => !idsCiclo.includes(c.id) && (c.requisitos || []).includes(curso.id) && aprobados.includes(c.id)
+        );
       });
+
+      if (bloqueadosPorRequisito.length > 0) {
+        setMensajeError(`No se puede desmarcar todo el ciclo porque algunas asignaturas son requisito de cursos aprobados en ciclos posteriores.`);
+        return;
+      }
+
+      setAprobados((prev) => prev.filter((id) => !idsCiclo.includes(id)));
+      setMensajeExito(`Se han desmarcado las asignaturas de este ciclo.`);
+    } else {
+      let aprobadosNuevos = [...aprobados];
+      let aprobadosEnAccion = 0;
+
+      let cambioOcurrio = true;
+      while (cambioOcurrio) {
+        cambioOcurrio = false;
+        cursosDelCiclo.forEach((curso) => {
+          if (!aprobadosNuevos.includes(curso.id)) {
+            const sePuedeAprobar = (curso.requisitos || []).every((reqId) => aprobadosNuevos.includes(reqId));
+            if (sePuedeAprobar) {
+              aprobadosNuevos.push(curso.id);
+              aprobadosEnAccion++;
+              cambioOcurrio = true;
+            }
+          }
+        });
+      }
+
+      const omitidos = cursosDelCiclo.filter((c) => !aprobadosNuevos.includes(c.id)).length;
+      setAprobados(aprobadosNuevos);
+
+      if (aprobadosEnAccion > 0) {
+        if (omitidos === 0) {
+          setMensajeExito(`¡Todas las asignaturas disponibles del ciclo fueron marcadas como Aprobadas! 🎉`);
+        } else {
+          setMensajeExito(`Se aprobaron ${aprobadosEnAccion} asignaturas disponibles (${omitidos} continúan bloqueadas por faltar prerrequisitos anteriores).`);
+        }
+      } else {
+        setMensajeError(`No se pudieron aprobar cursos de este ciclo porque están bloqueados por prerrequisitos de ciclos anteriores.`);
+      }
     }
   };
 
@@ -132,6 +225,8 @@ export default function ConfiguracionInicial() {
   const porcentajeAvance = Math.min(100, Math.round((creditosAprobados / 205) * 100));
 
   const irSiguientePestana = () => {
+    setMensajeError(null);
+    setMensajeExito(null);
     const idx = ciclos.indexOf(cicloActivo);
     if (idx < ciclos.length - 1) {
       setCicloActivo(ciclos[idx + 1]);
@@ -139,6 +234,8 @@ export default function ConfiguracionInicial() {
   };
 
   const irAnteriorPestana = () => {
+    setMensajeError(null);
+    setMensajeExito(null);
     const idx = ciclos.indexOf(cicloActivo);
     if (idx > 0) {
       setCicloActivo(ciclos[idx - 1]);
@@ -174,7 +271,7 @@ export default function ConfiguracionInicial() {
                 </span>
               </div>
               <span className={`text-[10px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'} block font-medium mt-0.5`}>
-                Marca las asignaturas obligatorias que ya has aprobado.
+                Marca las asignaturas obligatorias que ya has aprobado respetando su cadena de prerrequisitos.
               </span>
             </div>
           </div>
@@ -239,7 +336,7 @@ export default function ConfiguracionInicial() {
             Indica tus Asignaturas Aprobadas
           </h1>
           <p className={`text-xs md:text-sm ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} mt-1.5 max-w-xl mx-auto leading-relaxed`}>
-            Marca los cursos obligatorios que ya has superado del Ciclo I al X.
+            Marca las asignaturas aprobadas. Las asignaturas con prerrequisitos pendientes se mantendrán bloqueadas 🔒.
           </p>
         </div>
 
@@ -253,7 +350,7 @@ export default function ConfiguracionInicial() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline">
-                <div className={`text-xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{obligatoriosAprobados} <span className="text-xs font-bold text-slate-400">/ 63</span></div>
+                <div className={`text-xl font-black ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>{obligatoriosAprobadosCount} <span className="text-xs font-bold text-slate-400">/ {cursosObligatorios.length}</span></div>
                 <span className="text-[10px] font-black text-blue-500 dark:text-blue-400">{porcentajeObligatorios}%</span>
               </div>
               <div className={`text-[10px] font-bold ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} uppercase tracking-wider`}>Asignaturas Aprobadas</div>
@@ -301,7 +398,11 @@ export default function ConfiguracionInicial() {
               <button
                 key={ciclo}
                 type="button"
-                onClick={() => setCicloActivo(ciclo)}
+                onClick={() => {
+                  setMensajeError(null);
+                  setMensajeExito(null);
+                  setCicloActivo(ciclo);
+                }}
                 className={`px-4 py-3 text-xs font-extrabold rounded-t-2xl shrink-0 transition-all border-b-2 cursor-pointer ${
                   estaActivo
                     ? ciclo === "ELECTIVOS"
@@ -322,6 +423,31 @@ export default function ConfiguracionInicial() {
             );
           })}
         </div>
+
+        {/* Mensajes de Alerta y Requisitos Faltantes */}
+        {mensajeError && (
+          <div className="p-3.5 mb-5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center justify-between space-x-2 animate-fadeIn">
+            <div className="flex items-center space-x-2">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>{mensajeError}</span>
+            </div>
+            <button onClick={() => setMensajeError(null)} className="text-rose-400 hover:text-white p-1 cursor-pointer">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {mensajeExito && (
+          <div className="p-3.5 mb-5 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-between space-x-2 animate-fadeIn">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{mensajeExito}</span>
+            </div>
+            <button onClick={() => setMensajeExito(null)} className="text-emerald-400 hover:text-white p-1 cursor-pointer">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* ── CONTENIDO VISTA DE CICLO ── */}
         <div className="space-y-6 animate-fadeIn">
@@ -349,45 +475,81 @@ export default function ConfiguracionInicial() {
           {/* Listado de cursos obligatorios del ciclo activo */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-80 overflow-y-auto pr-1">
             {cursosDelCiclo.map((curso) => {
-              const estaSeleccionado = aprobados.includes(curso.id);
+              const estaAprobado = aprobados.includes(curso.id);
+              const requisitosFaltantes = (curso.requisitos || []).filter((reqId) => !aprobados.includes(reqId));
+              const estaDisponible = !estaAprobado && requisitosFaltantes.length === 0;
+              const estaBloqueado = !estaAprobado && requisitosFaltantes.length > 0;
 
               return (
                 <button
                   key={curso.id}
                   type="button"
-                  onClick={() => toggleCurso(curso.id)}
-                  className={`p-4 rounded-2xl border text-left flex items-start space-x-3.5 transition-all duration-200 cursor-pointer group ${
-                    estaSeleccionado
+                  onClick={() => toggleCurso(curso)}
+                  className={`p-3.5 sm:p-4 rounded-2xl border text-left flex items-start space-x-3.5 transition-all duration-200 cursor-pointer group ${
+                    estaAprobado
                       ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-900 dark:text-white shadow-lg shadow-emerald-500/5"
+                      : estaDisponible
+                      ? tema === 'dark'
+                        ? "bg-blue-950/20 border-blue-500/30 hover:border-blue-500/50 hover:bg-blue-900/30 text-slate-100"
+                        : "bg-blue-50/60 border-blue-200 hover:border-blue-300 hover:bg-blue-100/60 text-slate-900"
                       : tema === 'dark'
-                      ? "bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-800/40 text-slate-300"
-                      : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100 text-slate-700"
+                      ? "bg-slate-950/40 border-slate-800/80 text-slate-400 opacity-60 hover:opacity-80"
+                      : "bg-slate-100/70 border-slate-200 text-slate-500 opacity-70 hover:opacity-90"
                   }`}
                 >
                   <div
                     className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 border transition-all ${
-                      estaSeleccionado
+                      estaAprobado
                         ? "bg-emerald-500 border-emerald-400 text-slate-950"
-                        : "bg-slate-200 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                        : estaDisponible
+                        ? "bg-blue-500/20 border-blue-400/50 text-blue-400"
+                        : "bg-slate-800 border-slate-700 text-slate-500"
                     }`}
                   >
-                    {estaSeleccionado && <CheckCircle2 className="w-4 h-4 font-bold" />}
+                    {estaAprobado && <CheckCircle2 className="w-4 h-4 font-bold" />}
+                    {estaDisponible && <Unlock className="w-3.5 h-3.5" />}
+                    {estaBloqueado && <Lock className="w-3.5 h-3.5" />}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className={`text-xs font-extrabold leading-tight ${
-                      estaSeleccionado
-                        ? "text-emerald-600 dark:text-emerald-300"
-                        : tema === 'dark' ? "text-slate-100" : "text-slate-900"
-                    }`}>
-                      <span>{curso.nombre}</span>
+                    <div className="flex items-center justify-between gap-1">
+                      <span className={`text-xs font-extrabold leading-tight ${
+                        estaAprobado
+                          ? "text-emerald-600 dark:text-emerald-300"
+                          : estaDisponible
+                          ? tema === 'dark' ? "text-white" : "text-slate-900"
+                          : tema === 'dark' ? "text-slate-400" : "text-slate-600"
+                      }`}>
+                        {curso.nombre}
+                      </span>
+                      {estaBloqueado && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0">
+                          🔒 Bloqueado
+                        </span>
+                      )}
+                      {estaDisponible && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 shrink-0">
+                          🔓 Disponible
+                        </span>
+                      )}
+                      {estaAprobado && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+                          ✓ Aprobado
+                        </span>
+                      )}
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-1.5 flex items-center space-x-2 font-mono">
+
+                    <div className="text-[11px] text-slate-400 mt-1.5 flex flex-wrap items-center gap-1.5 font-mono">
                       <span className={`px-2 py-0.5 rounded ${
                         tema === 'dark' ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-200 text-slate-700 border-slate-300'
                       } border font-bold`}>{curso.id}</span>
                       <span>·</span>
                       <span className={`font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>{curso.creditos} CR</span>
+                      {estaBloqueado && (
+                        <span className="text-[10px] text-rose-400 font-sans italic ml-1 truncate">
+                          (Requiere: {requisitosFaltantes.join(", ")})
+                        </span>
+                      )}
                     </div>
                   </div>
                 </button>
@@ -399,7 +561,7 @@ export default function ConfiguracionInicial() {
         {/* Footer Navegación entre Pestañas */}
         <div className={`flex flex-col sm:flex-row items-center justify-between border-t ${tema === 'dark' ? 'border-slate-800/80' : 'border-slate-200'} pt-6 gap-4 mt-6`}>
           <div className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-600'} text-center sm:text-left font-medium`}>
-            <span className={`${tema === 'dark' ? 'text-white' : 'text-slate-900'} font-black`}>{aprobados.length}</span> / 63 asignaturas marcadas (
+            <span className={`${tema === 'dark' ? 'text-white' : 'text-slate-900'} font-black`}>{aprobados.length}</span> / {todosLosCursos.length} asignaturas marcadas (
             <span className="text-emerald-500 dark:text-emerald-400 font-bold">{creditosAprobados} / 205 CR</span>)
           </div>
 
