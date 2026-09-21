@@ -255,10 +255,28 @@ export default function HorarioMatricula() {
       const codigoUni = localStorage.getItem("codigoUniversitario");
       const storageKey = `horario_semestres_${carreraKey}`;
       
-      // Cargar Cursos Aprobados de la Malla
+      // Cargar Cursos Aprobados de la Malla desde LocalStorage y Supabase
       const aprobadosGuardados = localStorage.getItem(`cursosAprobados_${carreraKey}`);
       if (aprobadosGuardados) {
         try { setAprobados(JSON.parse(aprobadosGuardados)); } catch (e) {}
+      }
+
+      if (codigoUni) {
+        try {
+          const { data: dataAprobados } = await supabase
+            .from("estudiante_cursos_aprobados")
+            .select("curso_id")
+            .eq("codigo_universitario", codigoUni)
+            .eq("carrera", carreraKey);
+
+          if (dataAprobados && dataAprobados.length > 0) {
+            const idsAprobadosBD = dataAprobados.map((r) => r.curso_id);
+            setAprobados(idsAprobadosBD);
+            localStorage.setItem(`cursosAprobados_${carreraKey}`, JSON.stringify(idsAprobadosBD));
+          }
+        } catch (e) {
+          console.warn("Supabase aprobados fallback local", e);
+        }
       }
 
       // Cargar Semestres personalizados
@@ -358,14 +376,16 @@ export default function HorarioMatricula() {
 
   const tieneDatos = Object.keys(mapaGrupoActual).length > 0;
 
-  // Cursos disponibles para organizar según Avance Académico (Malla Curricular)
+  // Cursos disponibles/pendientes para organizar según Avance Académico (Malla Curricular)
+  // Excluye automáticamente los cursos que el estudiante YA APROBÓ en su Malla.
   const cursosParaOrganizar = useMemo(() => {
-    return todosLosCursos.map((c) => {
-      const aprobado = aprobados.includes(c.id);
-      const requisitosCumplidos = c.requisitos.every((reqId) => aprobados.includes(reqId));
-      const estado = aprobado ? "aprobado" : requisitosCumplidos ? "disponible" : "bloqueado";
-      return { ...c, estado };
-    });
+    return todosLosCursos
+      .filter((c) => !aprobados.includes(c.id)) // EXCLUIR CURSOS YA APROBADOS
+      .map((c) => {
+        const requisitosCumplidos = c.requisitos.every((reqId) => aprobados.includes(reqId));
+        const estado = requisitosCumplidos ? "disponible" : "bloqueado";
+        return { ...c, estado };
+      });
   }, [todosLosCursos, aprobados]);
 
   // ── GUARDAR EN SUPABASE Y LOCALSTORAGE ──
@@ -998,70 +1018,75 @@ export default function HorarioMatricula() {
 
             {/* Cuerpo con Scroll */}
             <div className="p-5 overflow-y-auto space-y-3 flex-1">
-              {cursosParaOrganizar.map((curso) => {
-                const enSemestre = datosSemestreActual.cursos.includes(curso.id);
-                const detalle = datosSemestreActual.detalles[curso.id] || {};
-
-                return (
-                  <div
-                    key={curso.id}
-                    className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
-                      enSemestre
-                        ? "bg-blue-600/15 border-blue-500/40 text-white"
-                        : curso.estado === "aprobado"
-                        ? "bg-emerald-950/20 border-emerald-500/30 opacity-70"
-                        : curso.estado === "disponible"
-                        ? "bg-slate-900/60 border-slate-800 hover:border-slate-700"
-                        : "bg-slate-950/40 border-slate-900 opacity-60"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={enSemestre}
-                        disabled={curso.estado === "bloqueado"}
-                        onChange={() => toggleCursoEnSemestre(curso.id)}
-                        className="w-4 h-4 rounded border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-[10px] font-black px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                            {curso.id}
-                          </span>
-                          <span className="text-xs font-bold text-slate-400">
-                            Ciclo {curso.numeroCiclo} · {curso.creditos} CR
-                          </span>
-                          {curso.estado === "aprobado" && (
-                            <span className="text-[9px] font-extrabold px-2 py-0.2 rounded bg-emerald-500/20 text-emerald-400">✓ Ya Aprobado</span>
-                          )}
-                        </div>
-                        <h4 className="text-sm font-black mt-0.5">{curso.nombre}</h4>
-                      </div>
-                    </div>
-
-                    {/* Selector de Grupo Rápido si está seleccionado */}
-                    {enSemestre ? (
-                      <div className="flex items-center space-x-2">
-                        <select
-                          value={detalle.grupo || "grupo01"}
-                          onChange={(e) => guardarEdicionCurso(curso.id, e.target.value, detalle.aula, detalle.docente)}
-                          className="bg-slate-950 border border-blue-500/40 text-xs font-bold rounded-xl px-2.5 py-1 text-white focus:outline-none"
-                        >
-                          {Object.entries(informacionGrupos).map(([gCode, gInfo]) => (
-                            <option key={gCode} value={gCode}>
-                              {gInfo.etiqueta} ({gInfo.diasTexto})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    ) : (
-                      <span className="text-xs font-bold text-slate-500">
-                        {curso.estado === "disponible" ? "Disponible" : curso.estado === "aprobado" ? "Aprobado" : "Bloqueado"}
-                      </span>
-                    )}
+              {cursosParaOrganizar.length === 0 ? (
+                <div className="p-8 text-center space-y-2">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-6 h-6" />
                   </div>
-                );
-              })}
+                  <h4 className="text-sm font-black text-white">¡No tienes asignaturas pendientes!</h4>
+                  <p className="text-xs text-slate-400">Has aprobado todas las asignaturas registradas en tu Malla Curricular.</p>
+                </div>
+              ) : (
+                cursosParaOrganizar.map((curso) => {
+                  const enSemestre = datosSemestreActual.cursos.includes(curso.id);
+                  const detalle = datosSemestreActual.detalles[curso.id] || {};
+
+                  return (
+                    <div
+                      key={curso.id}
+                      className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
+                        enSemestre
+                          ? "bg-blue-600/15 border-blue-500/40 text-white"
+                          : curso.estado === "disponible"
+                          ? "bg-slate-900/60 border-slate-800 hover:border-slate-700"
+                          : "bg-slate-950/40 border-slate-900 opacity-60"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={enSemestre}
+                          disabled={curso.estado === "bloqueado"}
+                          onChange={() => toggleCursoEnSemestre(curso.id)}
+                          className="w-4 h-4 rounded border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        />
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                              {curso.id}
+                            </span>
+                            <span className="text-xs font-bold text-slate-400">
+                              Ciclo {curso.numeroCiclo} · {curso.creditos} CR
+                            </span>
+                          </div>
+                          <h4 className="text-sm font-black mt-0.5">{curso.nombre}</h4>
+                        </div>
+                      </div>
+
+                      {/* Selector de Grupo Rápido si está seleccionado */}
+                      {enSemestre ? (
+                        <div className="flex items-center space-x-2">
+                          <select
+                            value={detalle.grupo || "grupo01"}
+                            onChange={(e) => guardarEdicionCurso(curso.id, e.target.value, detalle.aula, detalle.docente)}
+                            className="bg-slate-950 border border-blue-500/40 text-xs font-bold rounded-xl px-2.5 py-1 text-white focus:outline-none"
+                          >
+                            {Object.entries(informacionGrupos).map(([gCode, gInfo]) => (
+                              <option key={gCode} value={gCode}>
+                                {gInfo.etiqueta} ({gInfo.diasTexto})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      ) : (
+                        <span className="text-xs font-bold text-slate-500">
+                          {curso.estado === "disponible" ? "Disponible" : "Bloqueado"}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
 
             {/* Footer Modal */}
