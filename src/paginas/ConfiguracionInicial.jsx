@@ -350,12 +350,12 @@ export default function ConfiguracionInicial() {
             <span className="text-emerald-500 dark:text-emerald-400 font-bold">{creditosAprobados} / 205 CR</span>)
           </div>
 
-          <div className="flex items-center space-x-3 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center justify-end gap-2.5 w-full sm:w-auto">
             {tutorialPrevioCompletado && (
               <button
                 type="button"
                 onClick={() => navigate("/estudiante/inicio")}
-                className={`w-full sm:w-auto px-4 py-3.5 ${
+                className={`w-full sm:w-auto px-4 py-3 ${
                   tema === 'dark' ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-200 border-slate-700' : 'bg-slate-200 hover:bg-slate-300 text-slate-800 border-slate-300'
                 } font-extrabold rounded-2xl text-xs border transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm`}
               >
@@ -368,32 +368,33 @@ export default function ConfiguracionInicial() {
               <button
                 type="button"
                 onClick={irAnteriorPestana}
-                className="w-full sm:w-auto px-5 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold rounded-2xl text-xs border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
+                className="w-full sm:w-auto px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold rounded-2xl text-xs border border-slate-700 transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Anterior</span>
               </button>
             )}
 
-            {cicloActivo !== "X" ? (
+            {cicloActivo !== "X" && (
               <button
                 type="button"
                 onClick={irSiguientePestana}
-                className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.98] text-white font-black rounded-2xl text-sm transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center space-x-2 cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.98] text-white font-black rounded-2xl text-xs transition-all shadow-lg shadow-blue-600/30 flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <span>{`Siguiente: Ciclo ${ciclos[ciclos.indexOf(cicloActivo) + 1]}`}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-            ) : (
-              <button
-                type="button"
-                onClick={manejarConfirmar}
-                className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 active:scale-[0.98] text-white font-black rounded-2xl text-sm transition-all shadow-xl shadow-emerald-600/30 flex items-center justify-center space-x-2 cursor-pointer"
-              >
-                <span>Confirmar e Iniciar Módulos</span>
-                <Sparkles className="w-4 h-4 text-amber-300" />
-              </button>
             )}
+
+            <button
+              type="button"
+              onClick={manejarConfirmar}
+              className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 active:scale-[0.98] text-white font-black rounded-2xl text-xs transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2 cursor-pointer"
+              title="Guardar avance actual y finalizar la calibración"
+            >
+              <span>Finalizar y Guardar</span>
+              <Sparkles className="w-4 h-4 text-amber-300" />
+            </button>
           </div>
         </div>
 
