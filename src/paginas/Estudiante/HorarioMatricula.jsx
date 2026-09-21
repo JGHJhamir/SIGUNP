@@ -347,9 +347,51 @@ export default function HorarioMatricula() {
   }, [carreraKey]);
 
   // Datos del semestre activo
+  // Datos del semestre activo y sanitización para prevenir grupos duplicados en el mismo semestre
   const datosSemestreActual = useMemo(() => {
-    return horariosPorSemestre[semestreVista] || { cursos: [], detalles: {} };
+    const semData = horariosPorSemestre[semestreVista] || { cursos: [], detalles: {} };
+    const gruposUsados = new Set();
+    const todosLosGrupos = Object.keys(informacionGrupos);
+    const detallesSanitizados = { ...semData.detalles };
+
+    (semData.cursos || []).forEach((cursoId) => {
+      const d = detallesSanitizados[cursoId] || { grupo: "grupo01", aula: "Aula 101", docente: "" };
+      if (!d.grupo || gruposUsados.has(d.grupo)) {
+        const libre = todosLosGrupos.find((g) => !gruposUsados.has(g)) || "grupo01";
+        detallesSanitizados[cursoId] = { ...d, grupo: libre };
+        gruposUsados.add(libre);
+      } else {
+        gruposUsados.add(d.grupo);
+      }
+    });
+
+    return {
+      cursos: semData.cursos || [],
+      detalles: detallesSanitizados
+    };
   }, [horariosPorSemestre, semestreVista]);
+
+  // Mapa de { [grupoCode]: cursoId } para saber qué grupo está ocupado por qué curso en el semestre activo
+  const gruposOcupadosEnSemestre = useMemo(() => {
+    const mapa = {};
+    if (!datosSemestreActual.cursos || !datosSemestreActual.detalles) return mapa;
+    datosSemestreActual.cursos.forEach((cursoId) => {
+      const d = datosSemestreActual.detalles[cursoId];
+      if (d && d.grupo) {
+        mapa[d.grupo] = cursoId;
+      }
+    });
+    return mapa;
+  }, [datosSemestreActual]);
+
+  // Helper para obtener el primer grupo libre en el semestre
+  const obtenerPrimerGrupoDisponible = (detallesExistentes = {}) => {
+    const gruposUsados = new Set(
+      Object.values(detallesExistentes).map((d) => d?.grupo).filter(Boolean)
+    );
+    const todosLosGrupos = Object.keys(informacionGrupos);
+    return todosLosGrupos.find((g) => !gruposUsados.has(g)) || "grupo01";
+  };
 
   // Mapa de Código de Grupo -> Datos completos del curso (Nombre, Grupo, Aula, Docente)
   const mapaGrupoActual = useMemo(() => {
@@ -451,6 +493,13 @@ export default function HorarioMatricula() {
 
   // Asignar o Editar Grupo, Aula y Docente de un curso
   const guardarEdicionCurso = (cursoId, grupo, aula, docente) => {
+    const ocupanteId = gruposOcupadosEnSemestre[grupo];
+    if (ocupanteId && ocupanteId !== cursoId) {
+      const nombreOcupante = mapaCursos[ocupanteId]?.nombre || ocupanteId;
+      mostrarToast(`⚠️ El grupo ya está asignado a: ${nombreOcupante}`);
+      return;
+    }
+
     const cursosActuales = datosSemestreActual.cursos.includes(cursoId)
       ? datosSemestreActual.cursos
       : [...datosSemestreActual.cursos, cursoId];
@@ -505,9 +554,9 @@ export default function HorarioMatricula() {
       delete nuevosDetalles[cursoId];
     } else {
       nuevosCursos = [...datosSemestreActual.cursos, cursoId];
-      // Asignar grupo por defecto si no tiene
+      const grupoLibre = obtenerPrimerGrupoDisponible(nuevosDetalles);
       nuevosDetalles[cursoId] = {
-        grupo: "grupo01",
+        grupo: grupoLibre,
         aula: "Aula 101",
         docente: ""
       };
@@ -1066,13 +1115,23 @@ export default function HorarioMatricula() {
                           <select
                             value={detalle.grupo || "grupo01"}
                             onChange={(e) => guardarEdicionCurso(curso.id, e.target.value, detalle.aula, detalle.docente)}
-                            className="bg-slate-950 border border-blue-500/40 text-xs font-bold rounded-xl px-2.5 py-1 text-white focus:outline-none"
+                            className="bg-slate-950 border border-blue-500/40 text-xs font-bold rounded-xl px-2.5 py-1 text-white focus:outline-none cursor-pointer"
                           >
-                            {Object.entries(informacionGrupos).map(([gCode, gInfo]) => (
-                              <option key={gCode} value={gCode}>
-                                {gInfo.etiqueta} ({gInfo.diasTexto})
-                              </option>
-                            ))}
+                            {Object.entries(informacionGrupos).map(([gCode, gInfo]) => {
+                              const ocupanteId = gruposOcupadosEnSemestre[gCode];
+                              const estaOcupadoPorOtro = ocupanteId && ocupanteId !== curso.id;
+                              const nombreOtro = estaOcupadoPorOtro ? (mapaCursos[ocupanteId]?.nombre || ocupanteId) : "";
+                              return (
+                                <option
+                                  key={gCode}
+                                  value={gCode}
+                                  disabled={estaOcupadoPorOtro}
+                                  className={estaOcupadoPorOtro ? "text-slate-600 bg-slate-900 font-normal" : "text-white font-bold"}
+                                >
+                                  {gInfo.etiqueta} ({gInfo.diasTexto}){estaOcupadoPorOtro ? ` — 🔒 Ocupado por ${nombreOtro}` : ""}
+                                </option>
+                              );
+                            })}
                           </select>
                         </div>
                       ) : (
@@ -1105,6 +1164,8 @@ export default function HorarioMatricula() {
         <FormularioEdicionCursoModal
           curso={modalEditarCurso}
           tema={tema}
+          gruposOcupadosEnSemestre={gruposOcupadosEnSemestre}
+          mapaCursos={mapaCursos}
           onGuardar={(grupo, aula, docente) => guardarEdicionCurso(modalEditarCurso.cursoId, grupo, aula, docente)}
           onEliminar={() => eliminarCursoDeSemestre(modalEditarCurso.cursoId)}
           onCerrar={() => setModalEditarCurso(null)}
@@ -1159,7 +1220,7 @@ export default function HorarioMatricula() {
 }
 
 // Subcomponente de Formulario de Edición de Curso (Grupo, Aula y Docente)
-function FormularioEdicionCursoModal({ curso, tema, onGuardar, onEliminar, onCerrar }) {
+function FormularioEdicionCursoModal({ curso, tema, gruposOcupadosEnSemestre, mapaCursos, onGuardar, onEliminar, onCerrar }) {
   const [grupoSel, setGrupoSel] = useState(curso.grupo || "grupo01");
   const [aulaInput, setAulaInput] = useState(curso.aula || "Aula 101");
   const [docenteInput, setDocenteInput] = useState(curso.docente || "");
@@ -1204,11 +1265,21 @@ function FormularioEdicionCursoModal({ curso, tema, onGuardar, onEliminar, onCer
               onChange={(e) => setGrupoSel(e.target.value)}
               className="w-full px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700 bg-slate-950 text-white focus:border-blue-500 focus:outline-none"
             >
-              {Object.entries(informacionGrupos).map(([gCode, gInfo]) => (
-                <option key={gCode} value={gCode}>
-                  {gInfo.etiqueta} — {gInfo.horario} ({gInfo.diasTexto})
-                </option>
-              ))}
+              {Object.entries(informacionGrupos).map(([gCode, gInfo]) => {
+                const ocupanteId = gruposOcupadosEnSemestre?.[gCode];
+                const estaOcupadoPorOtro = ocupanteId && ocupanteId !== curso.cursoId;
+                const nombreOtro = estaOcupadoPorOtro ? (mapaCursos?.[ocupanteId]?.nombre || ocupanteId) : "";
+                return (
+                  <option
+                    key={gCode}
+                    value={gCode}
+                    disabled={estaOcupadoPorOtro}
+                    className={estaOcupadoPorOtro ? "text-slate-600 bg-slate-900 font-normal" : "text-white font-bold"}
+                  >
+                    {gInfo.etiqueta} — {gInfo.horario} ({gInfo.diasTexto}){estaOcupadoPorOtro ? ` — 🔒 Ocupado por ${nombreOtro}` : ""}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
