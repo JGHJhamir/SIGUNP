@@ -458,16 +458,18 @@ export default function HorarioMatricula() {
 
         if (error) {
           console.warn("Aviso guardado Supabase:", error.message);
+          mostrarToast("¡Horario guardado localmente! 💾 (Revisa tu conexión a la nube)");
         } else {
-          mostrarToast("¡Horario guardado y sincronizado en Supabase Cloud! ☁️");
+          mostrarToast("¡Horario guardado y sincronizado en la Nube (Supabase)! ☁️");
         }
       } catch (e) {
         console.warn("Excepción guardado Supabase:", e);
+        mostrarToast("¡Horario guardado en este dispositivo! 💾");
       } finally {
         setGuardandoEnCloud(false);
       }
     } else {
-      mostrarToast("¡Horario guardado en sesión local! 💾");
+      mostrarToast("¡Horario guardado en este dispositivo! 💾 (Registra tu Código UNP en Mi Perfil para sincronizar en la nube)");
     }
   };
 
