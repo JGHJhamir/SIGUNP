@@ -330,7 +330,7 @@ export default function HorarioMatricula() {
               // Convertir grupos antiguos a detalles si aplica
               if (item.grupos && Object.keys(detalles).length === 0) {
                 Object.keys(item.grupos).forEach((cId) => {
-                  detalles[cId] = { grupo: item.grupos[cId], aula: "Aula 101", docente: "" };
+                  detalles[cId] = { grupo: item.grupos[cId], aula: "Aula por definir", docente: "" };
                 });
               }
               mapaMigrado[sem] = { cursos: item.cursos, detalles };
@@ -355,7 +355,7 @@ export default function HorarioMatricula() {
     const detallesSanitizados = { ...semData.detalles };
 
     (semData.cursos || []).forEach((cursoId) => {
-      const d = detallesSanitizados[cursoId] || { grupo: "grupo01", aula: "Aula 101", docente: "" };
+      const d = detallesSanitizados[cursoId] || { grupo: "grupo01", aula: "Aula por definir", docente: "" };
       if (!d.grupo || gruposUsados.has(d.grupo)) {
         const libre = todosLosGrupos.find((g) => !gruposUsados.has(g)) || "grupo01";
         detallesSanitizados[cursoId] = { ...d, grupo: libre };
@@ -508,7 +508,7 @@ export default function HorarioMatricula() {
       ...datosSemestreActual.detalles,
       [cursoId]: {
         grupo: grupo || "grupo01",
-        aula: aula || "Aula 101",
+        aula: aula || "Aula por definir",
         docente: docente || ""
       }
     };
@@ -557,7 +557,7 @@ export default function HorarioMatricula() {
       const grupoLibre = obtenerPrimerGrupoDisponible(nuevosDetalles);
       nuevosDetalles[cursoId] = {
         grupo: grupoLibre,
-        aula: "Aula 101",
+        aula: "Aula por definir",
         docente: ""
       };
     }
@@ -1225,12 +1225,12 @@ export default function HorarioMatricula() {
 // Subcomponente de Formulario de Edición de Curso (Grupo, Aula y Docente)
 function FormularioEdicionCursoModal({ curso, tema, gruposOcupadosEnSemestre, mapaCursos, onGuardar, onEliminar, onCerrar }) {
   const [grupoSel, setGrupoSel] = useState(curso.grupo || "grupo01");
-  const [aulaInput, setAulaInput] = useState(curso.aula || "Aula 101");
+  const [aulaInput, setAulaInput] = useState(curso.aula || "Aula por definir");
   const [docenteInput, setDocenteInput] = useState(curso.docente || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onGuardar(grupoSel, aulaInput.trim() || "Aula 101", docenteInput.trim());
+    onGuardar(grupoSel, aulaInput.trim() || "Aula por definir", docenteInput.trim());
   };
 
   return (
@@ -1290,14 +1290,13 @@ function FormularioEdicionCursoModal({ curso, tema, gruposOcupadosEnSemestre, ma
           <div className="space-y-1.5">
             <label className="text-xs font-black text-slate-300 flex items-center space-x-1.5">
               <MapPin className="w-3.5 h-3.5 text-blue-400" />
-              <span>Nombre de Aula / Salón:</span>
+              <span>Nombre de Aula / Salón (Edición Libre):</span>
             </label>
             <input
               type="text"
-              required
               value={aulaInput}
               onChange={(e) => setAulaInput(e.target.value)}
-              placeholder="Ej. Aula 102, Lab S01, Auditorio B"
+              placeholder="Ej. Aula 102, Lab S01, Auditorio B, Virtual..."
               className="w-full px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-700 bg-slate-950 text-white focus:border-blue-500 focus:outline-none"
             />
           </div>
