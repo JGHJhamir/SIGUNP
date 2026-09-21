@@ -120,7 +120,7 @@ export default function ConfiguracionSistema() {
       {/* Secciones de Configuración */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Tarjeta 1: Periodo Lectivo y Estado de Matrícula */}
+        {/* Tarjeta 1: Periodo Lectivo */}
         <div className={`p-6 rounded-3xl border space-y-6 ${
           tema === 'dark' ? 'app-surface-card' : 'app-surface-card'
         }`}>
@@ -130,10 +130,10 @@ export default function ConfiguracionSistema() {
             </div>
             <div>
               <h3 className={`font-bold text-base ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
-                Periodo Académico y Matrícula
+                Periodo Académico Principal
               </h3>
               <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                Ajuste de semestre vigente y switch de inscripciones
+                Ajuste del semestre activo global en el sistema
               </p>
             </div>
           </div>
@@ -154,40 +154,6 @@ export default function ConfiguracionSistema() {
                 <option value="2026-II">Semestre 2026-II (Próximo Semestre)</option>
                 <option value="2027-I">Semestre 2027-I</option>
               </select>
-            </div>
-
-            {/* Switch de Matrícula */}
-            <div className={`p-4 rounded-2xl border flex items-center justify-between ${
-              tema === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <div className="flex items-center space-x-3">
-                {matriculaAbierta ? (
-                  <Unlock className="w-5 h-5 text-emerald-500" />
-                ) : (
-                  <Lock className="w-5 h-5 text-rose-500" />
-                )}
-                <div>
-                  <span className={`text-xs font-bold block ${tema === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
-                    Proceso de Matrícula
-                  </span>
-                  <span className={`text-[11px] block ${
-                    matriculaAbierta ? 'text-emerald-500 font-semibold' : 'text-rose-500 font-semibold'
-                  }`}>
-                    {matriculaAbierta ? "ABIERTA — Los alumnos pueden inscribir cursos" : "CERRADA — Inscripciones deshabilitadas"}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={alternarMatricula}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
-                  matriculaAbierta
-                    ? 'bg-rose-500/10 text-rose-500 border-rose-500/20 hover:bg-rose-500 hover:text-white'
-                    : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500 hover:text-white'
-                }`}
-              >
-                {matriculaAbierta ? "Cerrar Matrícula" : "Aperturar Matrícula"}
-              </button>
             </div>
           </div>
         </div>
