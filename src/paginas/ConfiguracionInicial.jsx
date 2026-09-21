@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTema } from "../contexto/ContextoTema";
 import { obtenerPlanEstudiosActual } from "../datos/planesEstudio";
+import { supabase } from "../lib/supabase";
 
 const NOMBRES_CICLO = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -59,10 +60,33 @@ export default function ConfiguracionInicial() {
     );
   };
 
-  const manejarConfirmar = () => {
+  const manejarConfirmar = async () => {
     localStorage.setItem("tutorialCompletado", "true");
     localStorage.setItem(`cursosAprobados_${carreraKey}`, JSON.stringify(aprobados));
     localStorage.setItem("cursosAprobados", JSON.stringify(aprobados));
+
+    const codigoUni = localStorage.getItem("codigoUniversitario");
+    if (codigoUni) {
+      try {
+        await supabase
+          .from("estudiante_cursos_aprobados")
+          .delete()
+          .eq("codigo_universitario", codigoUni)
+          .eq("carrera", carreraKey);
+
+        if (aprobados.length > 0) {
+          const payload = aprobados.map((id) => ({
+            codigo_universitario: codigoUni,
+            curso_id: id,
+            carrera: carreraKey
+          }));
+          await supabase.from("estudiante_cursos_aprobados").insert(payload);
+        }
+      } catch (e) {
+        console.warn("Error Supabase guardar aprobados", e);
+      }
+    }
+
     navigate("/estudiante/inicio");
   };
 
@@ -142,7 +166,17 @@ export default function ConfiguracionInicial() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={manejarConfirmar}
+              className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black transition-all cursor-pointer flex items-center space-x-1.5 shadow-md"
+              title="Guardar avance actual y finalizar la calibración"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Finalizar y Guardar</span>
+            </button>
+
             {tutorialPrevioCompletado && (
               <button
                 type="button"
