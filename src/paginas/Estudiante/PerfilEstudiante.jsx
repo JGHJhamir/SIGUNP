@@ -176,7 +176,7 @@ export default function PerfilEstudiante() {
 
       setMensajePerfil({
         tipo: "success",
-        texto: "¡Perfil actualizado con éxito en Supabase y guardado en tu sesión!"
+        texto: "¡Perfil actualizado con éxito y sincronizado en la nube!"
       });
     } catch (err) {
       console.error("Error al actualizar perfil:", err);
@@ -186,7 +186,7 @@ export default function PerfilEstudiante() {
     }
   };
 
-  // ── CAMBIAR CONTRASEÑA EN SUPABASE ──
+  // ── CAMBIAR CONTRASEÑA EN LA NUBE ──
   const cambiarPassword = async (e) => {
     e.preventDefault();
     setMensajePassword(null);
@@ -211,14 +211,14 @@ export default function PerfilEstudiante() {
     try {
       const codigoLimpio = codigoUni.trim() || codigoActual;
 
-      // Actualizar password_hash en Supabase
+      // Actualizar password_hash en la nube
       const { error } = await supabase
         .from("estudiantes")
         .update({ password_hash: nuevaPassword })
         .eq("codigo_universitario", codigoLimpio);
 
       if (error) {
-        console.warn("Cambio password Supabase:", error.message);
+        console.warn("Cambio password:", error.message);
       }
 
       setPasswordActual("");
@@ -227,7 +227,7 @@ export default function PerfilEstudiante() {
 
       setMensajePassword({
         tipo: "success",
-        texto: "¡Contraseña actualizada correctamente en Supabase!"
+        texto: "¡Contraseña actualizada correctamente en tu cuenta!"
       });
     } catch (err) {
       console.error("Error al cambiar contraseña:", err);
@@ -325,7 +325,7 @@ export default function PerfilEstudiante() {
                     Editar Información Personal y Académica
                   </h2>
                   <p className={`text-xs ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Actualiza tus datos para sincronizarlos con la base de datos de Supabase.
+                    Actualiza tus datos para sincronizarlos con tu cuenta en la nube.
                   </p>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function PerfilEstudiante() {
                 className="w-full py-4 rounded-2xl font-black text-white tracking-wide transition-all shadow-xl bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.99] flex items-center justify-center space-x-2 text-xs cursor-pointer disabled:opacity-50"
               >
                 {cargandoPerfil ? (
-                  <span>Guardando en Supabase...</span>
+                  <span>Guardando en la nube...</span>
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
@@ -520,7 +520,7 @@ export default function PerfilEstudiante() {
                   Cambiar Contraseña
                 </h2>
                 <p className={`text-[11px] ${tema === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Actualiza tu clave de acceso en Supabase.
+                  Actualiza tu clave de acceso.
                 </p>
               </div>
             </div>
@@ -528,7 +528,6 @@ export default function PerfilEstudiante() {
             <form onSubmit={cambiarPassword} className="space-y-3.5">
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <Lock className="w-3.5 h-3.5 text-purple-500" />
                   <span>Contraseña Actual</span>
                 </label>
                 <div className="relative">
@@ -537,25 +536,24 @@ export default function PerfilEstudiante() {
                     value={passwordActual}
                     onChange={(e) => setPasswordActual(e.target.value)}
                     placeholder="••••••••"
-                    className={`w-full px-3.5 py-2.5 pr-10 rounded-xl ${
+                    className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs focus:outline-none focus:border-purple-500`}
+                    } border text-xs font-semibold focus:outline-none focus:border-purple-500 pr-10`}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setMostrarPassActual(!mostrarPassActual)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
                   >
-                    {mostrarPassActual ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {mostrarPassActual ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <Lock className="w-3.5 h-3.5 text-purple-500" />
-                  <span>Nueva Contraseña (Mín. 6)</span>
+                  <span>Nueva Contraseña</span>
                 </label>
                 <div className="relative">
                   <input
@@ -563,25 +561,24 @@ export default function PerfilEstudiante() {
                     value={nuevaPassword}
                     onChange={(e) => setNuevaPassword(e.target.value)}
                     minLength={6}
-                    placeholder="••••••••"
-                    className={`w-full px-3.5 py-2.5 pr-10 rounded-xl ${
+                    placeholder="Mínimo 6 caracteres"
+                    className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs focus:outline-none focus:border-purple-500`}
+                    } border text-xs font-semibold focus:outline-none focus:border-purple-500 pr-10`}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setMostrarPassNueva(!mostrarPassNueva)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
                   >
-                    {mostrarPassNueva ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {mostrarPassNueva ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               <div>
                 <label className={`block text-[11px] font-bold ${tema === 'dark' ? 'text-slate-300' : 'text-slate-700'} uppercase tracking-wider mb-1 flex items-center space-x-1.5`}>
-                  <Lock className="w-3.5 h-3.5 text-purple-500" />
                   <span>Confirmar Nueva Contraseña</span>
                 </label>
                 <div className="relative">
@@ -590,27 +587,27 @@ export default function PerfilEstudiante() {
                     value={confirmarPassword}
                     onChange={(e) => setConfirmarPassword(e.target.value)}
                     minLength={6}
-                    placeholder="••••••••"
-                    className={`w-full px-3.5 py-2.5 pr-10 rounded-xl ${
+                    placeholder="Repite la nueva contraseña"
+                    className={`w-full px-4 py-3 rounded-2xl ${
                       tema === 'dark' ? 'bg-slate-950/80 border-slate-800 text-slate-100' : 'bg-slate-50 border-slate-300 text-slate-900'
-                    } border text-xs focus:outline-none focus:border-purple-500`}
+                    } border text-xs font-semibold focus:outline-none focus:border-purple-500 pr-10`}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setMostrarPassConfirm(!mostrarPassConfirm)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 cursor-pointer p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
                   >
-                    {mostrarPassConfirm ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {mostrarPassConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               {mensajePassword && (
-                <div className={`p-3 rounded-2xl border flex items-start space-x-2 text-xs font-semibold ${
+                <div className={`p-3.5 rounded-2xl border flex items-start space-x-2.5 text-xs font-semibold animate-fadeIn ${
                   mensajePassword.tipo === "success" ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-rose-500/10 border-rose-500/30 text-rose-400"
                 }`}>
-                  {mensajePassword.tipo === "success" ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+                  {mensajePassword.tipo === "success" ? <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" /> : <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />}
                   <span>{mensajePassword.texto}</span>
                 </div>
               )}
@@ -638,14 +635,14 @@ export default function PerfilEstudiante() {
           }`}>
             <div className="flex items-center space-x-2 text-xs font-bold text-emerald-400">
               <ShieldCheck className="w-4 h-4" />
-              <span>Conexión Supabase Activa</span>
+              <span>Sincronización en Nube Activa</span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
-              Todos tus cambios en este perfil se persisten en tiempo real en la base de datos PostgreSQL de Supabase.
+              Todos tus cambios se persisten en tiempo real en la nube para que accedas a tu información desde cualquier dispositivo.
             </p>
             <div className="pt-1 flex items-center space-x-2 text-[10px] font-bold text-slate-500">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>SIGUNP v2.0 · Proyecto JIAR</span>
+              <span>SIGUNP v2.0 · Universidad Nacional de Piura</span>
             </div>
           </div>
 

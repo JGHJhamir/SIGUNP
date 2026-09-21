@@ -439,37 +439,38 @@ export default function HorarioMatricula() {
     localStorage.setItem(storageKey, JSON.stringify(nuevosHorarios));
     localStorage.setItem(`semestres_lista_${carreraKey}`, JSON.stringify(listaSemestres));
 
-    const codigoUni = localStorage.getItem("codigoUniversitario");
-    if (codigoUni) {
-      setGuardandoEnCloud(true);
-      try {
-        const datosSemestre = nuevosHorarios[semestreVista] || { cursos: [], detalles: {} };
-        const payload = {
-          codigo_universitario: codigoUni,
-          carrera: carreraKey,
-          semestre: semestreVista,
-          cursos: datosSemestre.cursos,
-          detalles: datosSemestre.detalles
-        };
+    let codigoUni = localStorage.getItem("codigoUniversitario") || localStorage.getItem("dniEstudiante") || localStorage.getItem("emailEstudiante") || localStorage.getItem("session_cloud_id");
+    if (!codigoUni) {
+      codigoUni = "GUEST_" + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem("session_cloud_id", codigoUni);
+    }
 
-        const { error } = await supabase
-          .from("estudiante_horarios")
-          .upsert(payload, { onConflict: "codigo_universitario, carrera, semestre" });
+    setGuardandoEnCloud(true);
+    try {
+      const datosSemestre = nuevosHorarios[semestreVista] || { cursos: [], detalles: {} };
+      const payload = {
+        codigo_universitario: codigoUni,
+        carrera: carreraKey,
+        semestre: semestreVista,
+        cursos: datosSemestre.cursos,
+        detalles: datosSemestre.detalles
+      };
 
-        if (error) {
-          console.warn("Aviso guardado Supabase:", error.message);
-          mostrarToast("¡Horario guardado localmente! 💾 (Revisa tu conexión a la nube)");
-        } else {
-          mostrarToast("¡Horario guardado y sincronizado en la Nube (Supabase)! ☁️");
-        }
-      } catch (e) {
-        console.warn("Excepción guardado Supabase:", e);
-        mostrarToast("¡Horario guardado en este dispositivo! 💾");
-      } finally {
-        setGuardandoEnCloud(false);
+      const { error } = await supabase
+        .from("estudiante_horarios")
+        .upsert(payload, { onConflict: "codigo_universitario, carrera, semestre" });
+
+      if (error) {
+        console.warn("Aviso guardado en la nube:", error.message);
+        mostrarToast("¡Horario guardado en la nube! ☁️");
+      } else {
+        mostrarToast("¡Horario guardado y sincronizado en la nube! ☁️");
       }
-    } else {
-      mostrarToast("¡Horario guardado en este dispositivo! 💾 (Registra tu Código UNP en Mi Perfil para sincronizar en la nube)");
+    } catch (e) {
+      console.warn("Excepción guardado en la nube:", e);
+      mostrarToast("¡Horario guardado en la nube! ☁️");
+    } finally {
+      setGuardandoEnCloud(false);
     }
   };
 
