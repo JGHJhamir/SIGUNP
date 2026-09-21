@@ -340,22 +340,6 @@ export default function MallaCurricular() {
                 <Sparkles className="w-3 h-3" />
                 <span>{nombreCarrera}</span>
               </div>
-              {/* Selector Rápido de Carrera */}
-              <div className="inline-flex items-center p-0.5 rounded-lg bg-slate-200/60 dark:bg-slate-800/60 border border-slate-300/50 dark:border-slate-700/50">
-                {CARRERAS_DISPONIBLES.map((c) => (
-                  <button
-                    key={c.key}
-                    onClick={() => cambiarCarrera(c.key)}
-                    className={`px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold transition-all ${
-                      carreraKey === c.key
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs'
-                        : tema === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {c.key === 'informatica' ? 'Informática' : 'Contabilidad'}
-                  </button>
-                ))}
-              </div>
             </div>
             <h1 className={`text-base sm:text-xl font-extrabold tracking-tight ${tema === 'dark' ? 'text-white' : 'text-slate-900'}`}>
               Avance Curricular por Ciclos
